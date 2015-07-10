@@ -27,7 +27,7 @@ void ML_Test2::start(Map *map)
 
 void ML_Test2::end(Map *map)
 {
-	destroy_tweens(tweens);
+	Tween::destroy_tweens(tweens);
 }
 
 void ML_Test2::trigger(Map *map, Map_Entity *entity)
@@ -41,5 +41,5 @@ void ML_Test2::trigger(Map *map, Map_Entity *entity)
 
 void ML_Test2::update(Map *map)
 {
-	update_tweens(tweens);
+	Tween::update_tweens(tweens);
 }

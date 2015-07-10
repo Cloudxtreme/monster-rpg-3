@@ -3,6 +3,8 @@ project(StarSquatters CXX)
 
 option(TRENTS_BUILD "Build my way" off)
 
+include_directories("include")
+
 if(NOT ("${USER_INCLUDE_PATH}" STREQUAL ""))
 	include_directories(${USER_INCLUDE_PATH})
 endif()
@@ -18,8 +20,6 @@ if(WIN32)
 		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DTRENTS_BUILD")
 	endif()
 endif()
-
-include_directories("include")
 
 set(SRC
 	src/dll.cpp

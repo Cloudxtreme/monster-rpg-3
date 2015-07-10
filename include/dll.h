@@ -4,6 +4,8 @@
 #include "Nooskewl_Engine/map.h"
 #include "Nooskewl_Engine/map_logic.h"
 
+using namespace Nooskewl_Engine;
+
 extern "C" {
 	__declspec(dllexport) Map_Logic *get_map_logic(Map *map);
 }

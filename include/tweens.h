@@ -5,6 +5,8 @@
 #include "Nooskewl_Engine/tween.h"
 #include "Nooskewl_Engine/types.h"
 
+using namespace Nooskewl_Engine;
+
 class Move_Tween : public Tween {
 public:
 	Map_Entity *entity;

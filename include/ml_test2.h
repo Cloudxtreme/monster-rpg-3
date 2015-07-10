@@ -5,6 +5,8 @@
 #include "Nooskewl_Engine/map_logic.h"
 #include "Nooskewl_Engine/tween.h"
 
+using namespace Nooskewl_Engine;
+
 class ML_Test2 : public Map_Logic {
 public:
 	void start(Map *map);

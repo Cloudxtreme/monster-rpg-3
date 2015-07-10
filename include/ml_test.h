@@ -4,6 +4,8 @@
 #include "Nooskewl_Engine/map.h"
 #include "Nooskewl_Engine/map_logic.h"
 
+using namespace Nooskewl_Engine;
+
 class ML_Test : public Map_Logic {
 public:
 	void trigger(Map *map, Map_Entity *entity);
