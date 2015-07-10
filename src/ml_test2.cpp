@@ -18,8 +18,8 @@ void ML_Test2::start(Map *map)
 	point2->start_pos = Point<int>(10, 15);
 	point2->destination = test->get_position();
 	point2->speed = 25.0f;
-	DLList_Node<Tween *> *node1 = t->push_back(point1);
-	DLList_Node<Tween *> *node2 = t->push_back(point2);
+	DLList<Tween *>::Node<Tween *> *node1 = t->push_back(point1);
+	DLList<Tween *>::Node<Tween *> *node2 = t->push_back(point2);
 	node2->next = node1;
 	node1->prev = node2;
 	tweens.push_back(t);
