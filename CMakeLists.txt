@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(StarSquatters CXX)
+project(MonsterRPG3 CXX)
 
 option(TRENTS_BUILD "Build my way" off)
 
@@ -28,5 +28,5 @@ set(SRC
 	src/tweens.cpp
 )
 
-add_library(StarSquatters SHARED ${SRC})
-target_link_libraries(StarSquatters "Nooskewl_Engine" "SDL2")
+add_library(MonsterRPG3 SHARED ${SRC})
+target_link_libraries(MonsterRPG3 "Nooskewl_Engine" "SDL2")
