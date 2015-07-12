@@ -9,7 +9,7 @@ bool Move_Tween::update(Tween *tween)
 	int pixels_moved = int(elapsed_f * speed);
 
 	Point<int> dist = destination - start_pos;
-	Size<int> dist_pixels = Size<int>(dist.x*8, dist.y*8);
+	Size<int> dist_pixels = Size<int>(dist.x*noo.tile_size, dist.y*noo.tile_size);
 
 	if (dist_pixels.length() <= pixels_moved) {
 		entity->set_position(destination);
@@ -19,11 +19,11 @@ bool Move_Tween::update(Tween *tween)
 
 	float angle = dist_pixels.angle();
 
-	Point<int> new_pos = Point<int>(int(cos(angle) * pixels_moved), int(sin(angle) * pixels_moved)) + start_pos * 8;
+	Point<int> new_pos = Point<int>(int(cos(angle) * pixels_moved), int(sin(angle) * pixels_moved)) + start_pos * noo.tile_size;
 	Point<int> new_tile = new_pos / 8;
-	Point<int> offset_pix = new_pos - (new_tile * 8);
+	Point<int> offset_pix = new_pos - (new_tile * noo.tile_size);
 	Point<float> offset = offset_pix;
-	offset /= 8.0f;
+	offset /= (float)noo.tile_size;
 
 	entity->set_position(new_tile);
 	entity->set_offset(offset);
