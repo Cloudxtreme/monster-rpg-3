@@ -8,6 +8,7 @@ using namespace Nooskewl_Engine;
 
 class ML_Test : public Map_Logic {
 public:
+	void start(Map *map);
 	void trigger(Map *map, Map_Entity *entity);
 };
 

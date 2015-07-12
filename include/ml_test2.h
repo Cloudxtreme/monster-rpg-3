@@ -13,6 +13,7 @@ public:
 	void end(Map *map);
 	void trigger(Map *map, Map_Entity *entity);
 	void update(Map *map);
+	void activate(Map *map, Map_Entity *activator, Map_Entity *activated);
 
 private:
 	Tweens tweens;

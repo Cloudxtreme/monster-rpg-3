@@ -6,6 +6,7 @@ void ML_Test2::start(Map *map)
 	test = new Map_Entity(NULL);
 	test->load_sprite("player");
 	test->set_position(Point<int>(10, 3));
+	test->set_solid(false);
 	map->add_entity(test);
 	DLList<Tween *> *t = new DLList<Tween *>();
 	Move_Tween *point1 = new Move_Tween;
@@ -33,7 +34,7 @@ void ML_Test2::end(Map *map)
 void ML_Test2::trigger(Map *map, Map_Entity *entity)
 {
 	Point<int> collide_pos;
-	if (entity->get_id() == 0 && entity->collides(Point<int>(7, 18), Size<int>(2, 1), collide_pos)) {
+	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(7, 18), Size<int>(2, 1), collide_pos)) {
 		entity->stop();
 		map->change_map("test.map", Point<int>(7, 1) + collide_pos, S);
 	}
@@ -42,4 +43,11 @@ void ML_Test2::trigger(Map *map, Map_Entity *entity)
 void ML_Test2::update(Map *map)
 {
 	Tween::update_tweens(tweens);
+}
+
+void ML_Test2::activate(Map *map, Map_Entity *activator, Map_Entity *activated)
+{
+	if (activated == test) {
+		map->add_speech("TESTING");
+	}
 }
