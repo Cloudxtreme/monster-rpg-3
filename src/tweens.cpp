@@ -1,3 +1,5 @@
+#include <Nooskewl_Engine/Nooskewl_Engine.h>
+
 #include "tweens.h"
 
 bool Move_Tween::update(Tween *tween)
