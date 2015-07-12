@@ -1,7 +1,18 @@
+#include <Nooskewl_Engine/Nooskewl_Engine.h>
+
 #include "dll.h"
 
 #include "ml_test.h"
 #include "ml_test2.h"
+
+#ifdef MONSTERRPG3_WINDOWS
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+{
+	noo.window_title = "Monster RPG 3";
+
+	return TRUE;
+}
+#endif
 
 Map_Logic *get_map_logic(Map *map)
 {
