@@ -23,6 +23,7 @@ void ML_start::trigger(Map *map, Map_Entity *entity)
 	Point<int> collide_pos;
 	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(14, 14), Size<int>(1, 1), collide_pos)) {
 		if (sat == false) {
+			noo.player->stop();
 			noo.player->disable_input();
 			MO3_Widget *main_widget = new MO3_Widget(1.0f, 1.0f);
 			MO3_Window *bubble = new MO3_Window(90, noo.font->get_height()+20);
