@@ -5,9 +5,15 @@
 #include "ml_start.h"
 
 #ifdef MONSTERRPG3_WINDOWS
+static bool started = false;
+
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-	noo.window_title = "Monster RPG 3";
+	if (started == false) {
+		started = true;
+
+		noo.window_title = "Monster RPG 3";
+	}
 
 	return TRUE;
 }
