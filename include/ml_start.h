@@ -12,11 +12,11 @@ class ML_start : public Map_Logic {
 public:
 	ML_start();
 
-	void start(Map *map);
-	void end(Map *map);
-	void trigger(Map *map, Map_Entity *entity);
-	void update(Map *map);
-	void activate(Map *map, Map_Entity *activator, Map_Entity *activated);
+	void start();
+	void end();
+	void trigger(Map_Entity *entity);
+	void update();
+	void activate(Map_Entity *activator, Map_Entity *activated);
 
 private:
 	bool sat;

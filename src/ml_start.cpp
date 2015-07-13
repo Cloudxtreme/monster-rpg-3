@@ -10,15 +10,15 @@ ML_start::ML_start() :
 {
 }
 
-void ML_start::start(Map *map)
+void ML_start::start()
 {
 }
 
-void ML_start::end(Map *map)
+void ML_start::end()
 {
 }
 
-void ML_start::trigger(Map *map, Map_Entity *entity)
+void ML_start::trigger(Map_Entity *entity)
 {
 	Point<int> collide_pos;
 	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(14, 14), Size<int>(1, 1), collide_pos)) {
@@ -53,7 +53,7 @@ void ML_start::trigger(Map *map, Map_Entity *entity)
 	}
 }
 
-void ML_start::update(Map *map)
+void ML_start::update()
 {
 	if (yes && yes->pressed()) {
 		delete noo.gui;
@@ -72,6 +72,6 @@ void ML_start::update(Map *map)
 	}
 }
 
-void ML_start::activate(Map *map, Map_Entity *activator, Map_Entity *activated)
+void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
 }

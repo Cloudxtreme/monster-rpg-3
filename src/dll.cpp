@@ -13,18 +13,16 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 }
 #endif
 
-Map_Logic *get_map_logic(Map *map)
+Map_Logic *get_map_logic(std::string map_name)
 {
 	Map_Logic *ml = NULL;
-
-	std::string map_name = map->get_map_name();
 
 	if (map_name == "start.map") {
 		ml = new ML_start();
 	}
 
 	if (ml) {
-		ml->start(map);
+		ml->start();
 	}
 
 	return ml;
