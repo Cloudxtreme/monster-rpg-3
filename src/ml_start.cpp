@@ -12,6 +12,7 @@ ML_start::ML_start() :
 
 void ML_start::start()
 {
+	noo.map->add_speech("Cans o' juice, plenty of em! And big bags of onion sandwhiches... plenty of those and also some large old bags of meats and meat products. Sounding good to you? Well there's plenty to go around, don't be shy! Oh and pot roasts... we got loads of those! Come on over for a pizza party some time!");
 }
 
 void ML_start::end()
