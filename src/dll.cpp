@@ -2,8 +2,7 @@
 
 #include "dll.h"
 
-#include "ml_test.h"
-#include "ml_test2.h"
+#include "ml_start.h"
 
 #ifdef MONSTERRPG3_WINDOWS
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
@@ -20,11 +19,8 @@ Map_Logic *get_map_logic(Map *map)
 
 	std::string map_name = map->get_map_name();
 
-	if (map_name == "test.map") {
-		ml = new ML_Test();
-	}
-	else if (map_name == "test2.map") {
-		ml = new ML_Test2();
+	if (map_name == "start.map") {
+		ml = new ML_start();
 	}
 
 	if (ml) {

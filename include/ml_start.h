@@ -1,5 +1,5 @@
-#ifndef ML_TEST2_H
-#define ML_TEST2_H
+#ifndef ML_START_H
+#define ML_START_H
 
 #include "Nooskewl_Engine/map.h"
 #include "Nooskewl_Engine/map_logic.h"
@@ -7,8 +7,10 @@
 
 using namespace Nooskewl_Engine;
 
-class ML_Test2 : public Map_Logic {
+class ML_start : public Map_Logic {
 public:
+	ML_start();
+
 	void start(Map *map);
 	void end(Map *map);
 	void trigger(Map *map, Map_Entity *entity);
@@ -16,8 +18,7 @@ public:
 	void activate(Map *map, Map_Entity *activator, Map_Entity *activated);
 
 private:
-	Tweens tweens;
-	Map_Entity *test;
+	bool sat;
 };
 
-#endif // ML_TEST2_H
+#endif // ML_START_H

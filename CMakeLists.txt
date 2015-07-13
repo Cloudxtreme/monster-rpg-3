@@ -14,8 +14,7 @@ link_directories(${USER_LIBRARY_PATH})
 
 set(SRC
 	src/dll.cpp
-	src/ml_test.cpp
-	src/ml_test2.cpp
+	src/ml_start.cpp
 	src/tweens.cpp
 )
 
