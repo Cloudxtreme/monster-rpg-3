@@ -20,8 +20,7 @@ public:
 
 private:
 	bool sat;
-	SS_Widget *main_widget;
-	SS_Text_Button *yes, *pass;
+	MO3_Text_Button *yes, *pass;
 };
 
 #endif // ML_START_H
