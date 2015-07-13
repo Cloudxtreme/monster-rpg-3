@@ -1,9 +1,9 @@
 #ifndef TWEENS_H
 #define TWEENS_H
 
-#include "Nooskewl_Engine/map_entity.h"
-#include "Nooskewl_Engine/tween.h"
-#include "Nooskewl_Engine/types.h"
+#include <Nooskewl_Engine/map_entity.h>
+#include <Nooskewl_Engine/tween.h>
+#include <Nooskewl_Engine/types.h>
 
 using namespace Nooskewl_Engine;
 

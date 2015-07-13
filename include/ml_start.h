@@ -1,9 +1,10 @@
 #ifndef ML_START_H
 #define ML_START_H
 
-#include "Nooskewl_Engine/map.h"
-#include "Nooskewl_Engine/map_logic.h"
-#include "Nooskewl_Engine/tween.h"
+#include <Nooskewl_Engine/map.h>
+#include <Nooskewl_Engine/map_logic.h>
+#include <Nooskewl_Engine/tween.h>
+#include <Nooskewl_Engine/widgets.h>
 
 using namespace Nooskewl_Engine;
 
@@ -19,6 +20,8 @@ public:
 
 private:
 	bool sat;
+	SS_Widget *main_widget;
+	SS_Text_Button *yes, *pass;
 };
 
 #endif // ML_START_H
