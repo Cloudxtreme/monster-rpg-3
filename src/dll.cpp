@@ -21,9 +21,5 @@ Map_Logic *get_map_logic(std::string map_name)
 		ml = new ML_start();
 	}
 
-	if (ml) {
-		ml->start();
-	}
-
 	return ml;
 }
