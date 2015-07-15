@@ -24,16 +24,16 @@ void ML_start::trigger(Map_Entity *entity)
 	Point<int> collide_pos;
 	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(14, 14), Size<int>(1, 1), collide_pos)) {
 		if (sat == false) {
-			int padding = noo.window_image->w / 3;
+			int padding = noo.window_image->size.w / 3;
 			noo.player->stop();
 			noo.player->disable_input();
 			MO3_Widget *main_widget = new MO3_Widget(1.0f, 1.0f);
 			pass = new MO3_Text_Button("Pass", Size<int>(50, -1));
-			pass->set_padding(5, 20, noo.screen_h-20-pass->get_height(), 0);
+			pass->set_padding(5, 20, noo.screen_size.h-20-pass->get_height(), 0);
 			pass->set_float_right(true);
 			pass->set_parent(main_widget);
 			yes = new MO3_Text_Button("Yes", Size<int>(50, -1));
-			yes->set_padding(0, 0, noo.screen_h-20-yes->get_height(), 0);
+			yes->set_padding(0, 0, noo.screen_size.h-20-yes->get_height(), 0);
 			yes->set_float_right(true);
 			yes->set_parent(main_widget);
 			MO3_Window *bubble = new MO3_Window(105, noo.font->get_height()+padding*2);
@@ -45,7 +45,7 @@ void ML_start::trigger(Map_Entity *entity)
 			label->set_padding(padding, padding, padding, padding);
 			label->set_centered_x(true);
 			label->set_parent(bubble);
-			noo.gui = new TGUI(main_widget, noo.screen_w, noo.screen_h);
+			noo.gui = new TGUI(main_widget, noo.screen_size.w, noo.screen_size.h);
 			noo.gui->set_focus(yes);
 			sat = true;
 		}
