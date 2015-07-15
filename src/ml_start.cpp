@@ -24,6 +24,7 @@ void ML_start::trigger(Map_Entity *entity)
 	Point<int> collide_pos;
 	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(14, 14), Size<int>(1, 1), collide_pos)) {
 		if (sat == false) {
+			int padding = noo.window_image->w / 3;
 			noo.player->stop();
 			noo.player->disable_input();
 			MO3_Widget *main_widget = new MO3_Widget(1.0f, 1.0f);
@@ -35,13 +36,13 @@ void ML_start::trigger(Map_Entity *entity)
 			yes->set_padding(0, 0, noo.screen_h-20-yes->get_height(), 0);
 			yes->set_float_right(true);
 			yes->set_parent(main_widget);
-			MO3_Window *bubble = new MO3_Window(105, noo.font->get_height()+MO3_Widget::PAD_Y*2);
+			MO3_Window *bubble = new MO3_Window(105, noo.font->get_height()+padding*2);
 			bubble->set_padding(0, 20, pass->get_padding_top()-5-bubble->get_height(), 0);
 			bubble->set_float_right(true);
 			bubble->set_clear_floats(true);
 			bubble->set_parent(main_widget);
 			MO3_Label *label = new MO3_Label("Sit down?", 70);
-			label->set_padding(MO3_Widget::PAD_X, MO3_Widget::PAD_X, MO3_Widget::PAD_Y, MO3_Widget::PAD_Y);
+			label->set_padding(padding, padding, padding, padding);
 			label->set_centered_x(true);
 			label->set_parent(bubble);
 			noo.gui = new TGUI(main_widget, noo.screen_w, noo.screen_h);
