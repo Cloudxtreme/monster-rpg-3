@@ -3,6 +3,7 @@
 #include "dll.h"
 
 #include "ml_start.h"
+#include "ml_start_upper.h"
 
 #ifdef MONSTERRPG3_WINDOWS
 static bool started = false;
@@ -25,6 +26,9 @@ Map_Logic *get_map_logic(std::string map_name)
 
 	if (map_name == "start.map") {
 		ml = new ML_start();
+	}
+	else if (map_name == "start_upper.map") {
+		ml = new ML_start_upper();
 	}
 
 	return ml;

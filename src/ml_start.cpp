@@ -12,6 +12,7 @@ ML_start::ML_start() :
 
 void ML_start::start()
 {
+	noo.play_music("town.mml");
 	noo.map->add_speech("Sunshine|This text scrolls on and on and on and never stops... It just keeps going and going and going. There is no end to it! Just when you think it's finished, bam, it's not! Please scroll to the next page by clicking or pressing space...");
 }
 
@@ -22,7 +23,11 @@ void ML_start::end()
 void ML_start::trigger(Map_Entity *entity)
 {
 	Point<int> collide_pos;
-	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(14, 14), Size<int>(1, 1), collide_pos)) {
+	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(30, 2), Size<int>(2, 1), collide_pos)) {
+		entity->stop();
+		noo.map->change_map("start_upper.map", Point<int>(22, 4), S);
+	}
+	else if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(14, 14), Size<int>(1, 1), collide_pos)) {
 		if (sat == false) {
 			int padding = noo.window_image->size.w / 3;
 			noo.player->stop();
