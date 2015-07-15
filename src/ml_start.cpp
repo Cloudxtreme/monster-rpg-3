@@ -12,7 +12,7 @@ ML_start::ML_start() :
 
 void ML_start::start()
 {
-	noo.map->add_speech("Sunshine|Cans o' juice, plenty of em! And big bags of onion sandwhiches... plenty of those and also some large old bags of meats and meat products. Sounding good to you? Well there's plenty to go around, don't be shy! Oh and pot roasts... we got loads of those! Come on over for a pizza party some time!");
+	noo.map->add_speech("Sunshine|This text scrolls on and on and on and never stops... It just keeps going and going and going. There is no end to it! Just when you think it's finished, bam, it's not! Please scroll to the next page by clicking or pressing space...");
 }
 
 void ML_start::end()
