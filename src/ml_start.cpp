@@ -32,29 +32,31 @@ void ML_start::trigger(Map_Entity *entity)
 	}
 	else if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(8, 7), Size<int>(1, 1), collide_pos)) {
 		if (sat == false) {
-			int padding = 1;
+			int padding = noo.window_image->size.h / 3;
 			noo.player->stop();
 			noo.player->disable_input();
 			MO3_Widget *main_widget = new MO3_Widget(1.0f, 1.0f);
-			pass = new MO3_Text_Button("Pass", Size<int>(38, -1));
-			pass->set_padding(5, 10, noo.screen_size.h-10-pass->get_height(), 0);
+			pass = new MO3_Text_Button("Pass", Size<int>(30, -1));
 			pass->set_float_right(true);
-			pass->set_parent(main_widget);
-			yes = new MO3_Text_Button("Yes", Size<int>(38, -1));
-			yes->set_padding(0, 0, noo.screen_size.h-10-yes->get_height(), 0);
-			yes->set_float_right(true);
-			yes->set_parent(main_widget);
-			MO3_Window *bubble = new MO3_Window(83, noo.font->get_height()+padding*2);
-			bubble->set_padding(0, 10, pass->get_padding_top()-5-bubble->get_height(), 0);
+			yes = new MO3_Text_Button("Yes", Size<int>(30, -1));
+			MO3_Widget *button_container = new MO3_Widget(80, pass->get_height());
+			button_container->set_padding(0, 5, noo.screen_size.h - 5 - button_container->get_height(), 0);
+			button_container->set_float_right(true);
+			button_container->set_parent(main_widget);
+			pass->set_parent(button_container);
+			yes->set_parent(button_container);
+			MO3_Window *bubble = new MO3_Window(80, noo.font->get_height()+padding*2);
+			bubble->set_padding(0, 5, button_container->get_padding_top()-padding-bubble->get_height(), 0);
 			bubble->set_float_right(true);
 			bubble->set_clear_floats(true);
 			bubble->set_parent(main_widget);
-			MO3_Label *label = new MO3_Label("Sit down?", 73);
+			MO3_Label *label = new MO3_Label("Sit down?", 70);
 			label->set_padding(padding, padding, padding, padding);
 			label->set_centered_x(true);
 			label->set_parent(bubble);
 			noo.gui = new TGUI(main_widget, noo.screen_size.w, noo.screen_size.h);
 			noo.gui->set_focus(yes);
+			printf("pass=%p\n", pass);
 			sat = true;
 		}
 	}
