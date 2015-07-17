@@ -12,11 +12,25 @@ ML_start::ML_start() :
 
 void ML_start::start()
 {
-	if (noo.last_map_name == "") {
-		noo.player->set_position(Point<int>(1, 4));
+	if (noo.last_map_name == "") { // FIXME: not if loading a game, only starting a new one
+		noo.player->set_position(Point<int>(11, 24));
+		noo.player->set_direction(N);
+		noo.map->add_speech("name=Eny,top|Ahhh, the pub. Nothing beats it. Except maybe the pub in Seaside... but although this one isn't as clean, the people are nice. Hey, there's someone I know!");
 	}
 	noo.play_music("town.mml");
-	noo.map->add_speech("Sunshine|This text scrolls on and on and on and never stops... It just keeps going and going and going. There is no end to it! Just when you think it's finished, bam, it's not! Please scroll to the next page by clicking or pressing space...");
+
+	Map_Entity *coro = new Map_Entity(NULL);
+	coro->load_sprite("coro");
+	coro->set_position(Point<int>(3, 19));
+	coro->set_direction(S);
+	coro->set_sitting(true);
+	Map_Entity *sunshine = new Map_Entity(NULL);
+	sunshine->load_sprite("sunshine");
+	sunshine->set_position(Point<int>(1, 21));
+	sunshine->set_direction(E);
+	sunshine->set_sitting(true);
+	noo.map->add_entity(coro);
+	noo.map->add_entity(sunshine);
 }
 
 void ML_start::end()
