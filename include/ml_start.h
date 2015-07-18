@@ -21,6 +21,12 @@ public:
 private:
 	bool sat;
 	MO3_Text_Button *yes, *pass;
+	Map_Entity *coro;
+	Map_Entity *sunshine;
+	Map_Entity *business_man;
+	Map_Entity *legendary_warrior;
+	Map_Entity *bartender;
+	Map_Entity *sitting_lady;
 };
 
 #endif // ML_START_H

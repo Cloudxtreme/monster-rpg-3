@@ -19,18 +19,40 @@ void ML_start::start()
 	}
 	noo.play_music("town.mml");
 
-	Map_Entity *coro = new Map_Entity(NULL);
+	coro = new Map_Entity(NULL);
 	coro->load_sprite("coro");
 	coro->set_position(Point<int>(3, 19));
 	coro->set_direction(S);
 	coro->set_sitting(true);
-	Map_Entity *sunshine = new Map_Entity(NULL);
+	sunshine = new Map_Entity(NULL);
 	sunshine->load_sprite("sunshine");
 	sunshine->set_position(Point<int>(1, 21));
 	sunshine->set_direction(E);
 	sunshine->set_sitting(true);
+	business_man = new Map_Entity(NULL);
+	business_man->load_sprite("business_man");
+	business_man->set_position(Point<int>(16, 19));
+	business_man->set_direction(E);
+	legendary_warrior = new Map_Entity(NULL);
+	legendary_warrior->load_sprite("legendary_warrior");
+	legendary_warrior->set_position(Point<int>(12, 15));
+	legendary_warrior->set_direction(S);
+	legendary_warrior->set_sitting(true);
+	bartender = new Map_Entity(NULL);
+	bartender->load_sprite("bartender");
+	bartender->set_position(Point<int>(19, 19));
+	bartender->get_sprite()->start();
+	sitting_lady = new Map_Entity(NULL);
+	sitting_lady->load_sprite("sitting_lady");
+	sitting_lady->set_position(Point<int>(16, 13));
+	sitting_lady->set_direction(E);
+	sitting_lady->set_sitting(true);
 	noo.map->add_entity(coro);
 	noo.map->add_entity(sunshine);
+	noo.map->add_entity(business_man);
+	noo.map->add_entity(legendary_warrior);
+	noo.map->add_entity(bartender);
+	noo.map->add_entity(sitting_lady);
 }
 
 void ML_start::end()
@@ -102,4 +124,10 @@ void ML_start::update()
 
 void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
+	if (activated == coro) {
+		coro->set_direction(E);
+		noo.map->add_speech("name=Coro|Well, look who decided to show up! You know it doesn't count as \"sleeping in\" if the sun goes down again... There's another name for it.");
+		noo.map->add_speech("name=Eny|Oh yeah, what's that?");
+		noo.map->add_speech("name=Coro|Didn't say I know. Now sit down, Sunshine and I have exciting news!");
+	}
 }
