@@ -16,6 +16,7 @@ set(SRC
 	src/dll.cpp
 	src/ml_start.cpp
 	src/ml_start_upper.cpp
+	src/talk_brain.cpp
 	src/tweens.cpp
 )
 

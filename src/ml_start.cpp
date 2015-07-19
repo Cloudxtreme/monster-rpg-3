@@ -1,6 +1,7 @@
 #include <Nooskewl_Engine/engine.h>
 
 #include "ml_start.h"
+#include "talk_brain.h"
 #include "tweens.h"
 
 ML_start::ML_start() :
@@ -24,7 +25,7 @@ void ML_start::start()
 	coro->set_position(Point<int>(3, 19));
 	coro->set_direction(S);
 	coro->set_sitting(true);
-	sunshine = new Map_Entity(NULL);
+	sunshine = new Map_Entity(new Talk_Brain("sunshine"));
 	sunshine->load_sprite("sunshine");
 	sunshine->set_position(Point<int>(1, 21));
 	sunshine->set_direction(E);
@@ -94,7 +95,6 @@ void ML_start::trigger(Map_Entity *entity)
 			label->set_parent(bubble);
 			noo.gui = new TGUI(main_widget, noo.screen_size.w, noo.screen_size.h);
 			noo.gui->set_focus(yes);
-			printf("pass=%p\n", pass);
 			sat = true;
 		}
 	}
