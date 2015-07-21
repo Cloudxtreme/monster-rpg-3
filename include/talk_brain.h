@@ -7,6 +7,14 @@ using namespace Nooskewl_Engine;
 
 class Talk_Brain : public Brain {
 public:
+	static void callback(void *data);
+	struct Callback_Data {
+		Direction direction;
+		Map_Entity *entity;
+		Callback user_callback;
+		void *user_callback_data;
+	} callback_data;
+
 	Talk_Brain(std::string name, Callback callback = NULL, void *callback_data = NULL);
 	~Talk_Brain();
 
@@ -24,8 +32,8 @@ private:
 
 	// sorted: highest milestone first
 	std::vector<Talk *> sayings;
-	Callback callback;
-	void *callback_data;
+	Callback user_callback;
+	void *user_callback_data;
 };
 
 #endif // TALK_BRAIN

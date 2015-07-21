@@ -3,9 +3,21 @@
 
 #include "talk_brain.h"
 
+void Talk_Brain::callback(void *data)
+{
+	Callback_Data *d = (Callback_Data *)data;
+
+	d->entity->set_direction(d->direction);
+
+	if (d->user_callback) {
+		d->user_callback(d->user_callback_data);
+	}
+}
+
 Talk_Brain::Talk_Brain(std::string name, Callback callback, void *callback_data) :
 	name(name),
-	callback(callback)
+	user_callback(callback),
+	user_callback_data(callback_data)
 {
 	std::string text = noo.load_text("speech/" + name + ".utf8");
 
@@ -65,7 +77,24 @@ void Talk_Brain::activate(Map_Entity *activator, Map_Entity *activated)
 	for (size_t i = 0; i < sayings.size(); i++) {
 		Talk *t = sayings[i];
 		if (t->milestone < 0 || noo.check_milestone(t->milestone)) {
-			noo.map->add_speech(t->text, callback, callback_data);
+			callback_data.direction = activated->get_direction();
+			callback_data.entity = activated;
+			callback_data.user_callback = user_callback;
+			callback_data.user_callback_data = user_callback_data;
+			Point<int> offset = activator->get_position() - activated->get_position();
+			if (offset.x < 0) {
+				activated->set_direction(W);
+			}
+			else if (offset.x > 0) {
+				activated->set_direction(E);
+			}
+			else if (offset.y < 0) {
+				activated->set_direction(N);
+			}
+			else {
+				activated->set_direction(S);
+			}
+			noo.map->add_speech(t->text, callback, &callback_data);
 			return;
 		}
 	}
