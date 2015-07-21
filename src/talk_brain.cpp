@@ -1,5 +1,6 @@
 #include "Nooskewl_Engine/engine.h"
 #include "Nooskewl_Engine/map.h"
+#include "Nooskewl_Engine/tokenizer.h"
 
 #include "talk_brain.h"
 
@@ -93,6 +94,29 @@ void Talk_Brain::activate(Map_Entity *activator, Map_Entity *activated)
 			}
 			else {
 				activated->set_direction(S);
+			}
+			Point<float> entity_pos = (activated->get_position() + activated->get_offset()) * noo.tile_size + noo.map->get_offset();
+			int pipe = t->text.find('|');
+			if (pipe != std::string::npos) {
+				std::string options = t->text.substr(0, pipe);
+				Tokenizer tokenizer(options, ',');
+				std::string s;
+				bool x_set = false;
+				bool y_set = false;
+				while ((s = tokenizer.next()) != "") {
+					if (s == "top" || s == "bottom") {
+						y_set = true;
+					}
+					else if (s == "left" || s == "right") {
+						x_set = true;
+					}
+				}
+				if (x_set == false && entity_pos.x <= noo.screen_size.w/2) {
+					t->text = std::string("right,") + t->text;
+				}
+				if (y_set == false && entity_pos.y > noo.screen_size.h/2) {
+					t->text = std::string("top,") + t->text;
+				}
 			}
 			noo.map->add_speech(t->text, callback, &callback_data);
 			return;
