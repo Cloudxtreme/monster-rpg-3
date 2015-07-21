@@ -4,6 +4,33 @@
 #include "talk_brain.h"
 #include "tweens.h"
 
+int ML_start::callback_data;
+Map_Entity *ML_start::coro;
+
+void ML_start::callback(void *data)
+{
+	int stage = *(int *)data;
+	*(int *)data = stage + 1;
+	int count = 0;
+
+	if (stage == count++) {
+		noo.player->set_path(noo.map->find_path(noo.player->get_position(), Point<int>(5, 19)), callback, data);
+	}
+	else if (stage == count++) {
+		noo.player->set_direction(W);
+		coro->set_direction(E);
+		noo.map->add_speech("name=Coro|Well, look who decided to show up! You know it doesn't count as \"sleeping in\" if the sun goes down again... There's another name for it.");
+		noo.map->add_speech("name=Eny|Oh yeah, what's that?");
+		noo.map->add_speech("name=Coro|Didn't say I know. Now sit down, Sunshine and I have exciting news!", callback, data);
+	}
+	else if (stage == count++) {
+		noo.player->set_path(noo.map->find_path(noo.player->get_position(), Point<int>(6, 21)), callback, data);
+	}
+	else if (stage == count++) {
+		noo.player->set_direction(W);
+	}
+}
+
 ML_start::ML_start() :
 	sat(false),
 	yes(0),
@@ -13,19 +40,20 @@ ML_start::ML_start() :
 
 void ML_start::start()
 {
+	noo.play_music("town.mml");
+
 	if (noo.last_map_name == "") { // FIXME: not if loading a game, only starting a new one
 		noo.player->set_position(Point<int>(11, 24));
 		noo.player->set_direction(N);
-		noo.map->add_speech("name=Eny,top|Ahhh, the pub. Nothing beats it. Except maybe the pub in Seaside... but although this one isn't as clean, the people are nice. Hey, there's someone I know!");
+		noo.map->add_speech("name=Eny,top|Ahhh, the pub. Nothing beats it. Except maybe the pub in Seaside... but although this one isn't as clean, the people are nice. Hey, there's someone I know!", callback, &callback_data);
 	}
-	noo.play_music("town.mml");
 
 	coro = new Map_Entity(NULL);
 	coro->load_sprite("coro");
 	coro->set_position(Point<int>(3, 19));
 	coro->set_direction(S);
 	coro->set_sitting(true);
-	sunshine = new Map_Entity(new Talk_Brain("sunshine"));
+	sunshine = new Map_Entity(NULL);
 	sunshine->load_sprite("sunshine");
 	sunshine->set_position(Point<int>(1, 21));
 	sunshine->set_direction(E);
@@ -124,10 +152,4 @@ void ML_start::update()
 
 void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
-	if (activated == coro) {
-		coro->set_direction(E);
-		noo.map->add_speech("name=Coro|Well, look who decided to show up! You know it doesn't count as \"sleeping in\" if the sun goes down again... There's another name for it.");
-		noo.map->add_speech("name=Eny|Oh yeah, what's that?");
-		noo.map->add_speech("name=Coro|Didn't say I know. Now sit down, Sunshine and I have exciting news!");
-	}
 }
