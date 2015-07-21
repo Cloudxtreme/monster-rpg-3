@@ -94,7 +94,7 @@ void ML_start::start()
 	if (noo.last_map_name == "") { // FIXME: not if loading a game, only starting a new one
 		noo.player->set_position(Point<int>(11, 24));
 		noo.player->set_direction(N);
-		noo.map->add_speech("name=Eny,top|Ahhh, the pub. Nothing beats it. Except maybe the pub in Seaside... but although this one isn't as clean, the people are nice. Hey, there's someone I know!", callback, &callback_data);
+		noo.map->add_speech("name=Eny,top,right|Ahhh, the pub. Nothing beats it. Except maybe the pub in Seaside... but although this one isn't as clean, the people are nice. Hey, there's someone I know!", callback, &callback_data);
 	}
 
 	coro = new Map_Entity(new Talk_Brain("coro"));
