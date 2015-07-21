@@ -1,9 +1,11 @@
 #include "Nooskewl_Engine/engine.h"
+#include "Nooskewl_Engine/map.h"
 
 #include "talk_brain.h"
 
-Talk_Brain::Talk_Brain(std::string name) :
-	name(name)
+Talk_Brain::Talk_Brain(std::string name, Callback callback, void *callback_data) :
+	name(name),
+	callback(callback)
 {
 	std::string text = noo.load_text("speech/" + name + ".utf8");
 
@@ -63,7 +65,7 @@ void Talk_Brain::activate(Map_Entity *activator, Map_Entity *activated)
 	for (size_t i = 0; i < sayings.size(); i++) {
 		Talk *t = sayings[i];
 		if (t->milestone < 0 || noo.check_milestone(t->milestone)) {
-			noo.map->add_speech(t->text);
+			noo.map->add_speech(t->text, callback, callback_data);
 			return;
 		}
 	}
