@@ -1,6 +1,7 @@
 #include <Nooskewl_Engine/engine.h>
 #include <Nooskewl_Engine/talk_brain.h>
 
+#include "brains.h"
 #include "ml.h"
 #include "ml_start.h"
 #include "tweens.h"
@@ -129,12 +130,19 @@ void ML_start::start()
 		sitting_lady->set_position(Point<int>(16, 13));
 		sitting_lady->set_direction(E);
 		sitting_lady->set_sitting(true);
+		laughing_man = new Map_Entity("laughing_man");
+		laughing_man->set_brain(new Animated_Brain("laughing_man"));
+		laughing_man->load_sprite("laughing_man");
+		laughing_man->set_position(Point<int>(8, 7));
+		laughing_man->set_direction(S);
+		laughing_man->set_sitting(true);
 		noo.map->add_entity(coro);
 		noo.map->add_entity(sunshine);
 		noo.map->add_entity(business_man);
 		noo.map->add_entity(legendary_warrior);
 		noo.map->add_entity(bartender);
 		noo.map->add_entity(sitting_lady);
+		noo.map->add_entity(laughing_man);
 	}
 }
 
