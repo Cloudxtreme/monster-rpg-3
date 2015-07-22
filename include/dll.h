@@ -13,7 +13,8 @@
 using namespace Nooskewl_Engine;
 
 extern "C" {
-	MONSTERRPG3_EXPORT Map_Logic *get_map_logic(std::string map_name);
+	MONSTERRPG3_EXPORT Map_Logic *dll_get_map_logic(std::string map_name);
+	MONSTERRPG3_EXPORT Brain *dll_get_brain(std::string options);
 }
 
 #endif // DLL_H

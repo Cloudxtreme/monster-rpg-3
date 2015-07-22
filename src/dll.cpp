@@ -1,7 +1,7 @@
 #include <Nooskewl_Engine/Nooskewl_Engine.h>
 
+#include "brains.h"
 #include "dll.h"
-
 #include "ml_start.h"
 #include "ml_start_upper.h"
 
@@ -20,7 +20,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 }
 #endif
 
-Map_Logic *get_map_logic(std::string map_name)
+Map_Logic *dll_get_map_logic(std::string map_name)
 {
 	Map_Logic *ml = NULL;
 
@@ -32,4 +32,18 @@ Map_Logic *get_map_logic(std::string map_name)
 	}
 
 	return ml;
+}
+
+Brain *dll_get_brain(std::string options)
+{
+	Tokenizer t(options, ',');
+
+	std::string type = t.next();
+
+	if (type == "animated_brain") {
+		std::string name = t.next();
+		return new Animated_Brain(name);
+	}
+
+	return 0;
 }
