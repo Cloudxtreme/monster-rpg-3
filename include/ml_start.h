@@ -24,8 +24,6 @@ private:
 	static int callback_data;
 	static Map_Entity *coro;
 
-	bool sat;
-	MO3_Text_Button *yes, *pass;
 	Map_Entity *sunshine;
 	Map_Entity *business_man;
 	Map_Entity *legendary_warrior;
