@@ -18,9 +18,9 @@ void ML_start::callback(void *data)
 	NEXT_STAGE {
 		noo.player->set_direction(W);
 		coro->set_direction(E);
-		noo.map->add_speech("top,right,name=Coro|Well, look who decided to show up! You know it doesn't count as \"sleeping in\" if the sun goes down again... There's another name for it.");
-		noo.map->add_speech("top,right,name=Eny|Oh yeah, what's that?");
-		noo.map->add_speech("top,right,name=Coro|Didn't say I know. Now sit down, Sunshine and I have exciting news!", callback, data);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("Well, look who decided to show up! You know it doesn't count as \"sleeping in\" if the sun goes down again... There's another name for it.")END);
+		noo.map->add_speech("top,right,name=Eny|" + TRANSLATE("Oh yeah, what's that?")END);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("Didn't say I know. Now sit down, Sunshine and I have exciting news!")END, callback, data);
 	}
 	NEXT_STAGE {
 		noo.player->set_path(noo.map->find_path(noo.player->get_position(), Point<int>(6, 21)), callback, data);
@@ -28,70 +28,73 @@ void ML_start::callback(void *data)
 	NEXT_STAGE {
 		noo.player->set_direction(W);
 		noo.player->set_sitting(true);
-		noo.map->add_speech("top,right,name=Eny|Ok, so what is it?", callback, data);
+		noo.map->add_speech("top,right,name=Eny|" + TRANSLATE("Ok, so what is it?")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Sunshine|Well we're not really sure, but...", callback, data);
+		noo.map->add_speech("top,right,name=Sunshine|" + TRANSLATE("Well we're not really sure, but...")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|Of course we're sure... We're sure! Now, you remember the stories I used to tell you when you were younger about the Sky Tower, right?", callback, data);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("Of course we're sure... We're sure! Now, you remember the stories I used to tell you when you were younger about the Sky Tower, right?")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|Who could forget? And besides, everyone knows about Sky Tower... and you can even see it if you walk outside!", callback, data);
+		noo.map->add_speech("top,right,name=Eny|" + TRANSLATE("Who could forget? And besides, everyone knows about Sky Tower... and you can even see it if you walk outside!")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|The important part is that it has been locked as long as anyone can remember...", callback, data);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("The important part is that it has been locked as long as anyone can remember...")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Sunshine|My grampy says he's been inside before.", callback, data);
+		noo.map->add_speech("top,right,name=Sunshine|" + TRANSLATE("My grampy says he's been inside before.")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|Hogwash! Your grampy says he met the queen, too and we all know THAT'S not true. Anyway, the Tower has been locked as long as anyone can remember... but I've found out how to open it!", callback, data);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("Hogwash! Your grampy says he met the queen, too and we all know THAT'S not true. Anyway, the Tower has been locked as long as anyone can remember... but I've found out how to open it!")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|Sky Tower is full of gold and jewels and countless riches! Are we going to be rich?", callback, data);
+		noo.map->add_speech("top,right,name=Eny|" + TRANSLATE("Sky Tower is full of gold and jewels and countless riches! Are we going to be rich?")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|Would you love your father more if he were rich? But yes, yes we are!", callback, data);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("Would you love your father more if he were rich? But yes, yes we are!")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Sunshine|Tell her the catch.", callback, data);
+		noo.map->add_speech("top,right,name=Sunshine|" + TRANSLATE("Tell her the catch.")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|Well... it's RUMOURED that there are some... monsters guarding the floors below the treasure. But that's not confirmed!", callback, data);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("Well... it's RUMOURED that there are some... monsters guarding the floors below the treasure. But that's not confirmed!")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|Oi! Monsters! I don't need more monsters in my life... count me out!", callback, data);
+		noo.map->add_speech("top,right,name=Eny|" + TRANSLATE("Oi! Monsters! I don't need more monsters in my life... count me out!")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|Ok, ok... I just thought you would like to go down in history as the woman who conquered the Sky Tower.", callback, data);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("Ok, ok... I just thought you would like to go down in history as the woman who conquered the Sky Tower.")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Sunshine|Check. Mate.", callback, data);
+		noo.map->add_speech("top,right,name=Sunshine|" + TRANSLATE("Check. Mate.")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|History, eh? Oh I love history... I've always wanted to go down in history! Count me in!", callback, data);
+		noo.map->add_speech("top,right,name=Eny|" + TRANSLATE("History, eh? Oh I love history... I've always wanted to go down in history! Count me in!")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|That's the spirit! Now go and rustle up that friend of yours, Tiggy... we will need some black magic where we're going!", callback, data);
+		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("That's the spirit! Now go and rustle up that friend of yours, Tiggy... we will need some black magic where we're going!")END, callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|Tiggy, yeah... that might be easier said than done, but I'll try...", callback, data);
+		noo.map->add_speech("+milestone=First Scene,top,right,name=Eny|" + TRANSLATE("Tiggy, yeah... that might be easier said than done, but I'll try...")END, callback, data);
 	}
 }
 
 ML_start::ML_start()
 {
+	callback_data = 0;
 }
 
 void ML_start::start()
 {
 	noo.play_music("town.mml");
 
-	if (noo.last_map_name == "") { // FIXME: not if loading a game, only starting a new one
-		noo.player->set_position(Point<int>(11, 24));
-		noo.player->set_direction(N);
-		noo.map->add_speech("name=Eny,top,right|Ahhh, the pub. Nothing beats it. Except maybe the pub in Seaside... but although this one isn't as clean, the people are nice. Hey, there's someone I know!", callback, &callback_data);
+	if (noo.last_map_name != "--LOADED--") {
+		if (noo.check_milestone("First Scene") == false) {
+			noo.player->set_position(Point<int>(11, 24));
+			noo.player->set_direction(N);
+			noo.map->add_speech("name=Eny,top,right|" + TRANSLATE("Ahhh, the pub. Nothing beats it. Except maybe the pub in Seaside... but although this one isn't as clean, the people are nice. Hey, there's someone I know!")END, callback, &callback_data);
+		}
 		coro = new Map_Entity("coro");
 		coro->set_brain(new Talk_Brain("coro"));
 		coro->load_sprite("coro");
