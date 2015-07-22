@@ -1,8 +1,8 @@
 #ifndef BRAINS_H
 #define BRAINS_H
 
-#include "Nooskewl_Engine/main.h"
-#include "Nooskewl_Engine/talk_brain.h"
+#include <Nooskewl_Engine/main.h>
+#include <Nooskewl_Engine/talk_brain.h>
 
 using namespace Nooskewl_Engine;
 

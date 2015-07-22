@@ -1,4 +1,6 @@
-#include "Nooskewl_Engine/map_entity.h"
+#include <Nooskewl_Engine/internal.h>
+#include <Nooskewl_Engine/map_entity.h>
+#include <Nooskewl_Engine/sprite.h>
 
 #include "brains.h"
 
