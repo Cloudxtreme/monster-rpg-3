@@ -1,8 +1,8 @@
 #include <Nooskewl_Engine/engine.h>
+#include <Nooskewl_Engine/talk_brain.h>
 
 #include "ml.h"
 #include "ml_start.h"
-#include "talk_brain.h"
 #include "tweens.h"
 
 int ML_start::callback_data;
@@ -95,42 +95,47 @@ void ML_start::start()
 		noo.player->set_position(Point<int>(11, 24));
 		noo.player->set_direction(N);
 		noo.map->add_speech("name=Eny,top,right|Ahhh, the pub. Nothing beats it. Except maybe the pub in Seaside... but although this one isn't as clean, the people are nice. Hey, there's someone I know!", callback, &callback_data);
+		coro = new Map_Entity("coro");
+		coro->set_brain(new Talk_Brain("coro"));
+		coro->load_sprite("coro");
+		coro->set_position(Point<int>(3, 19));
+		coro->set_direction(S);
+		coro->set_sitting(true);
+		sunshine = new Map_Entity("sunshine");
+		sunshine->set_brain(new Talk_Brain("sunshine"));
+		sunshine->load_sprite("sunshine");
+		sunshine->set_position(Point<int>(1, 21));
+		sunshine->set_direction(E);
+		sunshine->set_sitting(true);
+		business_man = new Map_Entity("business_man");
+		business_man->set_brain(new Talk_Brain("business_man"));
+		business_man->load_sprite("business_man");
+		business_man->set_position(Point<int>(16, 19));
+		business_man->set_direction(E);
+		legendary_warrior = new Map_Entity("legendary_warrior");
+		legendary_warrior->set_brain(new Talk_Brain("legendary_warrior"));
+		legendary_warrior->load_sprite("legendary_warrior");
+		legendary_warrior->set_position(Point<int>(12, 15));
+		legendary_warrior->set_direction(S);
+		legendary_warrior->set_sitting(true);
+		bartender = new Map_Entity("bartender");
+		bartender->set_brain(new Talk_Brain("bartender"));
+		bartender->load_sprite("bartender");
+		bartender->set_position(Point<int>(19, 19));
+		bartender->get_sprite()->start();
+		sitting_lady = new Map_Entity("sitting_lady");
+		sitting_lady->set_brain(new Talk_Brain("sitting_lady"));
+		sitting_lady->load_sprite("sitting_lady");
+		sitting_lady->set_position(Point<int>(16, 13));
+		sitting_lady->set_direction(E);
+		sitting_lady->set_sitting(true);
+		noo.map->add_entity(coro);
+		noo.map->add_entity(sunshine);
+		noo.map->add_entity(business_man);
+		noo.map->add_entity(legendary_warrior);
+		noo.map->add_entity(bartender);
+		noo.map->add_entity(sitting_lady);
 	}
-
-	coro = new Map_Entity(new Talk_Brain("coro"));
-	coro->load_sprite("coro");
-	coro->set_position(Point<int>(3, 19));
-	coro->set_direction(S);
-	coro->set_sitting(true);
-	sunshine = new Map_Entity(new Talk_Brain("sunshine"));
-	sunshine->load_sprite("sunshine");
-	sunshine->set_position(Point<int>(1, 21));
-	sunshine->set_direction(E);
-	sunshine->set_sitting(true);
-	business_man = new Map_Entity(new Talk_Brain("business_man"));
-	business_man->load_sprite("business_man");
-	business_man->set_position(Point<int>(16, 19));
-	business_man->set_direction(E);
-	legendary_warrior = new Map_Entity(new Talk_Brain("legendary_warrior"));
-	legendary_warrior->load_sprite("legendary_warrior");
-	legendary_warrior->set_position(Point<int>(12, 15));
-	legendary_warrior->set_direction(S);
-	legendary_warrior->set_sitting(true);
-	bartender = new Map_Entity(new Talk_Brain("bartender"));
-	bartender->load_sprite("bartender");
-	bartender->set_position(Point<int>(19, 19));
-	bartender->get_sprite()->start();
-	sitting_lady = new Map_Entity(new Talk_Brain("sitting_lady"));
-	sitting_lady->load_sprite("sitting_lady");
-	sitting_lady->set_position(Point<int>(16, 13));
-	sitting_lady->set_direction(E);
-	sitting_lady->set_sitting(true);
-	noo.map->add_entity(coro);
-	noo.map->add_entity(sunshine);
-	noo.map->add_entity(business_man);
-	noo.map->add_entity(legendary_warrior);
-	noo.map->add_entity(bartender);
-	noo.map->add_entity(sitting_lady);
 }
 
 void ML_start::end()
