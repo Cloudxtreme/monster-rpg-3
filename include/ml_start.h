@@ -28,6 +28,7 @@ private:
 	Map_Entity *bartender;
 	Map_Entity *sitting_lady;
 	Map_Entity *laughing_man;
+	Map_Entity *drinker;
 };
 
 #endif // ML_START_H

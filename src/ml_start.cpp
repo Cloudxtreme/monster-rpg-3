@@ -125,7 +125,6 @@ void ML_start::start()
 		bartender->set_brain(new Talk_Brain("bartender"));
 		bartender->load_sprite("bartender");
 		bartender->set_position(Point<int>(19, 19));
-		bartender->get_sprite()->start();
 		sitting_lady = new Map_Entity("sitting_lady");
 		sitting_lady->set_brain(new Talk_Brain("sitting_lady"));
 		sitting_lady->load_sprite("sitting_lady");
@@ -138,6 +137,10 @@ void ML_start::start()
 		laughing_man->set_position(Point<int>(8, 7));
 		laughing_man->set_direction(S);
 		laughing_man->set_sitting(true);
+		drinker = new Map_Entity("drinker");
+		drinker->set_brain(NULL);
+		drinker->load_sprite("drinker");
+		drinker->set_position(Point<int>(14, 8));
 		noo.map->add_entity(coro);
 		noo.map->add_entity(sunshine);
 		noo.map->add_entity(business_man);
@@ -145,6 +148,7 @@ void ML_start::start()
 		noo.map->add_entity(bartender);
 		noo.map->add_entity(sitting_lady);
 		noo.map->add_entity(laughing_man);
+		noo.map->add_entity(drinker);
 	}
 }
 
