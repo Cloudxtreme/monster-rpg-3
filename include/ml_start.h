@@ -1,8 +1,7 @@
 #ifndef ML_START_H
 #define ML_START_H
 
-#include <Nooskewl_Engine/map_entity.h>
-#include <Nooskewl_Engine/map_logic.h>
+#include <Nooskewl_Engine/Nooskewl_Engine.h>
 
 using namespace Nooskewl_Engine;
 

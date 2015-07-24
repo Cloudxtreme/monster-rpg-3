@@ -5,20 +5,16 @@
 #include "ml_start.h"
 #include "ml_start_upper.h"
 
-#ifdef MONSTERRPG3_WINDOWS
-static bool started = false;
-
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+bool dll_start()
 {
-	if (started == false) {
-		started = true;
-
-		noo.window_title = "Monster RPG 3";
-	}
-
-	return TRUE;
+	noo.window_title = "Monster RPG 3";
+	return start_brains();
 }
-#endif
+
+void dll_end()
+{
+	end_brains();
+}
 
 Map_Logic *dll_get_map_logic(std::string map_name)
 {

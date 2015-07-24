@@ -1,7 +1,4 @@
-#include <Nooskewl_Engine/engine.h>
-#include <Nooskewl_Engine/map.h>
-#include <Nooskewl_Engine/sprite.h>
-#include <Nooskewl_Engine/translation.h>
+#include <Nooskewl_Engine/Nooskewl_Engine.h>
 
 #include "brains.h"
 #include "ml.h"

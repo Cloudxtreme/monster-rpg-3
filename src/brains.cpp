@@ -1,11 +1,20 @@
-#include <Nooskewl_Engine/engine.h>
-#include <Nooskewl_Engine/internal.h>
-#include <Nooskewl_Engine/map.h>
-#include <Nooskewl_Engine/map_entity.h>
-#include <Nooskewl_Engine/sprite.h>
-#include <Nooskewl_Engine/tokenizer.h>
+#include <Nooskewl_Engine/Nooskewl_Engine.h>
 
 #include "brains.h"
+
+bool start_brains()
+{
+	if (Door_Brain::start() == 0) {
+		return false;
+	}
+
+	return true;
+}
+
+void end_brains()
+{
+	Door_Brain::end();
+}
 
 void Talk_Brain::callback(void *data)
 {
@@ -221,9 +230,23 @@ bool Talk_Then_Animate_Brain::save(SDL_RWops *file)
 
 //--
 
+MML *Door_Brain::mml;
+
+bool Door_Brain::start()
+{
+	mml = new MML("door.mml");
+	return true;
+}
+
+void Door_Brain::end()
+{
+	delete mml;
+}
+
 void Door_Brain::collide(Map_Entity *collider)
 {
 	if (collider == noo.player) {
+		mml->play(false);
 		noo.map->schedule_destroy(map_entity);
 	}
 }

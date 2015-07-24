@@ -1,10 +1,12 @@
 #ifndef BRAINS_H
 #define BRAINS_H
 
-#include <Nooskewl_Engine/main.h>
-#include <Nooskewl_Engine/brain.h>
+#include <Nooskewl_Engine/Nooskewl_Engine.h>
 
 using namespace Nooskewl_Engine;
+
+bool start_brains();
+void end_brains();
 
 class Talk_Brain : public Brain {
 public:
@@ -63,9 +65,15 @@ public:
 
 class Door_Brain : public Brain {
 public:
+	static bool start();
+	static void end();
+
 	void collide(Map_Entity *collider);
 
 	bool save(SDL_RWops *file);
+
+private:
+	static MML *mml;
 };
 
 #endif // BRAINS_H
