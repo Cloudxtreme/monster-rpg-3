@@ -23,7 +23,10 @@ void Animated_Brain::update()
 
 	if (name == "laughing_man") {
 		Uint32 ticks = SDL_GetTicks() % 5000;
-		if (ticks < 500) {
+		if (ticks < 600) {
+			if (sprite->get_animation() != "laugh") {
+				sprite->reset();
+			}
 			sprite->set_animation("laugh");
 		}
 		else {
