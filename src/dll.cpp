@@ -52,6 +52,9 @@ Brain *dll_get_brain(std::string options)
 		std::string name = t.next();
 		return new Talk_Then_Animate_Brain(name);
 	}
+	else if (type == "door_brain") {
+		return new Door_Brain();
+	}
 
 	return 0;
 }

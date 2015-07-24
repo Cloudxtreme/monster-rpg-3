@@ -61,4 +61,11 @@ public:
 	bool save(SDL_RWops *file);
 };
 
+class Door_Brain : public Brain {
+public:
+	void collide(Map_Entity *collider);
+
+	bool save(SDL_RWops *file);
+};
+
 #endif // BRAINS_H

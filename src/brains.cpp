@@ -218,3 +218,18 @@ bool Talk_Then_Animate_Brain::save(SDL_RWops *file)
 	SDL_fprintf(file, "brain=talk_then_animate_brain,%s\n", name.c_str());
 	return true;
 }
+
+//--
+
+void Door_Brain::collide(Map_Entity *collider)
+{
+	if (collider == noo.player) {
+		noo.map->schedule_destroy(map_entity);
+	}
+}
+
+bool Door_Brain::save(SDL_RWops *file)
+{
+	SDL_fprintf(file, "brain=door_brain\n");
+	return true;
+}
