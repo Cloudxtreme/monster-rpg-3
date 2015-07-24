@@ -81,6 +81,9 @@ void ML_start::callback(void *data)
 	NEXT_STAGE {
 		noo.map->add_speech("+milestone=First Scene,top,right,name=Eny|" + noo.game_t->translate(15), callback, data);
 	}
+	NEXT_STAGE {
+		coro->set_direction(S);
+	}
 }
 
 ML_start::ML_start()
