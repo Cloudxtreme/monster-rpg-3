@@ -44,6 +44,10 @@ Brain *dll_get_brain(std::string options)
 		std::string name = t.next();
 		return new Animated_Brain(name);
 	}
+	else if (type == "talk_then_animate_brain") {
+		std::string name = t.next();
+		return new Talk_Then_Animate_Brain(name);
+	}
 
 	return 0;
 }
