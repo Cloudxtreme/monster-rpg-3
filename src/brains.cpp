@@ -243,6 +243,11 @@ void Door_Brain::end()
 	delete mml;
 }
 
+void Door_Brain::activate(Map_Entity *activator)
+{
+	collide(activator);
+}
+
 void Door_Brain::collide(Map_Entity *collider)
 {
 	if (collider == noo.player) {

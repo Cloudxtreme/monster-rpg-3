@@ -68,6 +68,7 @@ public:
 	static bool start();
 	static void end();
 
+	void activate(Map_Entity *activator);
 	void collide(Map_Entity *collider);
 
 	bool save(SDL_RWops *file);

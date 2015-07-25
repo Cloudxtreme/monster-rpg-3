@@ -14,6 +14,7 @@ void ML_start_upper::start()
 		door1->load_sprite("door");
 		door1->set_position(Point<int>(3, 7));
 		door1->set_shadow_type(Map_Entity::SHADOW_TRANSLUCENT_COPY);
+		door1->set_solid(false);
 
 		Map_Entity *door2 = new Map_Entity("door");
 		Door_Brain *door2_brain = new Door_Brain();
@@ -21,6 +22,7 @@ void ML_start_upper::start()
 		door2->load_sprite("door");
 		door2->set_position(Point<int>(9, 7));
 		door2->set_shadow_type(Map_Entity::SHADOW_TRANSLUCENT_COPY);
+		door2->set_solid(false);
 
 		Map_Entity *door3 = new Map_Entity("door");
 		Door_Brain *door3_brain = new Door_Brain();
@@ -28,6 +30,7 @@ void ML_start_upper::start()
 		door3->load_sprite("door");
 		door3->set_position(Point<int>(15, 7));
 		door3->set_shadow_type(Map_Entity::SHADOW_TRANSLUCENT_COPY);
+		door3->set_solid(false);
 
 		Map_Entity *door4 = new Map_Entity("door");
 		Door_Brain *door4_brain = new Door_Brain();
@@ -35,6 +38,7 @@ void ML_start_upper::start()
 		door4->load_sprite("door");
 		door4->set_position(Point<int>(3, 12));
 		door4->set_shadow_type(Map_Entity::SHADOW_TRANSLUCENT_COPY);
+		door4->set_solid(false);
 
 		Map_Entity *door5 = new Map_Entity("door");
 		Door_Brain *door5_brain = new Door_Brain();
@@ -42,6 +46,7 @@ void ML_start_upper::start()
 		door5->load_sprite("door");
 		door5->set_position(Point<int>(21, 12));
 		door5->set_shadow_type(Map_Entity::SHADOW_TRANSLUCENT_COPY);
+		door5->set_solid(false);
 
 		noo.map->add_entity(door1);
 		noo.map->add_entity(door2);
