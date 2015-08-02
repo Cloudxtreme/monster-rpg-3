@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(MonsterRPG3 CXX)
+project("monster-rpg-3" CXX)
 
 option(TRENTS_BUILD "Build my way" off)
 
