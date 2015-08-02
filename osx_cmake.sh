@@ -1,1 +1,0 @@
-cmake .. -DCMAKE_OSX_ARCHITECTURES="i386;x86_64" -DTRENTS_BUILD=on -DUSER_INCLUDE_PATH="/Users/trent/code/local/include;/Users/trent/code/Nooskewl_Engine/include" -DUSER_LIBRARY_PATH="/Users/trent/code/local/lib" -DUSER_FRAMEWORK_PATH="/Users/trent/code/local/lib"
