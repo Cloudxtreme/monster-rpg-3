@@ -80,6 +80,7 @@ void ML_start::callback(void *data)
 	}
 	NEXT_STAGE {
 		coro->set_direction(S);
+		noo.player->set_input_enabled(true);
 	}
 }
 
@@ -94,6 +95,7 @@ void ML_start::start()
 
 	if (noo.last_map_name != "--LOADED--") {
 		if (noo.check_milestone("First Scene") == false) {
+			noo.player->set_input_enabled(false);
 			noo.player->set_position(Point<int>(11, 24));
 			noo.player->set_direction(N);
 			noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(0), callback, &callback_data);
