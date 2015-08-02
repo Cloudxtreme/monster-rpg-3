@@ -18,9 +18,9 @@ void ML_start::callback(void *data)
 	NEXT_STAGE {
 		noo.player->set_direction(W);
 		coro->set_direction(E);
-		noo.map->add_speech("top,right,name=Coro|" + TRANSLATE("Well, look who decided to show up! You know it doesn't count as \"sleeping in\" if the sun goes down again... There's another name for it.")END);
-		noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(7));
-		noo.map->add_speech("top,right,name=Coro|" + noo.game_t->translate(2), callback, data);
+		noo.map->add_speech("right,name=Coro|" + TRANSLATE("Well, look who decided to show up! You know it doesn't count as \"sleeping in\" if the sun goes down again... There's another name for it.")END);
+		noo.map->add_speech("right,name=Eny|" + noo.game_t->translate(7));
+		noo.map->add_speech("right,name=Coro|" + noo.game_t->translate(2), callback, data);
 	}
 	NEXT_STAGE {
 		noo.player->set_path(noo.map->find_path(noo.player->get_position(), Point<int>(6, 21)), callback, data);
@@ -28,55 +28,55 @@ void ML_start::callback(void *data)
 	NEXT_STAGE {
 		noo.player->set_direction(W);
 		noo.player->set_sitting(true);
-		noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(10), callback, data);
+		noo.map->add_speech("right,name=Eny|" + noo.game_t->translate(10), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Sunshine|" + noo.game_t->translate(16), callback, data);
+		noo.map->add_speech("right,name=Sunshine|" + noo.game_t->translate(16), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|" + noo.game_t->translate(6), callback, data);
+		noo.map->add_speech("right,name=Coro|" + noo.game_t->translate(6), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(19), callback, data);
+		noo.map->add_speech("right,name=Eny|" + noo.game_t->translate(19), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|" + noo.game_t->translate(14), callback, data);
+		noo.map->add_speech("right,name=Coro|" + noo.game_t->translate(14), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Sunshine|" + noo.game_t->translate(5), callback, data);
+		noo.map->add_speech("right,name=Sunshine|" + noo.game_t->translate(5), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|" + noo.game_t->translate(4), callback, data);
+		noo.map->add_speech("right,name=Coro|" + noo.game_t->translate(4), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(11), callback, data);
+		noo.map->add_speech("right,name=Eny|" + noo.game_t->translate(11), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|" + noo.game_t->translate(20), callback, data);
+		noo.map->add_speech("right,name=Coro|" + noo.game_t->translate(20), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Sunshine|" + noo.game_t->translate(12), callback, data);
+		noo.map->add_speech("right,name=Sunshine|" + noo.game_t->translate(12), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|" + noo.game_t->translate(18), callback, data);
+		noo.map->add_speech("right,name=Coro|" + noo.game_t->translate(18), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(8), callback, data);
+		noo.map->add_speech("right,name=Eny|" + noo.game_t->translate(8), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|" + noo.game_t->translate(9), callback, data);
+		noo.map->add_speech("right,name=Coro|" + noo.game_t->translate(9), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Sunshine|" + noo.game_t->translate(1), callback, data);
+		noo.map->add_speech("right,name=Sunshine|" + noo.game_t->translate(1), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(3), callback, data);
+		noo.map->add_speech("right,name=Eny|" + noo.game_t->translate(3), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("top,right,name=Coro|" + noo.game_t->translate(13), callback, data);
+		noo.map->add_speech("right,name=Coro|" + noo.game_t->translate(13), callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("+milestone=First Scene,top,right,name=Eny|" + noo.game_t->translate(15), callback, data);
+		noo.map->add_speech("+milestone=First Scene,right,name=Eny|" + noo.game_t->translate(15), callback, data);
 	}
 	NEXT_STAGE {
 		coro->set_direction(S);
@@ -96,7 +96,7 @@ void ML_start::start()
 		if (noo.check_milestone("First Scene") == false) {
 			noo.player->set_position(Point<int>(11, 24));
 			noo.player->set_direction(N);
-			noo.map->add_speech("name=Eny,top,right|" + noo.game_t->translate(0), callback, &callback_data);
+			noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(0), callback, &callback_data);
 		}
 		coro = new Map_Entity("coro");
 		coro->set_brain(new Talk_Brain("coro"));
