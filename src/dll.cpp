@@ -49,7 +49,15 @@ Brain *dll_get_brain(std::string options)
 		return new Talk_Then_Animate_Brain(name);
 	}
 	else if (type == "door_brain") {
-		return new Door_Brain();
+		bool open;
+		std::string open_s = t.next();
+		if (open_s == "open") {
+			open = true;
+		}
+		else {
+			open = false;
+		}
+		return new Door_Brain(open);
 	}
 
 	return 0;
