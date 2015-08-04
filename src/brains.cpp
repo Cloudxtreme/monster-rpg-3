@@ -243,21 +243,66 @@ void Door_Brain::end()
 	delete mml;
 }
 
+Door_Brain::Door_Brain(bool open) :
+	open(open)
+{
+}
+
 void Door_Brain::activate(Map_Entity *activator)
 {
-	collide(activator);
+	if (activator == noo.player) {
+		if (map_entity->entity_collides(activator) == false) {
+			mml->play(false);
+
+			open = !open;
+
+			if (open) {
+				do_open();
+			}
+			else {
+				do_close();
+			}
+		}
+	}
 }
 
 void Door_Brain::collide(Map_Entity *collider)
 {
-	if (collider == noo.player) {
+	if (collider == noo.player && open == false) {
 		mml->play(false);
-		noo.map->schedule_destroy(map_entity);
+
+		open = true;
+
+		do_open();
+	}
+}
+
+void Door_Brain::set_map_entity(Map_Entity *entity)
+{
+	Brain::set_map_entity(entity);
+
+	if (open) {
+		do_open();
+	}
+	else {
+		do_close();
 	}
 }
 
 bool Door_Brain::save(SDL_RWops *file)
 {
-	SDL_fprintf(file, "brain=door_brain\n");
+	SDL_fprintf(file, "brain=door_brain%s\n", open ? ",open" : "");
 	return true;
+}
+
+void Door_Brain::do_open()
+{
+	map_entity->set_solid(false);
+	map_entity->get_sprite()->set_animation("open");
+}
+
+void Door_Brain::do_close()
+{
+	map_entity->set_solid(true);
+	map_entity->get_sprite()->set_animation("closed");
 }

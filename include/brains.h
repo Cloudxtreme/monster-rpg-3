@@ -68,13 +68,21 @@ public:
 	static bool start();
 	static void end();
 
+	Door_Brain(bool open);
+
 	void activate(Map_Entity *activator);
 	void collide(Map_Entity *collider);
+	void set_map_entity(Map_Entity *map_entity);
 
 	bool save(SDL_RWops *file);
 
 private:
 	static MML *mml;
+
+	void do_open();
+	void do_close();
+
+	bool open;
 };
 
 #endif // BRAINS_H
