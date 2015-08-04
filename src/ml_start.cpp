@@ -98,7 +98,7 @@ void ML_start::start()
 			noo.player->set_input_enabled(false);
 			noo.player->set_position(Point<int>(11, 24));
 			noo.player->set_direction(N);
-			noo.map->add_speech("top,right,name=Eny|" + noo.game_t->translate(0), callback, &callback_data);
+			noo.map->add_speech("+milestone=Input Help,top,right,name=Eny|" + noo.game_t->translate(0), callback, &callback_data);
 		}
 		coro = new Map_Entity("coro");
 		coro->set_brain(new Talk_Brain("coro"));
