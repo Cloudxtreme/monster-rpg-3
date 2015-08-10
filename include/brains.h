@@ -43,6 +43,8 @@ protected:
 	std::vector<Talk *> sayings;
 	Callback user_callback;
 	void *user_callback_data;
+
+	bool talking;
 };
 
 class Animated_Brain : public Talk_Brain {
