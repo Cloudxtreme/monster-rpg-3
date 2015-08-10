@@ -25,12 +25,15 @@ void Talk_Brain::callback(void *data)
 	if (d->user_callback) {
 		d->user_callback(data);
 	}
+
+	((Talk_Brain *)d->entity->get_brain())->talking = false;
 }
 
 Talk_Brain::Talk_Brain(std::string name, Callback callback, void *callback_data) :
 	name(name),
 	user_callback(callback),
-	user_callback_data(callback_data)
+	user_callback_data(callback_data),
+	talking(false)
 {
 	std::string text = noo.load_text("speech/" + name + ".utf8");
 
@@ -89,6 +92,7 @@ void Talk_Brain::activate(Map_Entity *activator)
 {
 	std::string text = get_speech(activator, map_entity);
 	if (text != "") {
+		talking = true;
 		noo.map->add_speech(text, callback, &callback_data);
 	}
 }
@@ -176,15 +180,17 @@ void Animated_Brain::update()
 	}
 
 	if (name == "laughing_man") {
-		Uint32 ticks = SDL_GetTicks() % 5000;
-		if (ticks < 600) {
-			if (sprite->get_animation() != "laugh") {
-				sprite->reset();
+		if (((Animated_Brain *)map_entity->get_brain())->talking == false) {
+			Uint32 ticks = SDL_GetTicks() % 5000;
+			if (ticks < 600) {
+				if (sprite->get_animation() != "laugh") {
+					sprite->reset();
+				}
+				sprite->set_animation("laugh");
 			}
-			sprite->set_animation("laugh");
-		}
-		else {
-			sprite->set_animation("sit_s");
+			else {
+				sprite->set_animation("sit_s");
+			}
 		}
 	}
 }
