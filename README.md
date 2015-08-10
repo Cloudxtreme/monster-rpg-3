@@ -1,4 +1,8 @@
-# Build instructions (Ubuntu 14.04):
+# Build instructions
+
+The tools/build.sh script can be used to download and build everything, if you have access to the monster-rpg-3-data repo which is for early access backers only. The build instructions below can be used otherwise, but you'll need to get a datafile somewhere.
+
+# Build instructions (Ubuntu 14.04)
 
 ## Prerequisites
 
