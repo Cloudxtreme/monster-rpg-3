@@ -33,7 +33,7 @@ fi
 # Clone Monster RPG 3 data if its directory doesn't already exist.
 if [ ! -d "monster-rpg-3-data" ]; then
 
-  echo "### Cloning Monster RPG 3 data, please enter credentials ###"
+  echo "### Cloning Monster RPG 3 data ###"
   git clone https://github.com/Nooskewl/monster-rpg-3-data.git
 fi
 
