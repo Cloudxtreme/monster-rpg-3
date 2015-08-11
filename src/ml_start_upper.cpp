@@ -53,6 +53,17 @@ void ML_start_upper::start()
 		noo.map->add_entity(door3);
 		noo.map->add_entity(door4);
 		noo.map->add_entity(door5);
+
+		int bottle_milestone = noo.milestone_name_to_number("Pub bottle 5");
+
+		if (noo.check_milestone(bottle_milestone) == false) {
+			Map_Entity *bottle = new Map_Entity("bottle");
+			bottle->set_brain(new Item_Brain("bottle", 1, bottle_milestone));
+			bottle->load_sprite("bottle_tipped");
+			bottle->set_position(Point<int>(11, 3));
+			bottle->set_solid(false);
+			noo.map->add_entity(bottle);
+		}
 	}
 }
 
