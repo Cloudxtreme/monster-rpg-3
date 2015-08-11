@@ -143,6 +143,7 @@ void ML_start::start()
 		drinker->set_brain(new Talk_Then_Animate_Brain("drinker"));
 		drinker->load_sprite("drinker");
 		drinker->set_position(Point<int>(14, 8));
+
 		noo.map->add_entity(coro);
 		noo.map->add_entity(sunshine);
 		noo.map->add_entity(business_man);
@@ -151,6 +152,49 @@ void ML_start::start()
 		noo.map->add_entity(sitting_lady);
 		noo.map->add_entity(laughing_man);
 		noo.map->add_entity(drinker);
+
+		int bottle1_milestone = noo.milestone_name_to_number("Pub bottle 1");
+		int bottle2_milestone = noo.milestone_name_to_number("Pub bottle 2");
+		int bottle3_milestone = noo.milestone_name_to_number("Pub bottle 3");
+		int bottle4_milestone = noo.milestone_name_to_number("Pub bottle 4");
+
+		if (noo.check_milestone(bottle1_milestone) == false) {
+			Map_Entity *bottle1 = new Map_Entity("bottle");
+			bottle1->set_brain(new Item_Brain("bottle", 1, bottle1_milestone));
+			bottle1->load_sprite("bottle_tipped");
+			bottle1->set_position(Point<int>(1, 11));
+			bottle1->set_solid(false);
+			noo.map->add_entity(bottle1);
+		}
+
+		if (noo.check_milestone(bottle2_milestone) == false) {
+			Map_Entity *bottle2 = new Map_Entity("bottle");
+			bottle2->set_brain(new Item_Brain("bottle", 1, bottle2_milestone));
+			bottle2->load_sprite("bottle_tipped");
+			bottle2->set_position(Point<int>(14, 13));
+			bottle2->set_solid(false);
+			noo.map->add_entity(bottle2);
+		}
+
+		if (noo.check_milestone(bottle3_milestone) == false) {
+			Map_Entity *bottle3 = new Map_Entity("bottle");
+			bottle3->set_brain(new Item_Brain("bottle", 1, bottle3_milestone));
+			bottle3->load_sprite("bottle_tipped");
+			bottle3->set_position(Point<int>(17, 19));
+			bottle3->set_high(true);
+			bottle3->set_solid(false);
+			noo.map->add_entity(bottle3);
+		}
+
+		if (noo.check_milestone(bottle4_milestone) == false) {
+			Map_Entity *bottle4 = new Map_Entity("bottle");
+			bottle4->set_brain(new Item_Brain("bottle", 1, bottle4_milestone));
+			bottle4->load_sprite("bottle");
+			bottle4->set_position(Point<int>(17, 18));
+			bottle4->set_high(true);
+			bottle4->set_solid(false);
+			noo.map->add_entity(bottle4);
+		}
 	}
 }
 
