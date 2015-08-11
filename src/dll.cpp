@@ -59,6 +59,24 @@ Brain *dll_get_brain(std::string options)
 		}
 		return new Door_Brain(open);
 	}
+	else if (type == "item_brain") {
+		std::string this_options = options.substr(type.length() + 1);
+		Tokenizer t(this_options, ',');
+
+		std::string opt = t.next();
+
+		Tokenizer t2(opt, '=');
+
+		std::string key = t2.next();
+		std::string value = t2.next();
+
+		Tokenizer t3(value, ':');
+
+		std::string quantity = t3.next();
+		std::string milestone = t3.next();
+
+		return new Item_Brain(key, atoi(quantity.c_str()), atoi(milestone.c_str()));
+	}
 
 	return 0;
 }
