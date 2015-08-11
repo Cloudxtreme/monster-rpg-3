@@ -312,3 +312,55 @@ void Door_Brain::do_close()
 	map_entity->set_solid(true);
 	map_entity->get_sprite()->set_animation("closed");
 }
+
+//--
+
+Item_Brain::Item_Brain(std::string item_name, int quantity, int milestone) :
+	item_name(item_name),
+	quantity(quantity),
+	milestone(milestone)
+{
+}
+
+void Item_Brain::activate(Map_Entity *activator)
+{
+	Stats *stats = activator->get_stats();
+
+	if (stats) {
+		Inventory *inventory = stats->inventory;
+		if (inventory) {
+			if (quantity > 0) {
+				std::string name;
+				for (int i = 0; i < quantity; i++) {
+					Item *item = new Item(item_name);
+					inventory->add(item);
+					if (i == 0) {
+						name = item->name;
+					}
+				}
+				noo.item_mml->play(false);
+				// FIXME: a/an and adding s isn't foolproof
+				if (quantity > 1) {
+					noo.map->add_speech("Found " + itos(quantity) + " " + name + "s");
+				}
+				else {
+					char c = tolower(name.c_str()[0]);
+					if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+						noo.map->add_speech("Found an " + name + "...");
+					}
+					else {
+						noo.map->add_speech("Found a " + name + "...");
+					}
+				}
+			}
+			noo.map->schedule_destroy(map_entity);
+			noo.set_milestone(milestone, true);
+		}
+	}
+}
+
+bool Item_Brain::save(SDL_RWops *file)
+{
+	SDL_fprintf(file, "brain=item_brain,%s=%d:%d\n", item_name.c_str(), quantity, milestone);
+	return true;
+}

@@ -87,4 +87,18 @@ private:
 	bool open;
 };
 
+class Item_Brain : public Brain {
+public:
+	Item_Brain(std::string item_name, int quantity, int milestone);
+
+	void activate(Map_Entity *activator);
+
+	bool save(SDL_RWops *file);
+
+private:
+	std::string item_name;
+	int quantity;
+	int milestone;
+};
+
 #endif // BRAINS_H
