@@ -180,7 +180,8 @@ void ML_start::start()
 			Map_Entity *bottle3 = new Map_Entity("bottle");
 			bottle3->set_brain(new Item_Brain("bottle", 1, bottle3_milestone));
 			bottle3->load_sprite("bottle_tipped");
-			bottle3->set_position(Point<int>(17, 19));
+			bottle3->set_position(Point<int>(17, 20));
+			bottle3->set_z(noo.tile_size);
 			bottle3->set_high(true);
 			bottle3->set_solid(false);
 			noo.map->add_entity(bottle3);
@@ -190,7 +191,8 @@ void ML_start::start()
 			Map_Entity *bottle4 = new Map_Entity("bottle");
 			bottle4->set_brain(new Item_Brain("bottle", 1, bottle4_milestone));
 			bottle4->load_sprite("bottle");
-			bottle4->set_position(Point<int>(17, 18));
+			bottle4->set_position(Point<int>(17, 19));
+			bottle4->set_z(noo.tile_size);
 			bottle4->set_high(true);
 			bottle4->set_solid(false);
 			noo.map->add_entity(bottle4);
