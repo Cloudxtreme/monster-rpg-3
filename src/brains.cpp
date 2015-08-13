@@ -35,7 +35,7 @@ Talk_Brain::Talk_Brain(std::string name, Callback callback, void *callback_data)
 	user_callback_data(callback_data),
 	talking(false)
 {
-	std::string text = noo.load_text("speech/" + name + ".utf8");
+	std::string text = noo.load_text("text/speech/" + name + ".utf8");
 
 	int offset = 0;
 	bool done = false;
