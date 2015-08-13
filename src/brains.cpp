@@ -64,18 +64,27 @@ Talk_Brain::Talk_Brain(std::string name, Callback callback, void *callback_data)
 		int pipepos = line.find('|');
 
 		if (pipepos == std::string::npos) {
-			printf("Malformated character speech file: %s.utf8\n", name.c_str());
+			printf("Malformed character speech file: %s.utf8\n", name.c_str());
 		}
 		else {
 			std::string milestone_s = line.substr(0, pipepos);
 			std::string speech = line.substr(pipepos+1);
 			Talk *t = new Talk;
-			t->milestone = atoi(milestone_s.c_str());
+			if (milestone_s == "") {
+				t->milestone = -1;
+			}
+			else {
+				t->milestone = noo.milestone_name_to_number(milestone_s);
+			}
 			t->text = speech;
 			sayings.push_back(t);
 		}
 
-		offset = MAX(nlpos, crpos);
+		offset = MAX(nlpos, crpos) + 1;
+
+		if (text.c_str()[offset] == 0) {
+			done = true;
+		}
 	}
 
 	std::sort(sayings.begin(), sayings.end(), &Talk_Brain::compare_milestones);
