@@ -189,7 +189,7 @@ void Animated_Brain::update()
 				sprite->set_animation("laugh");
 			}
 			else {
-				sprite->set_animation("sit_s");
+				sprite->set_animation("stand_s");
 			}
 		}
 	}

@@ -138,7 +138,6 @@ void ML_start::start()
 		laughing_man->load_sprite("laughing_man");
 		laughing_man->set_position(Point<int>(8, 7));
 		laughing_man->set_direction(S);
-		laughing_man->set_sitting(true);
 		drinker = new Map_Entity("drinker");
 		drinker->set_brain(new Talk_Then_Animate_Brain("drinker"));
 		drinker->load_sprite("drinker");
