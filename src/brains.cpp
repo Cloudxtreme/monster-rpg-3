@@ -312,13 +312,11 @@ bool Door_Brain::save(SDL_RWops *file)
 
 void Door_Brain::do_open()
 {
-	map_entity->set_solid(false);
 	map_entity->get_sprite()->set_animation("open");
 }
 
 void Door_Brain::do_close()
 {
-	map_entity->set_solid(true);
 	map_entity->get_sprite()->set_animation("closed");
 }
 
