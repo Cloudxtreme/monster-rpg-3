@@ -11,6 +11,7 @@ public:
 	static void confirm_callback(void *data);
 
 	Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller_costs);
+	virtual ~Buy_Sell_GUI();
 
 	void handle_event(TGUI_Event *event);
 	bool update();
@@ -58,6 +59,8 @@ private:
 	int sell_count;
 	int buy_count;
 	std::vector<int> swapped_out_costs;
+
+	MML *cha_ching;
 
 	bool exit_menu;
 };

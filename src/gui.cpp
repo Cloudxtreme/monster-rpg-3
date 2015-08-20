@@ -122,6 +122,13 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	gui->set_focus(done_button);
 
 	set_labels();
+
+	cha_ching = new MML("buy.mml");
+}
+
+Buy_Sell_GUI::~Buy_Sell_GUI()
+{
+	delete cha_ching;
 }
 
 void Buy_Sell_GUI::handle_event(TGUI_Event *event)
@@ -177,7 +184,7 @@ bool Buy_Sell_GUI::update()
 
 			set_lists();
 
-			// FIXME: play sound
+			cha_ching->play(false);
 		}
 	}
 	else if (done_button->pressed() || exit_menu) {
