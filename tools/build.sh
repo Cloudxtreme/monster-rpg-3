@@ -70,8 +70,10 @@ popd
 
 echo "### Copying binaries to target dir ###"
 mkdir -p ${TARGET_DIR}
+mkdir -p ${TARGET_DIR}/data
 cp -f ${TGUI3_DIR}/build/libtgui3.so \
-      ${NE_DIR}/build/{libNooskewl_Engine.so,Nooskewl_Runner} \
+      ${NE_DIR}/build/{Nooskewl_Runner,libNooskewl_Engine.so} \
       ${MO3_DIR}/build/libMonsterRPG3.so \
       ${DATA_DIR}/MonsterRPG3.cpa \
-      ${TARGET_DIR}
+      ${TARGET_DIR}/data
+cp -f ${MO3_DIR}/icon.png ${MO3_DIR}/tools/MonsterRPG3 ${TARGET_DIR}
