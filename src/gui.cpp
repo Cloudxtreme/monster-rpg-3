@@ -172,6 +172,9 @@ bool Buy_Sell_GUI::update()
 				seller_costs.push_back(costs[seller_inventory->items[i][0]]);
 			}
 
+			stats->inventory->sort();
+			seller_inventory->sort();
+
 			set_lists();
 
 			// FIXME: play sound
@@ -388,6 +391,7 @@ void Buy_Sell_GUI::add_item(Item *item, bool buying)
 		v.push_back(item);
 		if (new_item) {
 			inventory->items.insert(inventory->items.begin() + offset, v);
+			inventory->sort(0, max+1);
 		}
 		else {
 			bool found = false;
@@ -400,6 +404,10 @@ void Buy_Sell_GUI::add_item(Item *item, bool buying)
 			}
 			if (found == false) {
 				inventory->items.push_back(v);
+				inventory->sort(max);
+			}
+			else {
+				inventory->sort(0, max+1);
 			}
 		}
 		if (buying) {

@@ -108,6 +108,7 @@ ML_start::ML_start()
 	Buy_Sell_GUI::add_item(&bartender_inventory, bartender_costs, "pickled_egg", 1, 12);
 	Buy_Sell_GUI::add_item(&bartender_inventory, bartender_costs, "beer", 1, 75);
 	Buy_Sell_GUI::add_item(&bartender_inventory, bartender_costs, "wine", 2, 40);
+	bartender_inventory.sort();
 }
 
 void ML_start::start()
