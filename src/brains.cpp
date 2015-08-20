@@ -217,6 +217,11 @@ void Talk_Then_Animate_Brain::animation_callback(void *data)
 	Map_Entity *entity = (Map_Entity *)data;
 	Sprite *sprite = entity->get_sprite();
 	sprite->set_animation(sprite->get_previous_animation());
+	Map_Entity *bottle = noo.map->find_entity("drinker_bottle");
+	if (bottle) {
+		Sprite *sprite = bottle->get_sprite();
+		sprite->set_animation(sprite->get_previous_animation());
+	}
 }
 
 void Talk_Then_Animate_Brain::speech_callback(void *data)
@@ -227,8 +232,14 @@ void Talk_Then_Animate_Brain::speech_callback(void *data)
 	Sprite *sprite = entity->get_sprite();
 
 	if (name == "drinker") {
-		sprite->set_animation("drinking", animation_callback, (void *)entity);
-		sprite->reset();
+		Map_Entity *bottle = noo.map->find_entity("drinker_bottle");
+		if (bottle) {
+			sprite->set_animation("drinking", animation_callback, (void *)entity);
+			sprite->reset();
+			sprite = bottle->get_sprite();
+			sprite->set_animation("drinking");
+			sprite->reset();
+		}
 	}
 }
 
@@ -347,16 +358,17 @@ void Item_Brain::activate(Map_Entity *activator)
 				}
 				noo.item_mml->play(false);
 				// FIXME: a/an and adding s isn't foolproof
+				std::string found = TRANSLATE("Found")END;
 				if (quantity > 1) {
-					noo.map->add_speech("Found " + itos(quantity) + " " + name + "s");
+					noo.map->add_speech(found + " " + itos(quantity) + " " + name + "s");
 				}
 				else {
 					char c = tolower(name.c_str()[0]);
 					if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
-						noo.map->add_speech("Found an " + name + "...");
+						noo.map->add_speech(found + " " + TRANSLATE("an")END + " " + name + "...");
 					}
 					else {
-						noo.map->add_speech("Found a " + name + "...");
+						noo.map->add_speech(found + " " + TRANSLATE("a") + " " + name + "...");
 					}
 				}
 			}
