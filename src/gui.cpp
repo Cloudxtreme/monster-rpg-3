@@ -610,7 +610,7 @@ bool Multiple_Choice_GUI::update()
 {
 	int pressed;
 	if ((pressed = list->pressed()) >= 0) {
-		callback((void *)pressed);
+		callback((void *)(int64_t)pressed);
 		return do_return(false);
 	}
 
