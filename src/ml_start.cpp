@@ -174,6 +174,14 @@ void ML_start::start()
 		noo.map->add_entity(laughing_man);
 		noo.map->add_entity(drinker);
 
+		if (noo.check_milestone("Drinker's bottle") == false) {
+			drinker_bottle = new Map_Entity("drinker_bottle");
+			drinker_bottle->load_sprite("drinker_bottle");
+			drinker_bottle->set_position(Point<int>(13, 8));
+			drinker_bottle->set_z_add(1);
+			noo.map->add_entity(drinker_bottle);
+		}
+
 		int bottle1_milestone = noo.milestone_name_to_number("Pub bottle 1");
 		int bottle2_milestone = noo.milestone_name_to_number("Pub bottle 2");
 		int bottle3_milestone = noo.milestone_name_to_number("Pub bottle 3");
@@ -380,5 +388,13 @@ void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 		Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(caption, choices, bartender_callback);
 		gui->start();
 		noo.guis.push_back(gui);
+	}
+	else if (activator == noo.player && activated->get_name() == "drinker_bottle") {
+		noo.set_milestone(noo.milestone_name_to_number("Drinker's bottle"), true);
+		noo.item_mml->play(false);
+		Item *item = new Item("bottle");
+		noo.player->get_stats()->inventory->add(item);
+		noo.map->schedule_destroy(activated);
+		noo.map->add_speech(TRANSLATE("Found")END + " " + TRANSLATE("a")END + " " + TRANSLATE("bottle")END);
 	}
 }
