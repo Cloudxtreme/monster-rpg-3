@@ -20,6 +20,7 @@ private:
 
 	void set_labels();
 	void set_list(Widget_List *list, Inventory *inventory, bool is_your_inventory);
+	void set_lists();
 	Item *remove_item(int index, bool buying);
 	void add_item(Item *item, bool buying);
 	void swap_item(int index, bool buying);
@@ -27,6 +28,8 @@ private:
 	int get_cost(bool player);
 	void clear_hilights();
 	void set_hilights();
+	void merge(Inventory *inventory, int count);
+	void move_original(Inventory *inventory, int count, std::vector<Item *> &move_from, std::vector<Item *> &move_to);
 
 	Widget_Label *your_gold_label;
 	Widget_List *your_list;

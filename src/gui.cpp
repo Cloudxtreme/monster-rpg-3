@@ -68,7 +68,6 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	your_gold_label->set_parent(your_column);
 	your_list = new Widget_List(1.0f, -1.0f);
 	your_list->set_break_line(true);
-	set_list(your_list, stats->inventory, true);
 	your_list->set_parent(your_column);
 	
 	TGUI_Widget *their_column = new TGUI_Widget(0.4f, 0.75f);
@@ -78,7 +77,6 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	their_gold_label->set_parent(their_column);
 	their_list = new Widget_List(1.0f, -1.0f);
 	their_list->set_break_line(true);
-	set_list(their_list, seller_inventory, false);
 	their_list->set_parent(their_column);
 
 	TGUI_Widget *button_column = new TGUI_Widget(0.2f, 0.75f);
@@ -87,6 +85,7 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	accept_button = new Widget_Text_Button(TRANSLATE("Accept")END, -1, -1);
 	accept_button->set_padding_top(int(noo.font->get_height() + 2));
 	accept_button->set_parent(button_column);
+	their_list->set_right_widget(accept_button); // feels better like this
 
 	done_button = new Widget_Text_Button(TRANSLATE("Done")END, -1, -1);
 	done_button->set_padding_top(int(noo.font->get_height() + 2));
@@ -115,6 +114,8 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	properties_label = new Widget_Label("", 100);
 	properties_label->set_relative_position(100, 2 * int(noo.font->get_height() + 2));
 	properties_label->set_parent(info_column);
+
+	set_lists();
 
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
 
@@ -159,6 +160,10 @@ bool Buy_Sell_GUI::update()
 			noo.guis.push_back(gui);
 		}
 		else {
+			move_original(stats->inventory, buy_count, their_original_inventory, your_original_inventory);
+			move_original(seller_inventory, sell_count, your_original_inventory, their_original_inventory);
+			merge(stats->inventory, buy_count);
+			merge(seller_inventory, sell_count);
 			buy_count = 0;
 			sell_count = 0;
 			clear_hilights();
@@ -166,6 +171,9 @@ bool Buy_Sell_GUI::update()
 			for (size_t i = 0; i < seller_inventory->items.size(); i++) {
 				seller_costs.push_back(costs[seller_inventory->items[i][0]]);
 			}
+
+			set_lists();
+
 			// FIXME: play sound
 		}
 	}
@@ -274,6 +282,12 @@ void Buy_Sell_GUI::set_list(Widget_List *list, Inventory *inventory, bool is_you
 	list->set_items(item_list);
 }
 
+void Buy_Sell_GUI::set_lists()
+{
+	set_list(your_list, stats->inventory, true);
+	set_list(their_list, seller_inventory, false);
+}
+
 Item *Buy_Sell_GUI::remove_item(int index, bool buying)
 {
 	Inventory *inventory;
@@ -325,16 +339,20 @@ void Buy_Sell_GUI::add_item(Item *item, bool buying)
 {
 	Inventory *inventory;
 
+	int max;
+
 	if (buying) {
 		inventory = stats->inventory;
+		max = buy_count;
 	}
 	else {
 		inventory = seller_inventory;
+		max = sell_count;
 	}
 
 	int index = -1;
 
-	for (size_t i = 0; i < inventory->items.size(); i++) {
+	for (size_t i = 0; i < inventory->items.size() && (int)i < max; i++) {
 		if (inventory->items[i][0]->name == item->name) {
 			index = i;
 			break;
@@ -372,7 +390,17 @@ void Buy_Sell_GUI::add_item(Item *item, bool buying)
 			inventory->items.insert(inventory->items.begin() + offset, v);
 		}
 		else {
-			inventory->items.push_back(v);
+			bool found = false;
+			for (size_t i = 0; i < inventory->items.size(); i++) {
+				if (inventory->items[i][0]->name == item->name) {
+					found = true;
+					inventory->items[i].push_back(item);
+					break;
+				}
+			}
+			if (found == false) {
+				inventory->items.push_back(v);
+			}
 		}
 		if (buying) {
 			if (new_item) {
@@ -395,8 +423,7 @@ void Buy_Sell_GUI::swap_item(int index, bool buying)
 	Item *item = remove_item(index, buying);
 	add_item(item, buying);
 
-	set_list(your_list, stats->inventory, true);
-	set_list(their_list, seller_inventory, false);
+	set_lists();
 
 	bool your_empty = gui->get_focus() == your_list && stats->inventory->items.size() == 0;
 	bool their_empty = gui->get_focus() == their_list && seller_inventory->items.size() == 0;
@@ -481,6 +508,43 @@ void Buy_Sell_GUI::set_hilights()
 	}
 	for (int i = 0; i < sell_count; i++) {
 		their_list->set_hilight(i, true);
+	}
+}
+
+void Buy_Sell_GUI::merge(Inventory *inventory, int count)
+{
+	int index = 0;
+	for (int i = 0; i < count; i++) {
+		std::string name = inventory->items[index][0]->name;
+		bool found = false;
+		for (size_t j = 0; j < inventory->items.size(); j++) {
+			if (index == (int)j) {
+				continue;
+			}
+			if (inventory->items[j][0]->name == name) {
+				inventory->items[j].insert(inventory->items[j].begin(), inventory->items[index].begin(), inventory->items[index].end());
+				inventory->items.erase(inventory->items.begin() + index);
+				found = true;
+				break;
+			}
+		}
+		if (found == false) {
+			index++;
+		}
+	}
+}
+
+void Buy_Sell_GUI::move_original(Inventory *inventory, int count, std::vector<Item *> &move_from, std::vector<Item *> &move_to)
+{
+	for (int i = 0; i < count; i++) {
+		for (size_t j = 0; j < inventory->items[i].size(); j++) {
+			Item *item = inventory->items[i][j];
+			std::vector<Item *>::iterator it = std::find(move_from.begin(), move_from.end(), item);
+			if (it != move_from.end()) {
+				move_from.erase(it);
+			}
+			move_to.push_back(item);
+		}
 	}
 }
 
