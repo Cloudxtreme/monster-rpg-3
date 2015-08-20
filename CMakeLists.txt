@@ -13,6 +13,7 @@ link_directories(${USER_LIBRARY_PATH})
 set(SRC
 	src/brains.cpp
 	src/dll.cpp
+	src/gui.cpp
 	src/ml_start.cpp
 	src/ml_start_upper.cpp
 	src/tweens.cpp
