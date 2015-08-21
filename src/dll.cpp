@@ -2,6 +2,7 @@
 
 #include "brains.h"
 #include "dll.h"
+#include "gui.h"
 #include "ml_start.h"
 #include "ml_start_upper.h"
 
@@ -77,6 +78,21 @@ Brain *dll_get_brain(std::string options)
 
 		return new Item_Brain(key, atoi(quantity.c_str()), atoi(milestone.c_str()));
 	}
+	else if (type == "item_drop") {
+		std::string inventory_s = options.substr(type.length() + 1);
+
+		Inventory *inventory = new Inventory();
+		inventory->from_string(inventory_s);
+
+		return new Item_Drop_Brain(inventory);
+	}
 
 	return 0;
+}
+
+void dll_pause()
+{
+	Pause_GUI *gui = new Pause_GUI();
+	gui->start();
+	noo.guis.push_back(gui);
 }
