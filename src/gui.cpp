@@ -825,8 +825,11 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 
 	if (is_storage == false) {
 		your_gold_label = new Widget_Label("", 70);
-		your_gold_label->set_parent(your_column);
 	}
+	else {
+		your_gold_label = new Widget_Label(TRANSLATE("Your items")END, 70);
+	}
+	your_gold_label->set_parent(your_column);
 	your_list = new Widget_List(1.0f, -1.0f);
 	your_list->set_break_line(true);
 	your_list->set_parent(your_column);
@@ -836,8 +839,11 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 
 	if (is_storage == false) {
 		their_gold_label = new Widget_Label("", 70);
-		their_gold_label->set_parent(their_column);
 	}
+	else {
+		their_gold_label = new Widget_Label(TRANSLATE("Drop")END, 70);
+	}
+	their_gold_label->set_parent(their_column);
 	their_list = new Widget_List(1.0f, -1.0f);
 	their_list->set_break_line(true);
 	their_list->set_parent(their_column);
@@ -846,9 +852,7 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	button_column->set_parent(pad);
 
 	accept_button = new Widget_Text_Button(TRANSLATE("Accept")END, -1, -1);
-	if (is_storage == false) {
-		accept_button->set_padding_top(int(noo.font->get_height() + 2));
-	}
+	accept_button->set_padding_top(int(noo.font->get_height() + 2));
 	accept_button->set_parent(button_column);
 	their_list->set_right_widget(accept_button); // feels better like this
 
