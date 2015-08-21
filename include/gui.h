@@ -201,6 +201,9 @@ private:
 
 	Callback done_callback;
 	void *callback_data;
+
+	Item *start_weapon;
+	Item *start_armour;
 };
 
 class Multiple_Choice_GUI : public GUI {

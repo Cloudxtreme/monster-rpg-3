@@ -666,28 +666,36 @@ void Items_GUI::set_labels()
 {
 	if (list != 0) {
 		int selected = list->get_selected();
-		selected = indices[selected];
-		Item *item = stats->inventory->items[selected][0];
-
-		int condition = 100 * item->condition / 0xffff;
-
-		weight_label->set_text(TRANSLATE("Weight")END + ": " + itos(item->weight));
-
-		if (item->type != Item::OTHER) {
-			condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
+		if (selected < 0) {
+			weight_label->set_text(TRANSLATE("Weight")END + ": -");
+			condition_label->set_text(TRANSLATE("Condition")END + ": -");
+			value_label->set_text(TRANSLATE("Value")END + ": -");
+			properties_label->set_text("");
 		}
 		else {
-			condition_label->set_text(TRANSLATE("Condition")END + ": -");
-		}
+			selected = indices[selected];
+			Item *item = stats->inventory->items[selected][0];
 
-		int value = item->get_value();
+			int condition = 100 * item->condition / 0xffff;
 
-		value_label->set_text(TRANSLATE("Value")END + ": " + itos(value));
+			weight_label->set_text(TRANSLATE("Weight")END + ": " + itos(item->weight));
 
-		int attack = int(item->min_attack + ((condition / 100.0f) * (item->max_attack - item->min_attack)));
+			if (item->type != Item::OTHER) {
+				condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
+			}
+			else {
+				condition_label->set_text(TRANSLATE("Condition")END + ": -");
+			}
 
-		if (item->type == Item::WEAPON) {
-			properties_label->set_text(TRANSLATE("Attack")END + ": " + itos(attack));
+			int value = item->get_value();
+
+			value_label->set_text(TRANSLATE("Value")END + ": " + itos(value));
+
+			int attack = int(item->min_attack + ((condition / 100.0f) * (item->max_attack - item->min_attack)));
+
+			if (item->type == Item::WEAPON) {
+				properties_label->set_text(TRANSLATE("Attack")END + ": " + itos(attack));
+			}
 		}
 	}
 
@@ -769,6 +777,13 @@ void Items_GUI::drop_item(int index)
 		}
 	}
 	dropped_items->add(item);
+
+	if (index == stats->weapon_index) {
+		stats->weapon_index = -1;
+	}
+	else if (index == stats->armour_index) {
+		stats->armour_index = -1;
+	}
 }
 
 //--
@@ -814,6 +829,19 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	got_number = false;
 
 	stats = noo.map->get_entity(0)->get_stats();
+
+	if (stats->weapon_index < 0) {
+		start_weapon = 0;
+	}
+	else {
+		start_weapon = stats->inventory->items[stats->weapon_index][0];
+	}
+	if (stats->armour_index < 0) {
+		start_armour = 0;
+	}
+	else {
+		start_armour = stats->inventory->items[stats->armour_index][0];
+	}
 
 	for (size_t i = 0; i < seller_inventory->items.size(); i++) {
 		for (size_t j = 0; j < seller_inventory->items[i].size(); j++) {
@@ -934,6 +962,20 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 Buy_Sell_GUI::~Buy_Sell_GUI()
 {
 	delete cha_ching;
+
+	stats->weapon_index = -1;
+	stats->armour_index = -1;
+
+	for (size_t i = 0; i < stats->inventory->items.size(); i++) {
+		for (size_t j = 0; j < stats->inventory->items[i].size(); j++) {
+			if (stats->inventory->items[i][j] == start_weapon) {
+				stats->weapon_index = i;
+			}
+			else if (stats->inventory->items[i][j] == start_armour) {
+				stats->armour_index = i;
+			}
+		}
+	}
 }
 
 void Buy_Sell_GUI::handle_event(TGUI_Event *event)
@@ -1131,14 +1173,11 @@ void Buy_Sell_GUI::set_list(Widget_List *list, Inventory *inventory, bool is_you
 	for (size_t i = 0; i < items.size(); i++) {
 		int count = items[i].size();
 		if (count > 0) {
-			// Don't allow selling equipped stuff
-			if (
-				(i == stats->weapon_index) ||
-				(i == stats->armour_index)) {
-				continue;
-			}
 			std::string name = items[i][0]->name;
 			item_list.push_back(itos(count) + " " + name);
+		}
+		else {
+			printf("Zero sized item array...\n");
 		}
 	}
 

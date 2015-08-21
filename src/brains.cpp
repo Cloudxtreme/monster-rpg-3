@@ -164,9 +164,9 @@ std::string Talk_Brain::get_speech(Map_Entity *activator, Map_Entity *activated)
 	return "";
 }
 
-bool Talk_Brain::save(SDL_RWops *file)
+bool Talk_Brain::save(std::string &out)
 {
-	SDL_fprintf(file, "brain=talk_brain,%s\n", name.c_str());
+	out += string_printf("brain=talk_brain,1\n%s\n", name.c_str());
 	return true;
 }
 
@@ -205,9 +205,9 @@ void Animated_Brain::update()
 	}
 }
 
-bool Animated_Brain::save(SDL_RWops *file)
+bool Animated_Brain::save(std::string &out)
 {
-	SDL_fprintf(file, "brain=animated_brain,%s\n", name.c_str());
+	out += string_printf("brain=animated_brain,1\n%s\n", name.c_str());
 	return true;
 }
 
@@ -249,9 +249,9 @@ Talk_Then_Animate_Brain::Talk_Then_Animate_Brain(std::string name) :
 {
 }
 
-bool Talk_Then_Animate_Brain::save(SDL_RWops *file)
+bool Talk_Then_Animate_Brain::save(std::string &out)
 {
-	SDL_fprintf(file, "brain=talk_then_animate_brain,%s\n", name.c_str());
+	out += string_printf("brain=talk_then_animate_brain,1\n%s\n", name.c_str());
 	return true;
 }
 
@@ -316,9 +316,9 @@ void Door_Brain::set_map_entity(Map_Entity *entity)
 	}
 }
 
-bool Door_Brain::save(SDL_RWops *file)
+bool Door_Brain::save(std::string &out)
 {
-	SDL_fprintf(file, "brain=door_brain%s\n", open ? ",open" : "");
+	out += string_printf("brain=door_brain,1\n%s\n", open ? ",open" : "");
 	return true;
 }
 
@@ -379,9 +379,9 @@ void Item_Brain::activate(Map_Entity *activator)
 	}
 }
 
-bool Item_Brain::save(SDL_RWops *file)
+bool Item_Brain::save(std::string &out)
 {
-	SDL_fprintf(file, "brain=item_brain,%s=%d:%d\n", item_name.c_str(), quantity, milestone);
+	out += string_printf("brain=item_brain,1\n%s=%d:%d\n", item_name.c_str(), quantity, milestone);
 	return true;
 }
 
@@ -413,9 +413,10 @@ void Item_Drop_Brain::activate(Map_Entity *activator)
 	noo.guis.push_back(gui);
 }
 
-bool Item_Drop_Brain::save(SDL_RWops *file)
+bool Item_Drop_Brain::save(std::string &out)
 {
-	SDL_fprintf(file, "brain=item_drop,%s\n", inventory->to_string().c_str());
+	std::string inventory_s = inventory->to_string();
+	out += "brain=item_drop," + itos(std::count(inventory_s.begin(), inventory_s.end(), '\n')+1) + "\n" + inventory->to_string() + "\n";
 	return true;
 }
 
@@ -468,21 +469,23 @@ void Shop_Brain::activate(Map_Entity *activator)
 	noo.guis.push_back(gui);
 }
 
-bool Shop_Brain::save(SDL_RWops *file)
+bool Shop_Brain::save(std::string &out)
 {
+	std::string inventory_s = inventory->to_string();
 	int count = costs.size();
-	SDL_fprintf(
-		file,
-		"brain=shop,%s,%s,%s,%d,",
+	out += string_printf(
+		"brain=shop,%d\n%s,%s,%s,%d,",
+		2 + std::count(inventory_s.begin(), inventory_s.end(), '\n'),
 		escape_string(caption, ',').c_str(),
 		escape_string(yes_option, ',').c_str(),
 		escape_string(no_option, ',').c_str(),
 		count
 	);
 	for (int i = 0; i < count; i++) {
-		SDL_fprintf(file, "%d,", costs[i]);
+		out += string_printf("%d%s", costs[i], i < count-1 ? "," : "");
 	}
-	SDL_fprintf(file, "%s\n", inventory->to_string().c_str());
+	out += "\n";
+	out += inventory_s + "\n";
 	return true;
 }
 

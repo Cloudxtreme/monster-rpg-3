@@ -31,28 +31,23 @@ Map_Logic *dll_get_map_logic(std::string map_name)
 	return ml;
 }
 
-Brain *dll_get_brain(std::string options)
+Brain *dll_get_brain(std::string type, std::string data)
 {
-	Tokenizer t(options, ',');
-
-	std::string type = t.next();
-
 	if (type == "talk_brain") {
-		std::string name = t.next();
+		std::string name = trim(data);
 		return new Talk_Brain(name);
 	}
 	else if (type == "animated_brain") {
-		std::string name = t.next();
+		std::string name = trim(data);
 		return new Animated_Brain(name);
 	}
 	else if (type == "talk_then_animate_brain") {
-		std::string name = t.next();
+		std::string name = trim(data);
 		return new Talk_Then_Animate_Brain(name);
 	}
 	else if (type == "door_brain") {
 		bool open;
-		std::string open_s = t.next();
-		if (open_s == "open") {
+		if (trim(data) == "open") {
 			open = true;
 		}
 		else {
@@ -61,7 +56,7 @@ Brain *dll_get_brain(std::string options)
 		return new Door_Brain(open);
 	}
 	else if (type == "item_brain") {
-		std::string this_options = options.substr(type.length() + 1);
+		std::string this_options = trim(data);
 		Tokenizer t(this_options, ',');
 
 		std::string opt = t.next();
@@ -79,32 +74,34 @@ Brain *dll_get_brain(std::string options)
 		return new Item_Brain(key, atoi(quantity.c_str()), atoi(milestone.c_str()));
 	}
 	else if (type == "item_drop") {
-		std::string inventory_s = options.substr(type.length() + 1);
-
 		Inventory *inventory = new Inventory();
-		inventory->from_string(inventory_s);
+
+		inventory->from_string(data);
 
 		return new Item_Drop_Brain(inventory);
 	}
 	else if (type == "shop") {
-		std::string this_options = options.substr(type.length() + 1);
-		Tokenizer t(this_options, ',');
+		Tokenizer t(data, '\n');
+
+		std::string line1 = t.next();
+
+		Tokenizer t2(line1, ',');
 
 		int len = 0;
 
-		std::string caption = t.next();
+		std::string caption = t2.next();
 		len += caption.length() + 1;
 		caption = unescape_string(caption);
 
-		std::string yes_option = t.next();
+		std::string yes_option = t2.next();
 		len += yes_option.length() + 1;
 		yes_option = unescape_string(yes_option);
 
-		std::string no_option = t.next();
+		std::string no_option = t2.next();
 		len += no_option.length() + 1;
 		no_option = unescape_string(no_option);
 
-		std::string inv_size_s = t.next();
+		std::string inv_size_s = t2.next();
 		len += inv_size_s.length() + 1;
 
 		int inv_size = atoi(inv_size_s.c_str());
@@ -112,13 +109,15 @@ Brain *dll_get_brain(std::string options)
 		std::vector<int> costs;
 
 		for (int i = 0; i < inv_size; i++) {
-			std::string cost = t.next();
+			std::string cost = t2.next();
 			len += cost.length() + 1;
 
 			costs.push_back(atoi(cost.c_str()));
 		}
 
-		std::string inventory_s = this_options.substr(len);
+		std::string inventory_s = data.substr(line1.length());
+
+		trim(inventory_s);
 
 		Inventory *inventory = new Inventory();
 		inventory->from_string(inventory_s);

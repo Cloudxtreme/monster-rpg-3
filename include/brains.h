@@ -25,7 +25,7 @@ public:
 
 	void activate(Map_Entity *activator);
 
-	bool save(SDL_RWops *file);
+	bool save(std::string &out);
 
 protected:
 	struct Talk {
@@ -52,7 +52,7 @@ public:
 	Animated_Brain(std::string name);
 
 	void update();
-	bool save(SDL_RWops *file);
+	bool save(std::string &out);
 };
 
 class Talk_Then_Animate_Brain : public Talk_Brain {
@@ -62,7 +62,7 @@ public:
 
 	Talk_Then_Animate_Brain(std::string name);
 
-	bool save(SDL_RWops *file);
+	bool save(std::string &out);
 };
 
 class Door_Brain : public Brain {
@@ -76,7 +76,7 @@ public:
 	void collide(Map_Entity *collider);
 	void set_map_entity(Map_Entity *map_entity);
 
-	bool save(SDL_RWops *file);
+	bool save(std::string &out);
 
 private:
 	static MML *mml;
@@ -93,7 +93,7 @@ public:
 
 	void activate(Map_Entity *activator);
 
-	bool save(SDL_RWops *file);
+	bool save(std::string &out);
 
 private:
 	std::string item_name;
@@ -110,7 +110,7 @@ public:
 
 	void activate(Map_Entity *activator);
 
-	bool save(SDL_RWops *file);
+	bool save(std::string &out);
 
 	Inventory *get_inventory();
 
@@ -127,7 +127,7 @@ public:
 
 	void activate(Map_Entity *activator);
 
-	bool save(SDL_RWops *file);
+	bool save(std::string &out);
 
 	Inventory *get_inventory();
 	std::vector<int> &get_costs();
