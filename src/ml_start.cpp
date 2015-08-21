@@ -292,7 +292,7 @@ void ML_start::start()
 		if (noo.check_milestone(wineglass4_milestone) == false) {
 			Map_Entity *wineglass4 = new Map_Entity("wineglass_broken");
 			wineglass4->set_brain(new Item_Brain("wineglass_broken", 1, wineglass4_milestone));
-			wineglass4->load_sprite("wineglass");
+			wineglass4->load_sprite("wineglass_broken");
 			wineglass4->set_position(Point<int>(3, 13));
 			wineglass4->set_z(noo.tile_size);
 			wineglass4->set_high(true);
