@@ -127,6 +127,7 @@ private:
 
 	Callback callback;
 
+	bool created_dropped_items;
 	Inventory *dropped_items;
 
 	int dropping_index;

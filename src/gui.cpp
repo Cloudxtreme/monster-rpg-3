@@ -506,10 +506,19 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 
 	std::vector<Map_Entity *> colliding = noo.map->get_colliding_entities(-1, noo.player->get_position(), Size<int>(1, 1));
 	bool can_drop = true;
+	Item_Drop_Brain *drop_brain = 0;
+	created_dropped_items = false;
 	for (size_t i = 0; i < colliding.size(); i++) {
 		if (colliding[i] != noo.player) {
-			can_drop = false;
-			break;
+			Brain *brain = colliding[i]->get_brain();
+			if (dynamic_cast<Item_Drop_Brain *>(brain)) {
+				drop_brain = (Item_Drop_Brain *)brain;
+				break;
+			}
+			else {
+				can_drop = false;
+				break;
+			}
 		}
 	}
 	if (can_drop == false) {
@@ -519,6 +528,14 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 		drop_radio = new Widget_Radio_Button(TRANSLATE("Drop")END);
 		drop_radio->set_break_line(true);
 		drop_radio->set_parent(info);
+
+		if (drop_brain) {
+			dropped_items = drop_brain->get_inventory();
+		}
+		else {
+			dropped_items = new Inventory;
+			created_dropped_items = true;
+		}
 	}
 
 	discard_radio = new Widget_Radio_Button(TRANSLATE("Discard")END);
@@ -577,8 +594,6 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	}
 
 	set_labels();
-
-	dropped_items = new Inventory;
 }
 
 void Items_GUI::handle_event(TGUI_Event *event)
@@ -705,15 +720,17 @@ void Items_GUI::set_labels()
 void Items_GUI::handle_dropped_items()
 {
 	if (dropped_items->items.size() > 0) {
-		Map_Entity *drop = new Map_Entity("item_drop");
-		drop->set_brain(new Item_Drop_Brain(dropped_items));
-		drop->load_sprite("item_drop");
-		drop->set_position(noo.player->get_position());
-		drop->set_solid(false);
-		drop->set_low(true);
-		noo.map->add_entity(drop);
+		if (created_dropped_items) {
+			Map_Entity *drop = new Map_Entity("item_drop");
+			drop->set_brain(new Item_Drop_Brain(dropped_items));
+			drop->load_sprite("item_drop");
+			drop->set_position(noo.player->get_position());
+			drop->set_solid(false);
+			drop->set_low(true);
+			noo.map->add_entity(drop);
+		}
 	}
-	else {
+	else if (created_dropped_items) {
 		delete dropped_items;
 	}
 }
