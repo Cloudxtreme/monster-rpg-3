@@ -1,6 +1,7 @@
 #include <Nooskewl_Engine/Nooskewl_Engine.h>
 
 #include "brains.h"
+#include "gui.h"
 
 bool start_brains()
 {
@@ -382,4 +383,43 @@ bool Item_Brain::save(SDL_RWops *file)
 {
 	SDL_fprintf(file, "brain=item_brain,%s=%d:%d\n", item_name.c_str(), quantity, milestone);
 	return true;
+}
+
+//--
+
+void Item_Drop_Brain::callback(void *data)
+{
+	Item_Drop_Brain *brain = (Item_Drop_Brain *)data;
+
+	if (brain->get_inventory()->items.size() == 0) {
+		noo.map->schedule_destroy(brain->get_map_entity());
+	}
+}
+
+Item_Drop_Brain::Item_Drop_Brain(Inventory *inventory) :
+	inventory(inventory)
+{
+}
+
+Item_Drop_Brain::~Item_Drop_Brain()
+{
+	delete inventory;
+}
+
+void Item_Drop_Brain::activate(Map_Entity *activator)
+{
+	Buy_Sell_GUI *gui = new Buy_Sell_GUI(inventory, std::vector<int>(), true, callback, this);
+	gui->start();
+	noo.guis.push_back(gui);
+}
+
+bool Item_Drop_Brain::save(SDL_RWops *file)
+{
+	SDL_fprintf(file, "brain=item_drop,%s\n", inventory->to_string().c_str());
+	return true;
+}
+
+Inventory *Item_Drop_Brain::get_inventory()
+{
+	return inventory;
 }

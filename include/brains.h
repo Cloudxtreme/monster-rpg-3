@@ -101,4 +101,21 @@ private:
 	int milestone;
 };
 
+class Item_Drop_Brain : public Brain {
+public:
+	static void callback(void *data);
+
+	Item_Drop_Brain(Inventory *inventory);
+	~Item_Drop_Brain();
+
+	void activate(Map_Entity *activator);
+
+	bool save(SDL_RWops *file);
+
+	Inventory *get_inventory();
+
+private:
+	Inventory *inventory;
+};
+
 #endif // BRAINS_H
