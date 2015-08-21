@@ -118,4 +118,27 @@ private:
 	Inventory *inventory;
 };
 
+class Shop_Brain : public Brain {
+public:
+	static void callback(void *data);
+
+	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs);
+	~Shop_Brain();
+
+	void activate(Map_Entity *activator);
+
+	bool save(SDL_RWops *file);
+
+	Inventory *get_inventory();
+	std::vector<int> &get_costs();
+
+private:
+	std::string caption;
+	std::string yes_option;
+	std::string no_option;
+
+	Inventory *inventory;
+	std::vector<int> costs;
+};
+
 #endif // BRAINS_H

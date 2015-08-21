@@ -423,3 +423,75 @@ Inventory *Item_Drop_Brain::get_inventory()
 {
 	return inventory;
 }
+
+//--
+
+void Shop_Brain::callback(void *data)
+{
+	Multiple_Choice_GUI::Callback_Data *d = (Multiple_Choice_GUI::Callback_Data *)data;
+
+	int choice = d->choice;
+
+	if (choice == 0) {
+		Shop_Brain *brain = (Shop_Brain *)d->userdata;
+
+		Inventory *inventory = brain->get_inventory();
+		std::vector<int> &costs = brain->get_costs();
+
+		Buy_Sell_GUI *gui = new Buy_Sell_GUI(inventory, costs, false);
+		gui->start();
+		noo.guis.push_back(gui);
+	}
+}
+
+Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs) :
+	caption(caption),
+	yes_option(yes_option),
+	no_option(no_option),
+	inventory(inventory),
+	costs(costs)
+{
+}
+
+Shop_Brain::~Shop_Brain()
+{
+	delete inventory;
+}
+
+void Shop_Brain::activate(Map_Entity *activator)
+{
+	std::vector<std::string> choices;
+	choices.push_back(yes_option);
+	choices.push_back(no_option);
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(caption, choices, callback, this);
+	gui->start();
+	noo.guis.push_back(gui);
+}
+
+bool Shop_Brain::save(SDL_RWops *file)
+{
+	int count = costs.size();
+	SDL_fprintf(
+		file,
+		"brain=shop,%s,%s,%s,%d,",
+		escape_string(caption, ',').c_str(),
+		escape_string(yes_option, ',').c_str(),
+		escape_string(no_option, ',').c_str(),
+		count
+	);
+	for (int i = 0; i < count; i++) {
+		SDL_fprintf(file, "%d,", costs[i]);
+	}
+	SDL_fprintf(file, "%s\n", inventory->to_string().c_str());
+	return true;
+}
+
+Inventory *Shop_Brain::get_inventory()
+{
+	return inventory;
+}
+
+std::vector<int> &Shop_Brain::get_costs()
+{
+	return costs;
+}
