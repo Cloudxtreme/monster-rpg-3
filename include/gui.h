@@ -198,7 +198,12 @@ private:
 
 class Multiple_Choice_GUI : public GUI {
 public:
-	Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, Callback callback);
+	struct Callback_Data {
+		int choice;
+		void *userdata;
+	};
+
+	Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, Callback callback, void *callback_data);
 
 	bool update();
 
@@ -207,6 +212,7 @@ private:
 	Widget_List *list;
 
 	Callback callback;
+	void *callback_data;
 };
 
 #endif // M3_GUI_H

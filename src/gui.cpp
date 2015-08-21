@@ -1384,8 +1384,9 @@ void Buy_Sell_GUI::move_original(Inventory *inventory, int count, std::vector<It
 
 //--
 
-Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, Callback callback) :
-	callback(callback)
+Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, Callback callback, void *callback_data) :
+	callback(callback),
+	callback_data(callback_data)
 {
 	int w = 150;
 
@@ -1429,7 +1430,10 @@ bool Multiple_Choice_GUI::update()
 {
 	int pressed;
 	if ((pressed = list->pressed()) >= 0) {
-		callback((void *)(int64_t)pressed);
+		Callback_Data data;
+		data.choice = pressed;
+		data.userdata = callback_data;
+		callback((void *)&data);
 		return do_return(false);
 	}
 
