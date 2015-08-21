@@ -262,23 +262,18 @@ void Pause_GUI::handle_event(TGUI_Event *event)
 		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
 		noo.button_mml->play(false);
 		exit_menu = true;
-		noo.game_unpaused();
 	}
 	else {
 		GUI::handle_event(event);
 	}
 }
 
-bool Pause_GUI::update()
+void Pause_GUI::update()
 {
-	if (exit_menu) {
-		return do_return(false);
-	}
-
-	if (check_quit() == false || resume_button->pressed()) {
-		exit_menu = true; // ensure we never come back here, see above
+	if (check_quit() == false || resume_button->pressed() || exit_menu) {
 		noo.game_unpaused();
-		return do_return(false);
+		exit();
+		return;
 	}
 	else if (save_button->pressed()) {
 		Save_Load_GUI *save_load_gui = new Save_Load_GUI(true);
@@ -319,13 +314,13 @@ bool Pause_GUI::update()
 		set_the_labels = false;
 		set_labels();
 	}
-
-	return do_return(true);
 }
 
-bool Pause_GUI::update_background()
+void Pause_GUI::update_background()
 {
-	return do_return(check_quit());
+	if (check_quit() == false) {
+		exit();
+	}
 }
 
 bool Pause_GUI::check_quit()
@@ -609,27 +604,21 @@ void Items_GUI::handle_event(TGUI_Event *event)
 
 		noo.button_mml->play(false);
 		exit_menu = true;
-		callback(0);
-		handle_dropped_items();
 	}
 	else {
 		GUI::handle_event(event);
 	}
 }
 
-bool Items_GUI::update()
+void Items_GUI::update()
 {
-	if (exit_menu) {
-		return do_return(false);
-	}
-
 	int pressed;
 
-	if (done_button->pressed()) {
-		exit_menu = true; // ensure we never come back here, see above
+	if (done_button->pressed() || exit_menu) {
 		callback(0);
 		handle_dropped_items();
-		return do_return(false);
+		exit();
+		return;
 	}
 	else if (list && ((pressed = list->pressed()) >= 0)) {
 		int index = indices[pressed];
@@ -686,8 +675,6 @@ bool Items_GUI::update()
 	}
 
 	set_labels();
-
-	return do_return(true);
 }
 
 void Items_GUI::set_labels()
@@ -759,6 +746,9 @@ void Items_GUI::set_list()
 	std::vector< std::vector<Item *> > &items = inventory->items;
 
 	std::vector<std::string> item_list;
+
+	indices.clear();
+
 	for (size_t i = 0; i < items.size(); i++) {
 		int count = items[i].size();
 		if (count > 0) {
@@ -795,19 +785,33 @@ void Items_GUI::set_list()
 
 void Items_GUI::drop_item(int index)
 {
+	int selected = list->get_selected();
+
+	bool erased;
+
 	Item *item = stats->inventory->items[index][0];
 	stats->inventory->items[index].erase(stats->inventory->items[index].begin());
 	if (stats->inventory->items[index].size() == 0) {
 		stats->inventory->items.erase(stats->inventory->items.begin() + index);
+		indices.erase(indices.begin() + selected);
+		for (size_t i = selected; i < indices.size(); i++) {
+			indices[i]--;
+		}
+		erased = true;
 	}
-	set_list();
-	int selected = list->get_selected();
-	if (selected >= (int)stats->inventory->items.size()) {
-		selected--;
-		if (selected < 0) {
+	else {
+		erased = false;
+	}
+
+	if (selected >= (int)indices.size()) {
+		if (selected == 0) {
 			gui->focus_something();
 		}
+		else {
+			list->set_selected(selected-1);
+		}
 	}
+
 	dropped_items->add(item);
 
 	if (index == stats->weapon_index) {
@@ -816,6 +820,14 @@ void Items_GUI::drop_item(int index)
 	else if (index == stats->armour_index) {
 		stats->armour_index = -1;
 	}
+	else if (erased && stats->weapon_index > index) {
+		stats->weapon_index--;
+	}
+	else if (erased && stats->armour_index > index) {
+		stats->armour_index--;
+	}
+	
+	set_list();
 }
 
 //--
@@ -1016,7 +1028,6 @@ void Buy_Sell_GUI::handle_event(TGUI_Event *event)
 		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
 
 		noo.button_mml->play(false);
-		exit_menu = true;
 		maybe_confirm();
 	}
 	else {
@@ -1024,18 +1035,15 @@ void Buy_Sell_GUI::handle_event(TGUI_Event *event)
 	}
 }
 
-bool Buy_Sell_GUI::update()
+void Buy_Sell_GUI::update()
 {
-	if (exit_menu) {
-		return do_return(false);
-	}
-
 	if (cancel) {
 		return_items();
 		if (done_callback) {
 			done_callback(callback_data);
 		}
-		return do_return(false);
+		exit();
+		return;
 	}
 
 	set_labels();
@@ -1077,8 +1085,7 @@ bool Buy_Sell_GUI::update()
 		}
 	}
 	else if (done_button->pressed()) {
-		exit_menu = true; // ensure we never come back here, see above
-		return do_return(maybe_confirm());
+		maybe_confirm();
 	}
 	else if ((pressed = your_list->pressed()) >= 0) {
 		int count = stats->inventory->items[pressed].size();
@@ -1123,8 +1130,6 @@ bool Buy_Sell_GUI::update()
 			set_hilights();
 		}
 	}
-
-	return do_return(true);
 }
 
 void Buy_Sell_GUI::set_labels()
@@ -1489,19 +1494,22 @@ void Buy_Sell_GUI::move_original(Inventory *inventory, int count, std::vector<It
 
 bool Buy_Sell_GUI::maybe_confirm()
 {
-	if (is_storage == false && (buy_count > 0 || sell_count > 0)) {
-		Yes_No_GUI *gui = new Yes_No_GUI(TRANSLATE("Cancel transaction?")END, confirm_callback);
+	if (buy_count > 0 || sell_count > 0) {
+		Yes_No_GUI *gui;
+		if (is_storage) {
+			gui = new Yes_No_GUI(TRANSLATE("Cancel?")END, confirm_callback);
+		}
+		else {
+			gui = new Yes_No_GUI(TRANSLATE("Cancel transaction?")END, confirm_callback);
+		}
 		gui->start();
 		noo.guis.push_back(gui);
-
-		return true;
 	}
 	else {
 		if (done_callback) {
 			done_callback(callback_data);
 		}
-
-		return false;
+		exit();
 	}
 }
 
@@ -1550,21 +1558,14 @@ Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::s
 	gui->set_focus(list);
 }
 
-bool Multiple_Choice_GUI::update()
+void Multiple_Choice_GUI::update()
 {
-	if (exit_menu) {
-		return do_return(false);
-	}
-
 	int pressed;
 	if ((pressed = list->pressed()) >= 0) {
-		exit_menu = true; // ensure we never come back here, see above
 		Callback_Data data;
 		data.choice = pressed;
 		data.userdata = callback_data;
 		callback((void *)&data);
-		return do_return(false);
+		exit();
 	}
-
-	return do_return(true);
 }

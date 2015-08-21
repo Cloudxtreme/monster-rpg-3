@@ -12,8 +12,8 @@ public:
 	Pause_GUI();
 
 	void handle_event(TGUI_Event *event);
-	bool update();
-	bool update_background();
+	void update();
+	void update_background();
 
 	bool fade_done(bool fading_in);
 
@@ -92,7 +92,7 @@ public:
 	Items_GUI(Item::Type type, Callback callback);
 
 	void handle_event(TGUI_Event *event);
-	bool update();
+	void update();
 
 private:
 	static bool got_number;
@@ -143,7 +143,7 @@ public:
 	virtual ~Buy_Sell_GUI();
 
 	void handle_event(TGUI_Event *event);
-	bool update();
+	void update();
 
 private:
 	static bool cancel;
@@ -217,7 +217,7 @@ public:
 
 	Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, Callback callback, void *callback_data);
 
-	bool update();
+	void update();
 
 private:
 	Widget_Label *caption_label;
