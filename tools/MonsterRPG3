@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd `dirname $0`/data
-./Nooskewl_Runner
+./Nooskewl_Runner $@
