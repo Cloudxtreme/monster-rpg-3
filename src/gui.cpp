@@ -1,6 +1,9 @@
 #include "gui.h"
 
 bool Buy_Sell_GUI::cancel;
+bool Buy_Sell_GUI::getting_number;
+bool Buy_Sell_GUI::got_number;
+int Buy_Sell_GUI::number;
 
 void Buy_Sell_GUI::add_item(Inventory *inventory, std::vector<int> &costs, std::string name, int cost, int quantity)
 {
@@ -19,6 +22,12 @@ void Buy_Sell_GUI::confirm_callback(void *data)
 	}
 }
 
+void Buy_Sell_GUI::get_number_callback(void *data)
+{
+	number = (int64_t)data;
+	got_number = true;
+}
+
 Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller_costs) :
 	seller_inventory(seller_inventory),
 	seller_costs(seller_costs),
@@ -26,7 +35,8 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	buy_count(0),
 	exit_menu(false)
 {
-	cancel = false; // static, can't use initializer list
+	cancel = false; // statics, can't use initializer list
+	got_number = false;
 
 	stats = noo.map->get_entity(0)->get_stats();
 
@@ -198,14 +208,49 @@ bool Buy_Sell_GUI::update()
 		}
 	}
 	else if ((pressed = your_list->pressed()) >= 0) {
-		clear_hilights();
-		swap_item(pressed, false);
-		set_hilights();
+		int count = stats->inventory->items[pressed].size();
+		if (count > 5) {
+			getting_number = true;
+			got_number = false;
+			getting_for_your_inventory = true;
+			getting_for = pressed;
+			Get_Number_GUI *gngui = new Get_Number_GUI(TRANSLATE("How many?")END, count+1, 0, get_number_callback);
+			gngui->start();
+			noo.guis.push_back(gngui);
+		}
+		else {
+			clear_hilights();
+			swap_item(pressed, false);
+			set_hilights();
+		}
 	}
 	else if ((pressed = their_list->pressed()) >= 0) {
-		clear_hilights();
-		swap_item(pressed, true);
-		set_hilights();
+		int count = seller_inventory->items[pressed].size();
+		if (count > 5) {
+			getting_number = true;
+			got_number = false;
+			getting_for_your_inventory = false;
+			getting_for = pressed;
+			Get_Number_GUI *gngui = new Get_Number_GUI(TRANSLATE("How many?")END, count+1, 0, get_number_callback);
+			gngui->start();
+			noo.guis.push_back(gngui);
+		}
+		else {
+			clear_hilights();
+			swap_item(pressed, true);
+			set_hilights();
+		}
+	}
+
+	if (got_number) {
+		got_number = false;
+		if (number > 0) {
+			clear_hilights();
+			for (int i = 0; i < number; i++) {
+				swap_item(getting_for, !getting_for_your_inventory);
+			}
+			set_hilights();
+		}
 	}
 
 	return do_return(true);

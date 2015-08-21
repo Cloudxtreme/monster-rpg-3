@@ -9,6 +9,7 @@ class Buy_Sell_GUI : public GUI {
 public:
 	static void add_item(Inventory *inventory, std::vector<int> &costs, std::string name, int cost, int quantity);
 	static void confirm_callback(void *data);
+	static void get_number_callback(void *data);
 
 	Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller_costs);
 	virtual ~Buy_Sell_GUI();
@@ -18,6 +19,9 @@ public:
 
 private:
 	static bool cancel;
+	static bool getting_number;
+	static bool got_number;
+	static int number;
 
 	void set_labels();
 	void set_list(Widget_List *list, Inventory *inventory, bool is_your_inventory);
@@ -61,6 +65,9 @@ private:
 	std::vector<int> swapped_out_costs;
 
 	MML *cha_ching;
+
+	bool getting_for_your_inventory;
+	int getting_for;
 
 	bool exit_menu;
 };
