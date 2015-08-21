@@ -86,6 +86,45 @@ Brain *dll_get_brain(std::string options)
 
 		return new Item_Drop_Brain(inventory);
 	}
+	else if (type == "shop") {
+		std::string this_options = options.substr(type.length() + 1);
+		Tokenizer t(this_options, ',');
+
+		int len = 0;
+
+		std::string caption = t.next();
+		len += caption.length() + 1;
+		caption = unescape_string(caption);
+
+		std::string yes_option = t.next();
+		len += yes_option.length() + 1;
+		yes_option = unescape_string(yes_option);
+
+		std::string no_option = t.next();
+		len += no_option.length() + 1;
+		no_option = unescape_string(no_option);
+
+		std::string inv_size_s = t.next();
+		len += inv_size_s.length() + 1;
+
+		int inv_size = atoi(inv_size_s.c_str());
+
+		std::vector<int> costs;
+
+		for (int i = 0; i < inv_size; i++) {
+			std::string cost = t.next();
+			len += cost.length() + 1;
+
+			costs.push_back(atoi(cost.c_str()));
+		}
+
+		std::string inventory_s = this_options.substr(len);
+
+		Inventory *inventory = new Inventory();
+		inventory->from_string(inventory_s);
+
+		return new Shop_Brain(caption, yes_option, no_option, inventory, costs);
+	}
 
 	return 0;
 }
