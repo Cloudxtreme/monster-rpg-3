@@ -1,4 +1,740 @@
+#include "brains.h"
 #include "gui.h"
+
+bool Pause_GUI::quitting;
+bool Pause_GUI::quit;
+bool Pause_GUI::showing_items;
+bool Pause_GUI::set_the_labels;
+
+void Pause_GUI::callback(void *data)
+{
+	if (quitting) {
+		quitting = false;
+		quit = data != 0;
+		if (quit) {
+			showing_items = false;
+			set_the_labels = false;
+		}
+	}
+	else if (showing_items) {
+		showing_items = false;
+		set_the_labels = true;
+	}
+}
+
+Pause_GUI::Pause_GUI() :
+	exit_menu(false)
+{
+	quitting = quit = false;
+
+	noo.game_paused();
+
+	Widget *modal_main_widget = new Widget(1.0f, 1.0f);
+	SDL_Colour background_colour = { 0, 0, 0, 192 };
+	modal_main_widget->set_background_colour(background_colour);
+
+	Widget_Window *window = new Widget_Window(0.95f, 0.95f);
+	window->set_center_x(true);
+	window->set_center_y(true);
+	window->set_parent(modal_main_widget);
+
+	quit_button = new Widget_Text_Button(noo.t->translate(8), 0.33f, -1);
+	quit_button->set_center_x(true);
+
+	save_button = new Widget_Text_Button(noo.t->translate(11), 0.34f, -1);
+	save_button->set_center_x(true);
+	save_button->set_padding_left(5);
+	save_button->set_padding_right(5);
+
+	resume_button = new Widget_Text_Button(noo.t->translate(10), 0.33f, -1);
+	resume_button->set_center_x(true);
+
+	Widget *button_container = new Widget(1.0f, quit_button->get_height());
+	button_container->set_center_x(true);
+	button_container->set_float_bottom(true);
+	button_container->set_padding(5);
+	button_container->set_parent(window);
+
+	quit_button->set_parent(button_container);
+	save_button->set_parent(button_container);
+	resume_button->set_parent(button_container);
+
+	TGUI_Widget *pad = new TGUI_Widget(1.0f, 1.0f);
+	pad->set_center_x(true);
+	pad->set_padding_left(5);
+	pad->set_padding_right(5);
+	pad->set_padding_top(5);
+	pad->set_padding_bottom(5 + quit_button->get_height());
+	pad->set_parent(window);
+
+	TGUI_Widget *column1 = new TGUI_Widget(TGUI_Widget::FIT_Y, 0.33f);
+	column1->set_center_x(true);
+	column1->set_padding_bottom(quit_button->get_height() + 5);
+	column1->set_parent(pad);
+
+	TGUI_Widget *column2 = new TGUI_Widget(TGUI_Widget::FIT_Y, 0.34f);
+	column2->set_center_x(true);
+	column2->set_padding_left(5);
+	column2->set_padding_right(5);
+	column2->set_padding_bottom(quit_button->get_height() + 5);
+	column2->set_parent(pad);
+
+	stats = noo.map->get_entity(0)->get_stats();
+
+	if (stats->profile_pic != 0) {
+		profile_image = new Widget_Image(stats->profile_pic, false);
+		profile_image->set_padding_bottom(2);
+		profile_image->set_parent(column1);
+	}
+
+	name = new Widget_Label("", -1);
+	name->set_break_line(true);
+	name->set_parent(column1);
+
+	alignment_label = new Widget_Label(TRANSLATE("Align")END + ": ", -1);
+	alignment_label->set_break_line(true);
+	alignment_label->set_padding_top((int)noo.font->get_height()+2);
+	alignment_label->set_parent(column1);
+
+	alignment = new Widget_Label("", -1);
+	alignment->set_padding_top((int)noo.font->get_height()+2);
+	alignment->set_parent(column1);
+
+	sex_label = new Widget_Label(TRANSLATE("Sex")END + ": ", -1);
+	sex_label->set_break_line(true);
+	sex_label->set_parent(column1);
+
+	sex = new Widget_Label("", -1);
+	sex->set_parent(column1);
+
+	gold_label = new Widget_Label(TRANSLATE("Gold")END + ": ", -1);
+	gold_label->set_break_line(true);
+	gold_label->set_parent(column1);
+
+	gold = new Widget_Label("", -1);
+	gold->set_parent(column1);
+
+	hp_label = new Widget_Label(TRANSLATE("HP")END + ": ", -1);
+	hp_label->set_break_line(true);
+	hp_label->set_padding_top((int)noo.font->get_height()+2);
+	hp_label->set_parent(column1);
+
+	hp = new Widget_Label("", -1);
+	hp->set_padding_top((int)noo.font->get_height()+2);
+	hp->set_parent(column1);
+
+	mp_label = new Widget_Label(TRANSLATE("MP")END + ": ", -1);
+	mp_label->set_break_line(true);
+	mp_label->set_parent(column1);
+
+	mp = new Widget_Label("", -1);
+	mp->set_parent(column1);
+
+	experience_label = new Widget_Label(TRANSLATE("Exp")END + ": ", -1);
+	experience_label->set_break_line(true);
+	experience_label->set_parent(column1);
+
+	experience = new Widget_Label("", -1);
+	experience->set_parent(column1);
+
+	weapon_image = new Widget_Image(new Image("weapon_icon.tga"));
+	weapon_image->set_break_line(true);
+	weapon_image->set_padding_top((int)noo.font->get_height()+2);
+	weapon_image->set_parent(column1);
+
+	weapon = new Widget_Label("", -1);
+	weapon->set_padding_top((int)noo.font->get_height()+2);
+	weapon->set_parent(column1);
+
+	armour_image = new Widget_Image(new Image("armour_icon.tga"));
+	armour_image->set_break_line(true);
+	armour_image->set_parent(column1);
+
+	armour = new Widget_Label("", -1);
+	armour->set_parent(column1);
+
+	attack_label = new Widget_Label(TRANSLATE("Attack")END + ": ", -1);
+	attack_label->set_break_line(true);
+	attack_label->set_padding_top(18);
+	attack_label->set_parent(column2);
+
+	attack = new Widget_Label("", -1);
+	attack->set_padding_top(18);
+	attack->set_parent(column2);
+
+	defense_label = new Widget_Label(TRANSLATE("Defense")END + ": ", -1);
+	defense_label->set_break_line(true);
+	defense_label->set_parent(column2);
+
+	defense = new Widget_Label("", -1);
+	defense->set_parent(column2);
+
+	agility_label = new Widget_Label(TRANSLATE("Agility")END + ": ", -1);
+	agility_label->set_break_line(true);
+	agility_label->set_parent(column2);
+
+	agility = new Widget_Label("", -1);
+	agility->set_parent(column2);
+
+	luck_label = new Widget_Label(TRANSLATE("Luck")END + ": ", -1);
+	luck_label->set_break_line(true);
+	luck_label->set_parent(column2);
+
+	luck = new Widget_Label("", -1);
+	luck->set_parent(column2);
+
+	speed_label = new Widget_Label(TRANSLATE("Speed")END + ": ", -1);
+	speed_label->set_break_line(true);
+	speed_label->set_parent(column2);
+
+	speed = new Widget_Label("", -1);
+	speed->set_parent(column2);
+
+	strength_label = new Widget_Label(TRANSLATE("Strength")END + ": ", -1);
+	strength_label->set_break_line(true);
+	strength_label->set_parent(column2);
+
+	strength = new Widget_Label("", -1);
+	strength->set_parent(column2);
+
+	karma_label = new Widget_Label(TRANSLATE("Karma")END + ": ", -1);
+	karma_label->set_break_line(true);
+	karma_label->set_parent(column2);
+
+	karma = new Widget_Label("", -1);
+	karma->set_parent(column2);
+
+	hunger_label = new Widget_Label(TRANSLATE("Hunger")END + ": ", -1);
+	hunger_label->set_break_line(true);
+	hunger_label->set_parent(column2);
+
+	hunger = new Widget_Label("", -1);
+	hunger->set_parent(column2);
+
+	thirst_label = new Widget_Label(TRANSLATE("Thirst")END + ": ", -1);
+	thirst_label->set_break_line(true);
+	thirst_label->set_parent(column2);
+
+	thirst = new Widget_Label("", -1);
+	thirst->set_parent(column2);
+
+	rest_label = new Widget_Label(TRANSLATE("Rest")END + ": ", -1);
+	rest_label->set_break_line(true);
+	rest_label->set_parent(column2);
+
+	rest = new Widget_Label("", -1);
+	rest->set_parent(column2);
+
+	sobriety_label = new Widget_Label(TRANSLATE("Sobriety")END + ": ", -1);
+	sobriety_label->set_break_line(true);
+	sobriety_label->set_parent(column2);
+
+	sobriety = new Widget_Label("", -1);
+	sobriety->set_parent(column2);
+
+	TGUI_Widget *column3 = new TGUI_Widget(0.33f, 1.0f);
+	column3->set_center_x(true);
+	column3->set_padding_bottom(quit_button->get_height() + 5);
+	column3->set_parent(pad);
+
+	items_button = new Widget_Text_Button(TRANSLATE("Items")END, 1.0f, -1);
+	items_button->set_parent(column3);
+
+	weapons_button = new Widget_Text_Button(TRANSLATE("Weapons")END, 1.0f, -1);
+	weapons_button->set_padding_top(2);
+	weapons_button->set_padding_bottom(2);
+	weapons_button->set_parent(column3);
+
+	armour_button = new Widget_Text_Button(TRANSLATE("Armour")END, 1.0f, -1);
+	armour_button->set_parent(column3);
+
+	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
+
+	gui->set_focus(resume_button);
+
+	set_labels();
+}
+
+void Pause_GUI::handle_event(TGUI_Event *event)
+{
+	if (
+		(event->type == TGUI_KEY_DOWN && event->keyboard.code == TGUIK_ESCAPE) ||
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
+		noo.button_mml->play(false);
+		exit_menu = true;
+	}
+	else {
+		GUI::handle_event(event);
+	}
+}
+
+bool Pause_GUI::update()
+{
+	if (exit_menu || check_quit() == false || resume_button->pressed()) {
+		noo.game_unpaused();
+		return do_return(false);
+	}
+	else if (save_button->pressed()) {
+		Save_Load_GUI *save_load_gui = new Save_Load_GUI(true);
+		save_load_gui->start();
+		noo.guis.push_back(save_load_gui);
+	}
+	else if (quit_button->pressed()) {
+		quitting = true;
+		quit = false;
+
+		Yes_No_GUI *yes_no_gui = new Yes_No_GUI(noo.t->translate(9), callback);
+		yes_no_gui->start();
+		noo.guis.push_back(yes_no_gui);
+	}
+	else if (items_button->pressed()) {
+		showing_items = true;
+		set_the_labels = false;
+		Items_GUI *items_gui = new Items_GUI(Item::OTHER, callback);
+		items_gui->start();
+		noo.guis.push_back(items_gui);
+	}
+	else if (weapons_button->pressed()) {
+		showing_items = true;
+		set_the_labels = false;
+		Items_GUI *items_gui = new Items_GUI(Item::WEAPON, callback);
+		items_gui->start();
+		noo.guis.push_back(items_gui);
+	}
+	else if (armour_button->pressed()) {
+		showing_items = true;
+		set_the_labels = false;
+		Items_GUI *items_gui = new Items_GUI(Item::ARMOUR, callback);
+		items_gui->start();
+		noo.guis.push_back(items_gui);
+	}
+
+	if (set_the_labels) {
+		set_the_labels = false;
+		set_labels();
+	}
+
+	return do_return(true);
+}
+
+bool Pause_GUI::update_background()
+{
+	return do_return(check_quit());
+}
+
+bool Pause_GUI::check_quit()
+{
+	if (quit) {
+		return false;
+	}
+
+	return true;
+}
+
+void Pause_GUI::set_labels()
+{
+	if (stats == 0) {
+		return;
+	}
+
+	name->set_text(TRANSLATE("Eny")END); // FIXME
+
+	if (stats->alignment == Stats::GOOD) {
+		alignment->set_text(TRANSLATE("Good")END);
+	}
+	else if (stats->alignment == Stats::EVIL) {
+		alignment->set_text(TRANSLATE("Evil")END);
+	}
+	else {
+		alignment->set_text(TRANSLATE("Neutral")END);
+	}
+
+	if (stats->sex == Stats::MALE) {
+		sex->set_text(TRANSLATE("Male")END);
+	}
+	else if (stats->sex == Stats::FEMALE) {
+		sex->set_text(TRANSLATE("Female")END);
+	}
+	else {
+		sex->set_text(TRANSLATE("Unknown")END);
+	}
+
+	gold->set_text(string_printf("%d", stats->inventory->gold));
+
+	hp->set_text(string_printf("%d/%d", stats->hp, stats->max_hp));
+	mp->set_text(string_printf("%d/%d", stats->mp, stats->max_mp));
+	experience->set_text(string_printf("%d", stats->experience));
+
+	if (stats->weapon_index >= 0) {
+		weapon->set_text(stats->inventory->items[stats->weapon_index][0]->name);
+	}
+	else {
+		weapon->set_text("");
+	}
+	if (stats->armour_index >= 0) {
+		armour->set_text(stats->inventory->items[stats->armour_index][0]->name);
+	}
+	else {
+		armour->set_text("");
+	}
+
+	attack->set_text(string_printf("%d", stats->attack));
+	defense->set_text(string_printf("%d", stats->defense));
+	agility->set_text(string_printf("%d", stats->agility));
+	luck->set_text(string_printf("%d", stats->luck));
+	speed->set_text(string_printf("%d", stats->speed));
+	strength->set_text(string_printf("%d", stats->strength));
+
+	karma->set_text(string_printf("%d%%", int((((float)stats->karma / 0xffff) * 2.0f - 1.0f) * 100)));
+	hunger->set_text(string_printf("%d%%", int((((float)stats->hunger / 0xffff) * 2.0f - 1.0f) * 100)));
+	thirst->set_text(string_printf("%d%%", int((((float)stats->thirst / 0xffff) * 2.0f - 1.0f) * 100)));
+	rest->set_text(string_printf("%d%%", int((((float)stats->rest / 0xffff) * 2.0f - 1.0f) * 100)));
+	sobriety->set_text(string_printf("%d%%", int((((float)stats->sobriety / 0xffff) * 2.0f - 1.0f) * 100)));
+
+	int max_w;
+
+	max_w = 0;
+	max_w = MAX(max_w, alignment_label->get_width());
+	max_w = MAX(max_w, sex_label->get_width());
+	max_w = MAX(max_w, gold_label->get_width());
+	alignment_label->set_width(max_w);
+	sex_label->set_width(max_w);
+	gold_label->set_width(max_w);
+
+	max_w = 0;
+	max_w = MAX(max_w, hp_label->get_width());
+	max_w = MAX(max_w, mp_label->get_width());
+	max_w = MAX(max_w, experience_label->get_width());
+	hp_label->set_width(max_w);
+	mp_label->set_width(max_w);
+	experience_label->set_width(max_w);
+
+	max_w = 0;
+	max_w = MAX(max_w, attack_label->get_width());
+	max_w = MAX(max_w, defense_label->get_width());
+	max_w = MAX(max_w, agility_label->get_width());
+	max_w = MAX(max_w, luck_label->get_width());
+	max_w = MAX(max_w, speed_label->get_width());
+	max_w = MAX(max_w, strength_label->get_width());
+	max_w = MAX(max_w, karma_label->get_width());
+	max_w = MAX(max_w, hunger_label->get_width());
+	max_w = MAX(max_w, thirst_label->get_width());
+	max_w = MAX(max_w, rest_label->get_width());
+	max_w = MAX(max_w, sobriety_label->get_width());
+
+	attack_label->set_width(max_w);
+	defense_label->set_width(max_w);
+	agility_label->set_width(max_w);
+	luck_label->set_width(max_w);
+	speed_label->set_width(max_w);
+	strength_label->set_width(max_w);
+	karma_label->set_width(max_w);
+	hunger_label->set_width(max_w);
+	thirst_label->set_width(max_w);
+	rest_label->set_width(max_w);
+	sobriety_label->set_width(max_w);
+
+	gui->layout();
+}
+
+bool Pause_GUI::fade_done(bool fading_in) {
+	if (fading_in == false) {
+		if (quit) {
+			delete noo.map;
+			noo.map = 0;
+			delete noo.player;
+			noo.player = 0;
+			noo.last_map_name = "";
+
+			Title_GUI *title_gui = new Title_GUI();
+			title_gui->start();
+			noo.guis.push_back(title_gui);
+		}
+	}
+
+	return false;
+}
+
+//--
+
+Items_GUI::Items_GUI(Item::Type type, Callback callback) :
+	list(0),
+	type(type),
+	exit_menu(false),
+	callback(callback)
+{
+	stats = noo.map->get_entity(0)->get_stats();
+
+	Widget *modal_main_widget = new Widget(1.0f, 1.0f);
+	SDL_Colour background_colour = { 0, 0, 0, 192 };
+	modal_main_widget->set_background_colour(background_colour);
+
+	Widget_Window *window = new Widget_Window(0.95f, 0.95f);
+	window->set_center_x(true);
+	window->set_center_y(true);
+	window->set_parent(modal_main_widget);
+
+	pad = new TGUI_Widget(1.0f, 1.0f);
+	pad->set_center_x(true);
+	pad->set_center_y(true);
+	pad->set_padding(5);
+	pad->set_parent(window);
+
+	set_list();
+
+	TGUI_Widget *info = new TGUI_Widget(0.4f, 1.0f);
+	info->set_parent(pad);
+
+	action_label = new Widget_Label(TRANSLATE("Action")END + ":", 70);
+	action_label->set_parent(info);
+
+	use_radio = new Widget_Radio_Button(TRANSLATE("Use")END);
+	use_radio->set_selected(true);
+	use_radio->set_break_line(true);
+	use_radio->set_parent(info);
+
+	std::vector<Map_Entity *> colliding = noo.map->get_colliding_entities(-1, noo.player->get_position(), Size<int>(1, 1));
+	bool can_drop = true;
+	for (size_t i = 0; i < colliding.size(); i++) {
+		if (colliding[i] != noo.player) {
+			can_drop = false;
+			break;
+		}
+	}
+	if (can_drop == false) {
+		drop_radio = 0;
+	}
+	else {
+		drop_radio = new Widget_Radio_Button(TRANSLATE("Drop")END);
+		drop_radio->set_break_line(true);
+		drop_radio->set_parent(info);
+	}
+
+	discard_radio = new Widget_Radio_Button(TRANSLATE("Discard")END);
+	discard_radio->set_break_line(true);
+	discard_radio->set_parent(info);
+
+	Widget_Radio_Button::Group group;
+	group.push_back(use_radio);
+	if (drop_radio) {
+		group.push_back(drop_radio);
+	}
+	group.push_back(discard_radio);
+	use_radio->set_group(group);
+	if (drop_radio) {
+		drop_radio->set_group(group);
+	}
+	discard_radio->set_group(group);
+
+	weight_label = new Widget_Label(TRANSLATE("Weight")END + ": -", 70);
+	weight_label->set_padding_top(5);
+	weight_label->set_break_line(true);
+	weight_label->set_parent(info);
+
+	value_label = new Widget_Label(TRANSLATE("Value")END + ": -", 70);
+	value_label->set_break_line(true);
+	value_label->set_parent(info);
+
+	condition_label = new Widget_Label(TRANSLATE("Condition")END + ": -", 70);
+	condition_label->set_break_line(true);
+	condition_label->set_parent(info);
+
+	properties_label = new Widget_Label("", 70);
+	properties_label->set_break_line(true);
+	properties_label->set_parent(info);
+
+	done_button = new Widget_Text_Button(TRANSLATE("Done")END, -1, -1);
+	done_button->set_parent(pad);
+
+	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
+
+	if (list) {
+		list->set_right_widget(use_radio);
+	}
+	use_radio->set_right_widget(done_button);
+	if (drop_radio) {
+		drop_radio->set_right_widget(done_button);
+	}
+	discard_radio->set_right_widget(done_button);
+	done_button->set_left_widget(use_radio);
+
+	if (list) {
+		gui->set_focus(list);
+	}
+	else {
+		gui->set_focus(done_button);
+	}
+
+	set_labels();
+
+	dropped_items = new Inventory;
+}
+
+void Items_GUI::handle_event(TGUI_Event *event)
+{
+	if ((event->type == TGUI_KEY_DOWN && event->keyboard.code == TGUIK_ESCAPE) ||
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
+
+		noo.button_mml->play(false);
+		exit_menu = true;
+	}
+	else {
+		GUI::handle_event(event);
+	}
+}
+
+bool Items_GUI::update()
+{
+	set_labels();
+
+	int pressed;
+
+	if (done_button->pressed() || exit_menu) {
+		callback(0);
+		handle_dropped_items();
+		return do_return(false);
+	}
+	else if (list && ((pressed = list->pressed()) >= 0)) {
+		int index = indices[pressed];
+
+		if (use_radio->is_selected()) {
+			if (type == Item::WEAPON) {
+				if (stats->weapon_index == index) {
+					stats->weapon_index = -1;
+					list->set_hilight(index, false);
+				}
+				else {
+					stats->weapon_index = index;
+					list->set_hilight(index, true);
+				}
+			}
+			else if (type == Item::ARMOUR) {
+				if (stats->armour_index == index) {
+					stats->armour_index = -1;
+					list->set_hilight(index, false);
+				}
+				else {
+					stats->armour_index = index;
+					list->set_hilight(index, true);
+				}
+			}
+			else {
+				// FIXME
+			}
+		}
+		else if (drop_radio && drop_radio->is_selected()) {
+			Item *item = stats->inventory->items[index][0];
+			stats->inventory->items[index].erase(stats->inventory->items[index].begin());
+			if (stats->inventory->items[index].size() == 0) {
+				stats->inventory->items.erase(stats->inventory->items.begin() + index);
+			}
+			set_list();
+			int selected = list->get_selected();
+			if (selected >= (int)stats->inventory->items.size()) {
+				selected--;
+				if (selected < 0) {
+					gui->focus_something();
+				}
+			}
+			dropped_items->add(item);
+		}
+	}
+
+	return do_return(true);
+}
+
+void Items_GUI::set_labels()
+{
+	if (list != 0) {
+		int selected = list->get_selected();
+		selected = indices[selected];
+		Item *item = stats->inventory->items[selected][0];
+
+		int condition = 100 * item->condition / 0xffff;
+
+		weight_label->set_text(TRANSLATE("Weight")END + ": " + itos(item->weight));
+
+		if (item->type != Item::OTHER) {
+			condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
+		}
+		else {
+			condition_label->set_text(TRANSLATE("Condition")END + ": -");
+		}
+
+		int value = item->get_value();
+
+		value_label->set_text(TRANSLATE("Value")END + ": " + itos(value));
+
+		int attack = int(item->min_attack + ((condition / 100.0f) * (item->max_attack - item->min_attack)));
+
+		if (item->type == Item::WEAPON) {
+			properties_label->set_text(TRANSLATE("Attack")END + ": " + itos(attack));
+		}
+	}
+
+	gui->layout();
+}
+
+void Items_GUI::handle_dropped_items()
+{
+	if (dropped_items->items.size() > 0) {
+		Map_Entity *drop = new Map_Entity("item_drop");
+		drop->set_brain(new Item_Drop_Brain(dropped_items));
+		drop->load_sprite("item_drop");
+		drop->set_position(noo.player->get_position());
+		drop->set_solid(false);
+		drop->set_low(true);
+		noo.map->add_entity(drop);
+	}
+	else {
+		delete dropped_items;
+	}
+}
+
+void Items_GUI::set_list()
+{
+	int hilight = -1;
+
+	Inventory *inventory = stats->inventory;
+	std::vector< std::vector<Item *> > &items = inventory->items;
+
+	std::vector<std::string> item_list;
+	for (size_t i = 0; i < items.size(); i++) {
+		int count = items[i].size();
+		if (count > 0) {
+			if (items[i][0]->type == type) {
+				std::string name = items[i][0]->name;
+				item_list.push_back(itos(count) + " " + name);
+				indices.push_back(i);
+				if (type == Item::WEAPON && i == stats->weapon_index) {
+					hilight = item_list.size() - 1;
+				}
+				else if (type == Item::ARMOUR && i == stats->armour_index) {
+					hilight = item_list.size() - 1;
+				}
+			}
+		}
+	}
+
+	if (list == 0 && item_list.size() == 0) {
+		list = 0;
+		TGUI_Widget *parent = new TGUI_Widget(0.4f, 1.0f);
+		parent->set_parent(pad);
+		Widget_Label *label = new Widget_Label("Inventory empty", -1);
+		label->set_parent(parent);
+	}
+	else {
+		bool exists = list != 0;
+		if (exists == false) {
+			list = new Widget_List(0.4f, 1.0f);
+			list->set_parent(pad);
+		}
+		list->set_items(item_list);
+		list->set_hilight(hilight, true);
+	}
+}
+
+//--
 
 bool Buy_Sell_GUI::cancel;
 bool Buy_Sell_GUI::getting_number;
@@ -28,12 +764,15 @@ void Buy_Sell_GUI::get_number_callback(void *data)
 	got_number = true;
 }
 
-Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller_costs) :
+Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller_costs, bool is_storage, Callback done_callback, void *callback_data) :
 	seller_inventory(seller_inventory),
 	seller_costs(seller_costs),
 	sell_count(0),
 	buy_count(0),
-	exit_menu(false)
+	is_storage(is_storage),
+	exit_menu(false),
+	done_callback(done_callback),
+	callback_data(callback_data)
 {
 	cancel = false; // statics, can't use initializer list
 	got_number = false;
@@ -43,7 +782,12 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	for (size_t i = 0; i < seller_inventory->items.size(); i++) {
 		for (size_t j = 0; j < seller_inventory->items[i].size(); j++) {
 			Item *item = seller_inventory->items[i][j];
-			costs[item] = seller_costs[i];
+			if (is_storage == false) {
+				costs[item] = seller_costs[i];
+			}
+			else {
+				costs[item] = 0;
+			}
 			their_original_inventory.push_back(item);
 		}
 	}
@@ -51,7 +795,12 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	for (size_t i = 0; i < stats->inventory->items.size(); i++) {
 		for (size_t j = 0; j < stats->inventory->items[i].size(); j++) {
 			Item *item = stats->inventory->items[i][j];
-			costs[item] = item->get_value();
+			if (is_storage == false) {
+				costs[item] = item->get_value();
+			}
+			else {
+				costs[item] = 0;
+			}
 			your_original_inventory.push_back(item);
 		}
 	}
@@ -74,8 +823,10 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	TGUI_Widget *your_column = new TGUI_Widget(0.4f, 0.75f);
 	your_column->set_parent(pad);
 
-	your_gold_label = new Widget_Label("", 70);
-	your_gold_label->set_parent(your_column);
+	if (is_storage == false) {
+		your_gold_label = new Widget_Label("", 70);
+		your_gold_label->set_parent(your_column);
+	}
 	your_list = new Widget_List(1.0f, -1.0f);
 	your_list->set_break_line(true);
 	your_list->set_parent(your_column);
@@ -83,8 +834,10 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	TGUI_Widget *their_column = new TGUI_Widget(0.4f, 0.75f);
 	their_column->set_parent(pad);
 
-	their_gold_label = new Widget_Label("", 70);
-	their_gold_label->set_parent(their_column);
+	if (is_storage == false) {
+		their_gold_label = new Widget_Label("", 70);
+		their_gold_label->set_parent(their_column);
+	}
 	their_list = new Widget_List(1.0f, -1.0f);
 	their_list->set_break_line(true);
 	their_list->set_parent(their_column);
@@ -93,7 +846,9 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	button_column->set_parent(pad);
 
 	accept_button = new Widget_Text_Button(TRANSLATE("Accept")END, -1, -1);
-	accept_button->set_padding_top(int(noo.font->get_height() + 2));
+	if (is_storage == false) {
+		accept_button->set_padding_top(int(noo.font->get_height() + 2));
+	}
 	accept_button->set_parent(button_column);
 	their_list->set_right_widget(accept_button); // feels better like this
 
@@ -158,6 +913,9 @@ bool Buy_Sell_GUI::update()
 {
 	if (cancel) {
 		return_items();
+		if (done_callback) {
+			done_callback(callback_data);
+		}
 		return do_return(false);
 	}
 
@@ -184,9 +942,11 @@ bool Buy_Sell_GUI::update()
 			buy_count = 0;
 			sell_count = 0;
 			clear_hilights();
-			seller_costs.clear();
-			for (size_t i = 0; i < seller_inventory->items.size(); i++) {
-				seller_costs.push_back(costs[seller_inventory->items[i][0]]);
+			if (is_storage == false) {
+				seller_costs.clear();
+				for (size_t i = 0; i < seller_inventory->items.size(); i++) {
+					seller_costs.push_back(costs[seller_inventory->items[i][0]]);
+				}
 			}
 
 			stats->inventory->sort();
@@ -198,12 +958,15 @@ bool Buy_Sell_GUI::update()
 		}
 	}
 	else if (done_button->pressed() || exit_menu) {
-		if (buy_count > 0 || sell_count > 0) {
+		if (is_storage == false && (buy_count > 0 || sell_count > 0)) {
 			Yes_No_GUI *gui = new Yes_No_GUI(TRANSLATE("Cancel transaction?")END, confirm_callback);
 			gui->start();
 			noo.guis.push_back(gui);
 		}
 		else {
+			if (done_callback) {
+				done_callback(callback_data);
+			}
 			return do_return(false);
 		}
 	}
@@ -292,13 +1055,18 @@ void Buy_Sell_GUI::set_labels()
 		value_label->set_text(TRANSLATE("Value")END + ": " + itos(value));
 
 		std::string cost_text;
-		if (is_their_list) {
-			cost_text = TRANSLATE("Buy price")END + ": ";
+		if (is_storage == false) {
+			if (is_their_list) {
+				cost_text = TRANSLATE("Buy price")END + ": ";
+			}
+			else {
+				cost_text = TRANSLATE("Sell price")END + ": ";
+			}
+			cost_text += itos(get_cost(is_your_list));
 		}
 		else {
-			cost_text = TRANSLATE("Sell price")END + ": ";
+			cost_text = "-";
 		}
-		cost_text += itos(get_cost(is_your_list));
 		cost_label->set_text(cost_text);
 	}
 	else {
@@ -309,8 +1077,10 @@ void Buy_Sell_GUI::set_labels()
 		properties_label->set_text("");
 	}
 
-	your_gold_label->set_text(itos(stats->inventory->gold) + " gold (You)");
-	their_gold_label->set_text(itos(seller_inventory->gold) + " gold (Them)");
+	if (is_storage == false) {
+		your_gold_label->set_text(itos(stats->inventory->gold) + " gold (You)");
+		their_gold_label->set_text(itos(seller_inventory->gold) + " gold (Them)");
+	}
 
 	gui->layout();
 }
@@ -525,6 +1295,10 @@ void Buy_Sell_GUI::return_items()
 
 int Buy_Sell_GUI::get_cost(bool player)
 {
+	if (is_storage) {
+		return 0;
+	}
+
 	Widget_List *list;
 
 	if (player) {
