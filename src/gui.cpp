@@ -627,21 +627,21 @@ bool Items_GUI::update()
 			if (type == Item::WEAPON) {
 				if (stats->weapon_index == index) {
 					stats->weapon_index = -1;
-					list->set_hilight(index, false);
+					list->set_hilight(pressed, false);
 				}
 				else {
 					stats->weapon_index = index;
-					list->set_hilight(index, true);
+					list->set_hilight(pressed, true);
 				}
 			}
 			else if (type == Item::ARMOUR) {
 				if (stats->armour_index == index) {
 					stats->armour_index = -1;
-					list->set_hilight(index, false);
+					list->set_hilight(pressed, false);
 				}
 				else {
 					stats->armour_index = index;
-					list->set_hilight(index, true);
+					list->set_hilight(pressed, true);
 				}
 			}
 			else {
