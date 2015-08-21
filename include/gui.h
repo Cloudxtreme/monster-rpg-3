@@ -162,6 +162,7 @@ private:
 	void set_hilights();
 	void merge(Inventory *inventory, int count);
 	void move_original(Inventory *inventory, int count, std::vector<Item *> &move_from, std::vector<Item *> &move_to);
+	bool maybe_confirm();
 
 	Widget_Label *your_gold_label;
 	Widget_List *your_list;
@@ -224,6 +225,8 @@ private:
 
 	Callback callback;
 	void *callback_data;
+
+	bool exit_menu;
 };
 
 #endif // M3_GUI_H
