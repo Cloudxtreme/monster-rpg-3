@@ -14,7 +14,7 @@ static void bartender_callback(void *data)
 	int choice = int((int64_t)data);
 
 	if (choice == 0) {
-		Buy_Sell_GUI *gui = new Buy_Sell_GUI(&bartender_inventory, bartender_costs);
+		Buy_Sell_GUI *gui = new Buy_Sell_GUI(&bartender_inventory, bartender_costs, false);
 		gui->start();
 		noo.guis.push_back(gui);
 	}
