@@ -6,20 +6,6 @@
 #include "ml_start.h"
 #include "tweens.h"
 
-static Inventory bartender_inventory;
-static std::vector<int> bartender_costs;
-
-static void bartender_callback(void *data)
-{
-	int choice = int((int64_t)data);
-
-	if (choice == 0) {
-		Buy_Sell_GUI *gui = new Buy_Sell_GUI(&bartender_inventory, bartender_costs, false);
-		gui->start();
-		noo.guis.push_back(gui);
-	}
-}
-
 int ML_start::callback_data;
 Map_Entity *ML_start::coro;
 
@@ -102,13 +88,6 @@ void ML_start::callback(void *data)
 ML_start::ML_start()
 {
 	callback_data = 0;
-
-	bartender_inventory.items.clear();
-	bartender_inventory.gold = 48;
-	Buy_Sell_GUI::add_item(&bartender_inventory, bartender_costs, "pickled_egg", 1, 12);
-	Buy_Sell_GUI::add_item(&bartender_inventory, bartender_costs, "beer", 1, 75);
-	Buy_Sell_GUI::add_item(&bartender_inventory, bartender_costs, "wine", 2, 40);
-	bartender_inventory.sort();
 }
 
 void ML_start::start()
@@ -145,10 +124,27 @@ void ML_start::start()
 		legendary_warrior->set_position(Point<int>(12, 15));
 		legendary_warrior->set_direction(S);
 		legendary_warrior->set_sitting(true);
+
+		Inventory *bartender_inventory = new Inventory();
+		std::vector<int> bartender_costs;
+		bartender_inventory->gold = 48;
+		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "pickled_egg", 1, 12);
+		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "beer", 1, 75);
+		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "wine", 2, 40);
+		bartender_inventory->sort();
+
 		bartender = new Map_Entity("bartender");
-		bartender->set_brain(0);
+		bartender->set_brain(new Shop_Brain(
+			TRANSLATE("No loitering, kid! Either get drunk or get out!")END,
+			TRANSLATE("Let me see what you've got.")END,
+			TRANSLATE("I was just leaving...")END,
+			bartender_inventory,
+			bartender_costs
+		)
+		);
 		bartender->load_sprite("bartender");
 		bartender->set_position(Point<int>(19, 19));
+
 		sitting_lady = new Map_Entity("sitting_lady");
 		sitting_lady->set_brain(new Talk_Brain("sitting_lady"));
 		sitting_lady->load_sprite("sitting_lady");
@@ -380,16 +376,7 @@ void ML_start::update()
 
 void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
-	if (activator == noo.player && activated->get_name() == "bartender") {
-		std::string caption = TRANSLATE("No loitering, kid! Either get drunk or get out!")END;
-		std::vector<std::string> choices;
-		choices.push_back(TRANSLATE("Let me see what you've got.")END);
-		choices.push_back(TRANSLATE("I was just leaving...")END);
-		Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(caption, choices, bartender_callback);
-		gui->start();
-		noo.guis.push_back(gui);
-	}
-	else if (activator == noo.player && activated->get_name() == "drinker_bottle") {
+	if (activator == noo.player && activated->get_name() == "drinker_bottle") {
 		noo.set_milestone(noo.milestone_name_to_number("Drinker's bottle"), true);
 		noo.item_mml->play(false);
 		Item *item = new Item("bottle");
