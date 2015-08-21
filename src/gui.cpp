@@ -457,12 +457,23 @@ bool Pause_GUI::fade_done(bool fading_in) {
 
 //--
 
+bool Items_GUI::got_number;
+int Items_GUI::number;
+
+void Items_GUI::get_number_callback(void *data)
+{
+	number = (int64_t)data;
+	got_number = true;
+}
+
 Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	list(0),
 	type(type),
 	exit_menu(false),
 	callback(callback)
 {
+	got_number = false;
+
 	stats = noo.map->get_entity(0)->get_stats();
 
 	Widget *modal_main_widget = new Widget(1.0f, 1.0f);
@@ -623,20 +634,28 @@ bool Items_GUI::update()
 			}
 		}
 		else if (drop_radio && drop_radio->is_selected()) {
-			Item *item = stats->inventory->items[index][0];
-			stats->inventory->items[index].erase(stats->inventory->items[index].begin());
-			if (stats->inventory->items[index].size() == 0) {
-				stats->inventory->items.erase(stats->inventory->items.begin() + index);
+			int count = stats->inventory->items[pressed].size();
+			if (count > 5) {
+				got_number = false;
+				dropping_index = index;
+				Get_Number_GUI *gngui = new Get_Number_GUI(TRANSLATE("Drop how many?")END, count+1, 0, get_number_callback);
+				gngui->start();
+				noo.guis.push_back(gngui);
 			}
-			set_list();
-			int selected = list->get_selected();
-			if (selected >= (int)stats->inventory->items.size()) {
-				selected--;
-				if (selected < 0) {
-					gui->focus_something();
+			else {
+				drop_item(index);
+			}
+		}
+	}
+
+	if (got_number) {
+		got_number = false;
+		if (number > 0) {
+			if (drop_radio->is_selected()) {
+				for (int i = 0; i < number; i++) {
+					drop_item(dropping_index);
 				}
 			}
-			dropped_items->add(item);
 		}
 	}
 
@@ -734,10 +753,27 @@ void Items_GUI::set_list()
 	}
 }
 
+void Items_GUI::drop_item(int index)
+{
+	Item *item = stats->inventory->items[index][0];
+	stats->inventory->items[index].erase(stats->inventory->items[index].begin());
+	if (stats->inventory->items[index].size() == 0) {
+		stats->inventory->items.erase(stats->inventory->items.begin() + index);
+	}
+	set_list();
+	int selected = list->get_selected();
+	if (selected >= (int)stats->inventory->items.size()) {
+		selected--;
+		if (selected < 0) {
+			gui->focus_something();
+		}
+	}
+	dropped_items->add(item);
+}
+
 //--
 
 bool Buy_Sell_GUI::cancel;
-bool Buy_Sell_GUI::getting_number;
 bool Buy_Sell_GUI::got_number;
 int Buy_Sell_GUI::number;
 
@@ -977,7 +1013,6 @@ bool Buy_Sell_GUI::update()
 	else if ((pressed = your_list->pressed()) >= 0) {
 		int count = stats->inventory->items[pressed].size();
 		if (count > 5) {
-			getting_number = true;
 			got_number = false;
 			getting_for_your_inventory = true;
 			getting_for = pressed;
@@ -994,7 +1029,6 @@ bool Buy_Sell_GUI::update()
 	else if ((pressed = their_list->pressed()) >= 0) {
 		int count = seller_inventory->items[pressed].size();
 		if (count > 5) {
-			getting_number = true;
 			got_number = false;
 			getting_for_your_inventory = false;
 			getting_for = pressed;

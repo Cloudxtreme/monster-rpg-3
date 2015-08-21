@@ -87,15 +87,21 @@ private:
 
 class Items_GUI : public GUI {
 public:
+	static void get_number_callback(void *data);
+
 	Items_GUI(Item::Type type, Callback callback);
 
 	void handle_event(TGUI_Event *event);
 	bool update();
 
 private:
+	static bool got_number;
+	static int number;
+
 	void set_labels();
 	void handle_dropped_items();
 	void set_list();
+	void drop_item(int index);
 
 	Stats *stats;
 
@@ -122,6 +128,8 @@ private:
 	Callback callback;
 
 	Inventory *dropped_items;
+
+	int dropping_index;
 };
 
 class Buy_Sell_GUI : public GUI {
@@ -138,7 +146,6 @@ public:
 
 private:
 	static bool cancel;
-	static bool getting_number;
 	static bool got_number;
 	static int number;
 
