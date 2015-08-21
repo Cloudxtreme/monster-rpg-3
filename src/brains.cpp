@@ -408,7 +408,8 @@ Item_Drop_Brain::~Item_Drop_Brain()
 
 void Item_Drop_Brain::activate(Map_Entity *activator)
 {
-	Buy_Sell_GUI *gui = new Buy_Sell_GUI(inventory, std::vector<int>(), true, callback, this);
+	std::vector<int> unused;
+	Buy_Sell_GUI *gui = new Buy_Sell_GUI(inventory, unused, true, callback, this);
 	gui->start();
 	noo.guis.push_back(gui);
 }
