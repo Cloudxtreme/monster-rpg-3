@@ -318,7 +318,7 @@ void Door_Brain::set_map_entity(Map_Entity *entity)
 
 bool Door_Brain::save(std::string &out)
 {
-	out += string_printf("brain=door_brain,1\n%s\n", open ? ",open" : "");
+	out += string_printf("brain=door_brain,1\n%s\n", open ? "open" : "");
 	return true;
 }
 
@@ -334,10 +334,9 @@ void Door_Brain::do_close()
 
 //--
 
-Item_Brain::Item_Brain(std::string item_name, int quantity, int milestone) :
+Item_Brain::Item_Brain(std::string item_name, int quantity) :
 	item_name(item_name),
-	quantity(quantity),
-	milestone(milestone)
+	quantity(quantity)
 {
 }
 
@@ -374,14 +373,13 @@ void Item_Brain::activate(Map_Entity *activator)
 				}
 			}
 			noo.map->schedule_destroy(map_entity);
-			noo.set_milestone(milestone, true);
 		}
 	}
 }
 
 bool Item_Brain::save(std::string &out)
 {
-	out += string_printf("brain=item_brain,1\n%s=%d:%d\n", item_name.c_str(), quantity, milestone);
+	out += string_printf("brain=item_brain,1\n%s=%d\n", item_name.c_str(), quantity);
 	return true;
 }
 

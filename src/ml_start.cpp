@@ -90,17 +90,16 @@ ML_start::ML_start()
 	callback_data = 0;
 }
 
-void ML_start::start()
+void ML_start::start(bool been_here_before)
 {
 	noo.play_music("town.mml");
 
-	if (noo.last_map_name != "--LOADED--") {
-		if (noo.check_milestone("First Scene") == false) {
-			noo.player->set_input_enabled(false);
-			noo.player->set_position(Point<int>(11, 24));
-			noo.player->set_direction(N);
-			noo.map->add_speech("+milestone=Input Help,top,right,name=Eny|" + noo.game_t->translate(0), callback, &callback_data);
-		}
+	if (!been_here_before) {
+		noo.player->set_input_enabled(false);
+		noo.player->set_position(Point<int>(11, 24));
+		noo.player->set_direction(N);
+		noo.map->add_speech("+milestone=Input Help,top,right,name=Eny|" + noo.game_t->translate(0), callback, &callback_data);
+
 		coro = new Map_Entity("coro");
 		coro->set_brain(new Talk_Brain("coro"));
 		coro->load_sprite("coro");
@@ -170,190 +169,142 @@ void ML_start::start()
 		noo.map->add_entity(laughing_man);
 		noo.map->add_entity(drinker);
 
-		if (noo.check_milestone("Drinker's bottle") == false) {
-			drinker_bottle = new Map_Entity("drinker_bottle");
-			drinker_bottle->load_sprite("drinker_bottle");
-			drinker_bottle->set_position(Point<int>(13, 8));
-			drinker_bottle->set_z_add(1);
-			noo.map->add_entity(drinker_bottle);
-		}
+		drinker_bottle = new Map_Entity("drinker_bottle");
+		drinker_bottle->load_sprite("drinker_bottle");
+		drinker_bottle->set_position(Point<int>(13, 8));
+		drinker_bottle->set_z_add(1);
+		noo.map->add_entity(drinker_bottle);
 
-		int bottle1_milestone = noo.milestone_name_to_number("Pub bottle 1");
-		int bottle2_milestone = noo.milestone_name_to_number("Pub bottle 2");
-		int bottle3_milestone = noo.milestone_name_to_number("Pub bottle 3");
-		int bottle4_milestone = noo.milestone_name_to_number("Pub bottle 4");
-		int fish1_milestone = noo.milestone_name_to_number("Pub fish 1");
-		int fish2_milestone = noo.milestone_name_to_number("Pub fish 2");
-		int wineglass1_milestone = noo.milestone_name_to_number("Pub wineglass 1");
-		int wineglass2_milestone = noo.milestone_name_to_number("Pub wineglass 2");
-		int wineglass3_milestone = noo.milestone_name_to_number("Pub wineglass 3");
-		int wineglass4_milestone = noo.milestone_name_to_number("Pub wineglass 4");
-		int mug1_milestone = noo.milestone_name_to_number("Pub mug 1");
-		int mug2_milestone = noo.milestone_name_to_number("Pub mug 2");
-		int mug3_milestone = noo.milestone_name_to_number("Pub mug 3");
-		int mug4_milestone = noo.milestone_name_to_number("Pub mug 4");
-		int monsterslayer_milestone = noo.milestone_name_to_number("Pub Monsterslayer");
+		Map_Entity *bottle1 = new Map_Entity("bottle");
+		bottle1->set_brain(new Item_Brain("bottle", 1));
+		bottle1->load_sprite("bottle_tipped");
+		bottle1->set_position(Point<int>(1, 11));
+		bottle1->set_solid(false);
+		noo.map->add_entity(bottle1);
 
-		if (noo.check_milestone(bottle1_milestone) == false) {
-			Map_Entity *bottle1 = new Map_Entity("bottle");
-			bottle1->set_brain(new Item_Brain("bottle", 1, bottle1_milestone));
-			bottle1->load_sprite("bottle_tipped");
-			bottle1->set_position(Point<int>(1, 11));
-			bottle1->set_solid(false);
-			noo.map->add_entity(bottle1);
-		}
+		Map_Entity *bottle2 = new Map_Entity("bottle");
+		bottle2->set_brain(new Item_Brain("bottle", 1));
+		bottle2->load_sprite("bottle_tipped");
+		bottle2->set_position(Point<int>(14, 13));
+		bottle2->set_solid(false);
+		noo.map->add_entity(bottle2);
 
-		if (noo.check_milestone(bottle2_milestone) == false) {
-			Map_Entity *bottle2 = new Map_Entity("bottle");
-			bottle2->set_brain(new Item_Brain("bottle", 1, bottle2_milestone));
-			bottle2->load_sprite("bottle_tipped");
-			bottle2->set_position(Point<int>(14, 13));
-			bottle2->set_solid(false);
-			noo.map->add_entity(bottle2);
-		}
+		Map_Entity *bottle3 = new Map_Entity("bottle");
+		bottle3->set_brain(new Item_Brain("bottle", 1));
+		bottle3->load_sprite("bottle_tipped");
+		bottle3->set_position(Point<int>(17, 20));
+		bottle3->set_z(noo.tile_size);
+		bottle3->set_high(true);
+		bottle3->set_solid(false);
+		noo.map->add_entity(bottle3);
 
-		if (noo.check_milestone(bottle3_milestone) == false) {
-			Map_Entity *bottle3 = new Map_Entity("bottle");
-			bottle3->set_brain(new Item_Brain("bottle", 1, bottle3_milestone));
-			bottle3->load_sprite("bottle_tipped");
-			bottle3->set_position(Point<int>(17, 20));
-			bottle3->set_z(noo.tile_size);
-			bottle3->set_high(true);
-			bottle3->set_solid(false);
-			noo.map->add_entity(bottle3);
-		}
+		Map_Entity *bottle4 = new Map_Entity("bottle");
+		bottle4->set_brain(new Item_Brain("bottle", 1));
+		bottle4->load_sprite("bottle");
+		bottle4->set_position(Point<int>(17, 19));
+		bottle4->set_z(noo.tile_size);
+		bottle4->set_high(true);
+		bottle4->set_solid(false);
+		noo.map->add_entity(bottle4);
 
-		if (noo.check_milestone(bottle4_milestone) == false) {
-			Map_Entity *bottle4 = new Map_Entity("bottle");
-			bottle4->set_brain(new Item_Brain("bottle", 1, bottle4_milestone));
-			bottle4->load_sprite("bottle");
-			bottle4->set_position(Point<int>(17, 19));
-			bottle4->set_z(noo.tile_size);
-			bottle4->set_high(true);
-			bottle4->set_solid(false);
-			noo.map->add_entity(bottle4);
-		}
+		Map_Entity *fish1 = new Map_Entity("fish");
+		fish1->set_brain(new Item_Brain("fish", 1));
+		fish1->load_sprite("fish");
+		fish1->set_position(Point<int>(9, 7));
+		fish1->set_z(noo.tile_size);
+		fish1->set_high(true);
+		fish1->set_solid(false);
+		noo.map->add_entity(fish1);
 
-		if (noo.check_milestone(fish1_milestone) == false) {
-			Map_Entity *fish1 = new Map_Entity("fish");
-			fish1->set_brain(new Item_Brain("fish", 1, fish1_milestone));
-			fish1->load_sprite("fish");
-			fish1->set_position(Point<int>(9, 7));
-			fish1->set_z(noo.tile_size);
-			fish1->set_high(true);
-			fish1->set_solid(false);
-			noo.map->add_entity(fish1);
-		}
+		Map_Entity *fish2 = new Map_Entity("fish");
+		fish2->set_brain(new Item_Brain("fish", 1));
+		fish2->load_sprite("fish");
+		fish2->set_position(Point<int>(17, 17));
+		fish2->set_z(noo.tile_size);
+		fish2->set_high(true);
+		fish2->set_solid(false);
+		noo.map->add_entity(fish2);
 
-		if (noo.check_milestone(fish1_milestone) == false) {
-			Map_Entity *fish1 = new Map_Entity("fish");
-			fish1->set_brain(new Item_Brain("fish", 1, fish1_milestone));
-			fish1->load_sprite("fish");
-			fish1->set_position(Point<int>(17, 17));
-			fish1->set_z(noo.tile_size);
-			fish1->set_high(true);
-			fish1->set_solid(false);
-			noo.map->add_entity(fish1);
-		}
+		Map_Entity *wineglass1 = new Map_Entity("wineglass");
+		wineglass1->set_brain(new Item_Brain("wineglass", 1));
+		wineglass1->load_sprite("wineglass");
+		wineglass1->set_position(Point<int>(17, 18));
+		wineglass1->set_z(noo.tile_size);
+		wineglass1->set_high(true);
+		wineglass1->set_solid(false);
+		noo.map->add_entity(wineglass1);
 
-		if (noo.check_milestone(wineglass1_milestone) == false) {
-			Map_Entity *wineglass1 = new Map_Entity("wineglass");
-			wineglass1->set_brain(new Item_Brain("wineglass", 1, wineglass1_milestone));
-			wineglass1->load_sprite("wineglass");
-			wineglass1->set_position(Point<int>(17, 18));
-			wineglass1->set_z(noo.tile_size);
-			wineglass1->set_high(true);
-			wineglass1->set_solid(false);
-			noo.map->add_entity(wineglass1);
-		}
+		Map_Entity *wineglass2 = new Map_Entity("wineglass");
+		wineglass2->set_brain(new Item_Brain("wineglass", 1));
+		wineglass2->load_sprite("wineglass");
+		wineglass2->set_position(Point<int>(3, 21));
+		wineglass2->set_z(noo.tile_size);
+		wineglass2->set_high(true);
+		wineglass2->set_solid(false);
+		noo.map->add_entity(wineglass2);
 
-		if (noo.check_milestone(wineglass2_milestone) == false) {
-			Map_Entity *wineglass2 = new Map_Entity("wineglass");
-			wineglass2->set_brain(new Item_Brain("wineglass", 1, wineglass2_milestone));
-			wineglass2->load_sprite("wineglass");
-			wineglass2->set_position(Point<int>(3, 21));
-			wineglass2->set_z(noo.tile_size);
-			wineglass2->set_high(true);
-			wineglass2->set_solid(false);
-			noo.map->add_entity(wineglass2);
-		}
+		Map_Entity *wineglass3 = new Map_Entity("wineglass");
+		wineglass3->set_brain(new Item_Brain("wineglass", 1));
+		wineglass3->load_sprite("wineglass_tipped");
+		wineglass3->set_position(Point<int>(10, 16));
+		wineglass3->set_z(noo.tile_size);
+		wineglass3->set_high(true);
+		wineglass3->set_solid(false);
+		noo.map->add_entity(wineglass3);
 
-		if (noo.check_milestone(wineglass3_milestone) == false) {
-			Map_Entity *wineglass3 = new Map_Entity("wineglass");
-			wineglass3->set_brain(new Item_Brain("wineglass", 1, wineglass3_milestone));
-			wineglass3->load_sprite("wineglass_tipped");
-			wineglass3->set_position(Point<int>(10, 16));
-			wineglass3->set_z(noo.tile_size);
-			wineglass3->set_high(true);
-			wineglass3->set_solid(false);
-			noo.map->add_entity(wineglass3);
-		}
+		Map_Entity *wineglass4 = new Map_Entity("wineglass_broken");
+		wineglass4->set_brain(new Item_Brain("wineglass_broken", 1));
+		wineglass4->load_sprite("wineglass_broken");
+		wineglass4->set_position(Point<int>(3, 13));
+		wineglass4->set_z(noo.tile_size);
+		wineglass4->set_high(true);
+		wineglass4->set_solid(false);
+		noo.map->add_entity(wineglass4);
 
-		if (noo.check_milestone(wineglass4_milestone) == false) {
-			Map_Entity *wineglass4 = new Map_Entity("wineglass_broken");
-			wineglass4->set_brain(new Item_Brain("wineglass_broken", 1, wineglass4_milestone));
-			wineglass4->load_sprite("wineglass_broken");
-			wineglass4->set_position(Point<int>(3, 13));
-			wineglass4->set_z(noo.tile_size);
-			wineglass4->set_high(true);
-			wineglass4->set_solid(false);
-			noo.map->add_entity(wineglass4);
-		}
+		Map_Entity *mug1 = new Map_Entity("mug");
+		mug1->set_brain(new Item_Brain("mug", 1));
+		mug1->load_sprite("mug_left");
+		mug1->set_position(Point<int>(4, 6));
+		mug1->set_z(noo.tile_size);
+		mug1->set_high(true);
+		mug1->set_solid(false);
+		noo.map->add_entity(mug1);
 
-		if (noo.check_milestone(mug1_milestone) == false) {
-			Map_Entity *mug1 = new Map_Entity("mug");
-			mug1->set_brain(new Item_Brain("mug", 1, mug1_milestone));
-			mug1->load_sprite("mug_left");
-			mug1->set_position(Point<int>(4, 6));
-			mug1->set_z(noo.tile_size);
-			mug1->set_high(true);
-			mug1->set_solid(false);
-			noo.map->add_entity(mug1);
-		}
+		Map_Entity *mug2 = new Map_Entity("mug");
+		mug2->set_brain(new Item_Brain("mug", 1));
+		mug2->load_sprite("mug_left");
+		mug2->set_position(Point<int>(2, 21));
+		mug2->set_z(noo.tile_size);
+		mug2->set_high(true);
+		mug2->set_solid(false);
+		noo.map->add_entity(mug2);
 
-		if (noo.check_milestone(mug2_milestone) == false) {
-			Map_Entity *mug2 = new Map_Entity("mug");
-			mug2->set_brain(new Item_Brain("mug", 1, mug2_milestone));
-			mug2->load_sprite("mug_left");
-			mug2->set_position(Point<int>(2, 21));
-			mug2->set_z(noo.tile_size);
-			mug2->set_high(true);
-			mug2->set_solid(false);
-			noo.map->add_entity(mug2);
-		}
+		Map_Entity *mug3 = new Map_Entity("mug");
+		mug3->set_brain(new Item_Brain("mug", 1));
+		mug3->load_sprite("mug_left");
+		mug3->set_position(Point<int>(9, 8));
+		mug3->set_z(noo.tile_size);
+		mug3->set_high(true);
+		mug3->set_solid(false);
+		noo.map->add_entity(mug3);
 
-		if (noo.check_milestone(mug3_milestone) == false) {
-			Map_Entity *mug3 = new Map_Entity("mug");
-			mug3->set_brain(new Item_Brain("mug", 1, mug3_milestone));
-			mug3->load_sprite("mug_left");
-			mug3->set_position(Point<int>(9, 8));
-			mug3->set_z(noo.tile_size);
-			mug3->set_high(true);
-			mug3->set_solid(false);
-			noo.map->add_entity(mug3);
-		}
+		Map_Entity *mug4 = new Map_Entity("mug");
+		mug4->set_brain(new Item_Brain("mug", 1));
+		mug4->load_sprite("mug_left");
+		mug4->set_position(Point<int>(17, 16));
+		mug4->set_z(noo.tile_size);
+		mug4->set_high(true);
+		mug4->set_solid(false);
+		noo.map->add_entity(mug4);
 
-		if (noo.check_milestone(mug4_milestone) == false) {
-			Map_Entity *mug4 = new Map_Entity("mug");
-			mug4->set_brain(new Item_Brain("mug", 1, mug4_milestone));
-			mug4->load_sprite("mug_left");
-			mug4->set_position(Point<int>(17, 16));
-			mug4->set_z(noo.tile_size);
-			mug4->set_high(true);
-			mug4->set_solid(false);
-			noo.map->add_entity(mug4);
-		}
-
-		if (noo.check_milestone(monsterslayer_milestone) == false) {
-			Map_Entity *monsterslayer = new Map_Entity("monsterslayer");
-			monsterslayer->set_brain(new Item_Brain("monsterslayer", 1, monsterslayer_milestone));
-			monsterslayer->load_sprite("monsterslayer");
-			monsterslayer->set_position(Point<int>(12, 17));
-			monsterslayer->set_size(Size<int>(noo.tile_size*2, noo.tile_size*2));
-			monsterslayer->set_high(true);
-			monsterslayer->set_solid(false);
-			noo.map->add_entity(monsterslayer);
-		}
+		Map_Entity *monsterslayer = new Map_Entity("monsterslayer");
+		monsterslayer->set_brain(new Item_Brain("monsterslayer", 1));
+		monsterslayer->load_sprite("monsterslayer");
+		monsterslayer->set_position(Point<int>(12, 17));
+		monsterslayer->set_size(Size<int>(noo.tile_size*2, noo.tile_size*2));
+		monsterslayer->set_high(true);
+		monsterslayer->set_solid(false);
+		noo.map->add_entity(monsterslayer);
 	}
 }
 

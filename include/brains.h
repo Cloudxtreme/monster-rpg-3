@@ -89,7 +89,7 @@ private:
 
 class Item_Brain : public Brain {
 public:
-	Item_Brain(std::string item_name, int quantity, int milestone);
+	Item_Brain(std::string item_name, int quantity);
 
 	void activate(Map_Entity *activator);
 
@@ -98,7 +98,6 @@ public:
 private:
 	std::string item_name;
 	int quantity;
-	int milestone;
 };
 
 class Item_Drop_Brain : public Brain {

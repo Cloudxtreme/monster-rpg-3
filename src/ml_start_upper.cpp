@@ -3,11 +3,11 @@
 #include "brains.h"
 #include "ml_start_upper.h"
 
-void ML_start_upper::start()
+void ML_start_upper::start(bool been_here_before)
 {
 	noo.play_music("town.mml");
 
-	if (noo.last_map_name != "--LOADED--") {
+	if (been_here_before == false) {
 		Map_Entity *door1 = new Map_Entity("door");
 		door1->load_sprite("door");
 		Door_Brain *door1_brain = new Door_Brain(false);
@@ -54,40 +54,30 @@ void ML_start_upper::start()
 		noo.map->add_entity(door4);
 		noo.map->add_entity(door5);
 
-		int bottle_milestone = noo.milestone_name_to_number("Pub bottle 5");
-		int apple1_milestone = noo.milestone_name_to_number("Pub apple 1");
-		int apple2_milestone = noo.milestone_name_to_number("Pub apple 2");
+		Map_Entity *bottle = new Map_Entity("bottle");
+		bottle->set_brain(new Item_Brain("bottle", 1));
+		bottle->load_sprite("bottle_tipped");
+		bottle->set_position(Point<int>(11, 3));
+		bottle->set_solid(false);
+		noo.map->add_entity(bottle);
 
-		if (noo.check_milestone(bottle_milestone) == false) {
-			Map_Entity *bottle = new Map_Entity("bottle");
-			bottle->set_brain(new Item_Brain("bottle", 1, bottle_milestone));
-			bottle->load_sprite("bottle_tipped");
-			bottle->set_position(Point<int>(11, 3));
-			bottle->set_solid(false);
-			noo.map->add_entity(bottle);
-		}
+		Map_Entity *apple1 = new Map_Entity("apple");
+		apple1->set_brain(new Item_Brain("apple", 1));
+		apple1->load_sprite("apple");
+		apple1->set_position(Point<int>(7, 5));
+		apple1->set_z(noo.tile_size);
+		apple1->set_high(true);
+		apple1->set_solid(false);
+		noo.map->add_entity(apple1);
 
-		if (noo.check_milestone(bottle_milestone) == false) {
-			Map_Entity *apple1 = new Map_Entity("apple");
-			apple1->set_brain(new Item_Brain("apple", 1, apple1_milestone));
-			apple1->load_sprite("apple");
-			apple1->set_position(Point<int>(7, 5));
-			apple1->set_z(noo.tile_size);
-			apple1->set_high(true);
-			apple1->set_solid(false);
-			noo.map->add_entity(apple1);
-		}
-
-		if (noo.check_milestone(bottle_milestone) == false) {
-			Map_Entity *apple2 = new Map_Entity("apple");
-			apple2->set_brain(new Item_Brain("apple", 1, apple2_milestone));
-			apple2->load_sprite("apple");
-			apple2->set_position(Point<int>(20, 16));
-			apple2->set_z(noo.tile_size);
-			apple2->set_high(true);
-			apple2->set_solid(false);
-			noo.map->add_entity(apple2);
-		}
+		Map_Entity *apple2 = new Map_Entity("apple");
+		apple2->set_brain(new Item_Brain("apple", 1));
+		apple2->load_sprite("apple");
+		apple2->set_position(Point<int>(20, 16));
+		apple2->set_z(noo.tile_size);
+		apple2->set_high(true);
+		apple2->set_solid(false);
+		noo.map->add_entity(apple2);
 	}
 }
 

@@ -63,15 +63,10 @@ Brain *dll_get_brain(std::string type, std::string data)
 
 		Tokenizer t2(opt, '=');
 
-		std::string key = t2.next();
-		std::string value = t2.next();
+		std::string name = t2.next();
+		std::string quantity = t2.next();
 
-		Tokenizer t3(value, ':');
-
-		std::string quantity = t3.next();
-		std::string milestone = t3.next();
-
-		return new Item_Brain(key, atoi(quantity.c_str()), atoi(milestone.c_str()));
+		return new Item_Brain(name, atoi(quantity.c_str()));
 	}
 	else if (type == "item_drop") {
 		Inventory *inventory = new Inventory();
