@@ -1492,7 +1492,7 @@ void Buy_Sell_GUI::move_original(Inventory *inventory, int count, std::vector<It
 	}
 }
 
-bool Buy_Sell_GUI::maybe_confirm()
+void Buy_Sell_GUI::maybe_confirm()
 {
 	if (buy_count > 0 || sell_count > 0) {
 		Yes_No_GUI *gui;
