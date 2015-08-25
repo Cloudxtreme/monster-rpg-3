@@ -315,9 +315,15 @@ void ML_start::end()
 void ML_start::trigger(Map_Entity *entity)
 {
 	Point<int> collide_pos;
-	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(18, 3), Size<int>(3, 1), collide_pos)) {
-		entity->stop();
-		noo.map->change_map("start_upper.map", Point<int>(22, 5), S);
+	if (entity->get_id() == 0) {
+		if (entity->tiles_collide(Point<int>(18, 3), Size<int>(3, 1), collide_pos)) {
+			entity->stop();
+			noo.map->change_map("start_upper.map", Point<int>(22, 5), S);
+		}
+		else if (entity->tiles_collide(Point<int>(10, 25), Size<int>(3, 1), collide_pos)) {
+			entity->stop();
+			noo.map->change_map("town.map", Point<int>(38, 11), S);
+		}
 	}
 }
 
