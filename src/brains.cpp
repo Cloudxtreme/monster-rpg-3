@@ -236,12 +236,14 @@ void Talk_Then_Animate_Brain::speech_callback(void *data)
 {
 	Talk_Brain::Callback_Data *d = (Talk_Brain::Callback_Data *)data;
 	Map_Entity *entity = d->entity;
-	std::string name = entity->get_name();
+	Talk_Then_Animate_Brain *brain = dynamic_cast<Talk_Then_Animate_Brain *>(entity->get_brain());
 	Sprite *sprite = entity->get_sprite();
+	std::string name = entity->get_name();
 
 	if (name == "drinker") {
 		Map_Entity *bottle = noo.map->find_entity("drinker_bottle");
 		if (bottle) {
+			brain->animating = true;
 			sprite->set_animation("drinking", animation_callback, (void *)entity);
 			sprite->reset();
 			sprite = bottle->get_sprite();
@@ -260,7 +262,6 @@ Talk_Then_Animate_Brain::Talk_Then_Animate_Brain(std::string name) :
 void Talk_Then_Animate_Brain::activate(Map_Entity *activator)
 {
 	if (!animating) {
-		animating = true;
 		Talk_Brain::activate(activator);
 	}
 }
