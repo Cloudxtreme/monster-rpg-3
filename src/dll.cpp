@@ -60,17 +60,32 @@ Brain *dll_get_brain(std::string type, std::string data)
 		return new Door_Brain(open);
 	}
 	else if (type == "item_brain") {
-		std::string this_options = trim(data);
-		Tokenizer t(this_options, ',');
+		Tokenizer t(data, ',');
+		
+		std::string option;
 
-		std::string opt = t.next();
+		std::string name = "";;
+		int quantity = 1;
+		int milestone = -1;
 
-		Tokenizer t2(opt, '=');
+		while ((option = t.next()) != "") {
+			Tokenizer t2(option, '=');
 
-		std::string name = t2.next();
-		std::string quantity = t2.next();
+			std::string key = t2.next();
+			std::string value = t2.next();
 
-		return new Item_Brain(name, atoi(quantity.c_str()));
+			if (key == "name") {
+				name = value;
+			}
+			else if (key == "quantity") {
+				quantity = atoi(value.c_str());
+			}
+			else if (key == "milestone") {
+				milestone = atoi(value.c_str());
+			}
+		}
+
+		return new Item_Brain(name, quantity, milestone);
 	}
 	else if (type == "item_drop") {
 		Inventory *inventory = new Inventory();

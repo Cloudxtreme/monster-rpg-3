@@ -401,7 +401,7 @@ void Item_Brain::activate(Map_Entity *activator)
 
 bool Item_Brain::save(std::string &out)
 {
-	out += string_printf("brain=item_brain,1\n%s=%d\n", item_name.c_str(), quantity);
+	out += string_printf("brain=item_brain,1\nname=%s,quantity=%d,milestone=%d\n", item_name.c_str(), quantity, milestone);
 	return true;
 }
 
