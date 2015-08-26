@@ -446,10 +446,6 @@ bool Pause_GUI::fade_done(bool fading_in) {
 			delete noo.player;
 			noo.player = 0;
 			noo.last_map_name = "";
-
-			Title_GUI *title_gui = new Title_GUI();
-			title_gui->start();
-			noo.guis.push_back(title_gui);
 		}
 	}
 
