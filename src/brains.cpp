@@ -216,12 +216,19 @@ bool Animated_Brain::save(std::string &out)
 void Talk_Then_Animate_Brain::animation_callback(void *data)
 {
 	Map_Entity *entity = (Map_Entity *)data;
+	Talk_Then_Animate_Brain *brain = dynamic_cast<Talk_Then_Animate_Brain *>(entity->get_brain());
 	Sprite *sprite = entity->get_sprite();
+	std::string name = entity->get_name();
+
+	brain->animating = false;
 	sprite->set_animation(sprite->get_previous_animation());
-	Map_Entity *bottle = noo.map->find_entity("drinker_bottle");
-	if (bottle) {
-		Sprite *sprite = bottle->get_sprite();
-		sprite->set_animation(sprite->get_previous_animation());
+
+	if (name == "drinker") {
+		Map_Entity *bottle = noo.map->find_entity("drinker_bottle");
+		if (bottle) {
+			Sprite *sprite = bottle->get_sprite();
+			sprite->set_animation(sprite->get_previous_animation());
+		}
 	}
 }
 
@@ -245,8 +252,17 @@ void Talk_Then_Animate_Brain::speech_callback(void *data)
 }
 
 Talk_Then_Animate_Brain::Talk_Then_Animate_Brain(std::string name) :
-	Talk_Brain(name, speech_callback)
+	Talk_Brain(name, speech_callback),
+	animating(false)
 {
+}
+
+void Talk_Then_Animate_Brain::activate(Map_Entity *activator)
+{
+	if (!animating) {
+		animating = true;
+		Talk_Brain::activate(activator);
+	}
 }
 
 bool Talk_Then_Animate_Brain::save(std::string &out)

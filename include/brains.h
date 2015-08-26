@@ -61,8 +61,13 @@ public:
 	static void animation_callback(void *data);
 
 	Talk_Then_Animate_Brain(std::string name);
+	
+	void activate(Map_Entity *activator);
 
 	bool save(std::string &out);
+
+private:
+	bool animating;
 };
 
 class Door_Brain : public Brain {
