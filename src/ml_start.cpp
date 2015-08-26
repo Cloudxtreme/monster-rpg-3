@@ -169,7 +169,9 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(laughing_man);
 		noo.map->add_entity(drinker);
 
+		int drinker_bottle_milestone = noo.milestone_name_to_number("Drinker's bottle");
 		drinker_bottle = new Map_Entity("drinker_bottle");
+		drinker_bottle->set_brain(new Item_Brain("bottle", 1, drinker_bottle_milestone));
 		drinker_bottle->load_sprite("drinker_bottle");
 		drinker_bottle->set_position(Point<int>(13, 8));
 		drinker_bottle->set_z_add(1);
@@ -333,12 +335,4 @@ void ML_start::update()
 
 void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
-	if (activator == noo.player && activated->get_name() == "drinker_bottle") {
-		noo.set_milestone(noo.milestone_name_to_number("Drinker's bottle"), true);
-		noo.item_mml->play(false);
-		Item *item = new Item("bottle");
-		noo.player->get_stats()->inventory->add(item);
-		noo.map->schedule_destroy(activated);
-		noo.map->add_speech(TRANSLATE("Found")END + " " + TRANSLATE("a")END + " " + TRANSLATE("bottle")END);
-	}
 }
