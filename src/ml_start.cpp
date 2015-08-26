@@ -92,7 +92,7 @@ ML_start::ML_start()
 
 void ML_start::start(bool been_here_before)
 {
-	noo.play_music("town.mml");
+	noo.play_music("pub.mml");
 
 	if (!been_here_before) {
 		noo.player->set_input_enabled(false);

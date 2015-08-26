@@ -5,7 +5,7 @@
 
 void ML_start_upper::start(bool been_here_before)
 {
-	noo.play_music("town.mml");
+	noo.play_music("pub.mml");
 
 	if (been_here_before == false) {
 		Map_Entity *door1 = new Map_Entity("door");
