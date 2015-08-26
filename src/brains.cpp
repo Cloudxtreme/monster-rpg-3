@@ -350,9 +350,10 @@ void Door_Brain::do_close()
 
 //--
 
-Item_Brain::Item_Brain(std::string item_name, int quantity) :
+Item_Brain::Item_Brain(std::string item_name, int quantity, int milestone) :
 	item_name(item_name),
-	quantity(quantity)
+	quantity(quantity),
+	milestone(milestone)
 {
 }
 
@@ -386,6 +387,10 @@ void Item_Brain::activate(Map_Entity *activator)
 					else {
 						noo.map->add_speech(found + " " + TRANSLATE("a") + " " + name + "...");
 					}
+				}
+
+				if (milestone >= 0) {
+					noo.set_milestone(milestone, true);
 				}
 			}
 			noo.map->schedule_destroy(map_entity);
