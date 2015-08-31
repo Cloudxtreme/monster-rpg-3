@@ -5,11 +5,11 @@
 
 using namespace Nooskewl_Engine;
 
-class ML_town : public Map_Logic {
+class ML_cabbagetown : public Map_Logic {
 public:
 	static void callback(void *data);
 
-	ML_town();
+	ML_cabbagetown();
 
 	void start(bool been_here_before);
 	void end();

@@ -16,7 +16,7 @@ set(SRC
 	src/gui.cpp
 	src/ml_start.cpp
 	src/ml_start_upper.cpp
-	src/ml_town.cpp
+	src/ml_cabbagetown.cpp
 	src/tweens.cpp
 )
 

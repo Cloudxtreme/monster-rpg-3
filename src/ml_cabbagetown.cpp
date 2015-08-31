@@ -2,7 +2,7 @@
 
 #include "brains.h"
 #include "ml.h"
-#include "ml_town.h"
+#include "ml_cabbagetown.h"
 #include "tweens.h"
 
 static void add_cabbage(int x, int y)
@@ -15,13 +15,13 @@ static void add_cabbage(int x, int y)
 	noo.map->add_entity(cabbage);
 }
 
-ML_town::ML_town()
+ML_cabbagetown::ML_cabbagetown()
 {
 }
 
-void ML_town::start(bool been_here_before)
+void ML_cabbagetown::start(bool been_here_before)
 {
-	noo.play_music("town.mml");
+	noo.play_music("cabbagetown.mml");
 
 	if (!been_here_before) {
 		for (int y = 17; y <= 17; y++) {
@@ -97,11 +97,11 @@ void ML_town::start(bool been_here_before)
 	}
 }
 
-void ML_town::end()
+void ML_cabbagetown::end()
 {
 }
 
-void ML_town::trigger(Map_Entity *entity)
+void ML_cabbagetown::trigger(Map_Entity *entity)
 {
 	Point<int> collide_pos;
 	if (entity->get_id() == 0 && entity->tiles_collide(Point<int>(38, 10), Size<int>(2, 1), collide_pos)) {
@@ -110,10 +110,10 @@ void ML_town::trigger(Map_Entity *entity)
 	}
 }
 
-void ML_town::update()
+void ML_cabbagetown::update()
 {
 }
 
-void ML_town::activate(Map_Entity *activator, Map_Entity *activated)
+void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 {
 }

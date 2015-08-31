@@ -3,9 +3,9 @@
 #include "brains.h"
 #include "dll.h"
 #include "gui.h"
+#include "ml_cabbagetown.h"
 #include "ml_start.h"
 #include "ml_start_upper.h"
-#include "ml_town.h"
 
 bool dll_start()
 {
@@ -28,8 +28,8 @@ Map_Logic *dll_get_map_logic(std::string map_name)
 	else if (map_name == "start_upper.map") {
 		ml = new ML_start_upper();
 	}
-	else if (map_name == "town.map") {
-		ml = new ML_town();
+	else if (map_name == "cabbagetown.map") {
+		ml = new ML_cabbagetown();
 	}
 
 	return ml;
