@@ -5,8 +5,18 @@
 #include "ml_cabbagetown.h"
 #include "tweens.h"
 
-static void add_cabbage(int x, int y)
+const int num_cabbages = 68;
+
+static void add_cabbage(int x, int y, int chance)
 {
+	if (noo.map->is_solid(-1, 0, Point<int>(x, y), Size<int>(1, 1), true, true)) {
+		return;
+	}
+
+	if (rand() % 100 > chance) {
+		return;
+	}
+
 	std::string name = rand() % 2 ? "cabbage" : "rotten_cabbage";
 	Map_Entity *cabbage = new Map_Entity(name);
 	cabbage->set_brain(new Item_Brain(name, 1));
@@ -17,82 +27,85 @@ static void add_cabbage(int x, int y)
 
 ML_cabbagetown::ML_cabbagetown(int last_visited_time)
 {
+	int now = noo.get_play_time();
+	int diff = now - last_visited_time;
+	cabbages_to_regrow = int((diff / 1800.0f) * 5);
 }
 
 void ML_cabbagetown::start(bool been_here_before)
 {
 	noo.play_music("cabbagetown.mml");
 
-	if (!been_here_before) {
-		for (int y = 17; y <= 17; y++) {
-			for (int x = 27; x <= 32; x++) {
-				add_cabbage(x, y);
-			}
+	int chance = been_here_before ? cabbages_to_regrow * 100 / num_cabbages : 95;
+
+	for (int y = 17; y <= 17; y++) {
+		for (int x = 27; x <= 32; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 13; y <= 16; y++) {
-			for (int x = 32; x <= 32; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 13; y <= 16; y++) {
+		for (int x = 32; x <= 32; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 13; y <= 17; y++) {
-			for (int x = 36; x <= 36; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 13; y <= 17; y++) {
+		for (int x = 36; x <= 36; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 13; y <= 17; y++) {
-			for (int x = 41; x <= 41; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 13; y <= 17; y++) {
+		for (int x = 41; x <= 41; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 17; y <= 17; y++) {
-			for (int x = 37; x <= 40; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 17; y <= 17; y++) {
+		for (int x = 37; x <= 40; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 17; y <= 17; y++) {
-			for (int x = 46; x <= 50; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 17; y <= 17; y++) {
+		for (int x = 46; x <= 50; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 13; y <= 17; y++) {
-			for (int x = 45; x <= 45; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 13; y <= 17; y++) {
+		for (int x = 45; x <= 45; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 26; y <= 26; y++) {
-			for (int x = 27; x <= 32; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 26; y <= 26; y++) {
+		for (int x = 27; x <= 32; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 27; y <= 30; y++) {
-			for (int x = 32; x <= 32; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 27; y <= 30; y++) {
+		for (int x = 32; x <= 32; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 26; y <= 30; y++) {
-			for (int x = 36; x <= 36; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 26; y <= 30; y++) {
+		for (int x = 36; x <= 36; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 26; y <= 30; y++) {
-			for (int x = 41; x <= 41; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 26; y <= 30; y++) {
+		for (int x = 41; x <= 41; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 26; y <= 26; y++) {
-			for (int x = 37; x <= 40; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 26; y <= 26; y++) {
+		for (int x = 37; x <= 40; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 26; y <= 30; y++) {
-			for (int x = 45; x <= 45; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 26; y <= 30; y++) {
+		for (int x = 45; x <= 45; x++) {
+			add_cabbage(x, y, chance);
 		}
-		for (int y = 26; y <= 26; y++) {
-			for (int x = 46; x <= 50; x++) {
-				add_cabbage(x, y);
-			}
+	}
+	for (int y = 26; y <= 26; y++) {
+		for (int x = 46; x <= 50; x++) {
+			add_cabbage(x, y, chance);
 		}
 	}
 }
@@ -116,4 +129,37 @@ void ML_cabbagetown::update()
 
 void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 {
+}
+
+Map_Entity *ML_cabbagetown::mutate_loaded_entity(Map_Entity *entity)
+{
+	if (entity->get_name() == "cabbage" || entity->get_name() == "rotten_cabbage") {
+		Item_Brain *brain = dynamic_cast<Item_Brain *>(entity->get_brain());
+		int instantiation_time = brain->get_instantiation_time();
+		int now = noo.get_play_time();
+		int diff = now - instantiation_time;
+		int chance = int((diff / 1800.0f) * 3) * 100 / num_cabbages;
+		// Someone picked it
+		if (rand() % 100 < chance) {
+			delete entity;
+			return 0;
+		}
+	}
+
+	if (entity->get_name() == "cabbage") {
+		Item_Brain *brain = dynamic_cast<Item_Brain *>(entity->get_brain());
+		int instantiation_time = brain->get_instantiation_time();
+		int now = noo.get_play_time();
+		int diff = now - instantiation_time;
+		int chance = int((diff / 1800.0f) * 5) * 100 / num_cabbages;
+		// Someone picked it
+		if (rand() % 100 < chance) {
+			entity->set_name("rotten_cabbage");
+			delete brain;
+			entity->set_brain(new Item_Brain("rotten_cabbage", 1));
+			entity->load_sprite("rotten_cabbage");
+		}
+	}
+
+	return entity;
 }

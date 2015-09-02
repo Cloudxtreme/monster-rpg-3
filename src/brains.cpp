@@ -351,11 +351,14 @@ void Door_Brain::do_close()
 
 //--
 
-Item_Brain::Item_Brain(std::string item_name, int quantity, int milestone) :
+Item_Brain::Item_Brain(std::string item_name, int quantity, int milestone, int instantiation_time) :
 	item_name(item_name),
 	quantity(quantity),
 	milestone(milestone)
 {
+	if (instantiation_time < 0) {
+		instantiation_time = noo.get_play_time();
+	}
 }
 
 void Item_Brain::activate(Map_Entity *activator)
@@ -401,8 +404,13 @@ void Item_Brain::activate(Map_Entity *activator)
 
 bool Item_Brain::save(std::string &out)
 {
-	out += string_printf("brain=item_brain,1\nname=%s,quantity=%d,milestone=%d\n", item_name.c_str(), quantity, milestone);
+	out += string_printf("brain=item_brain,1\nname=%s,quantity=%d,milestone=%d,instantiation_time=%d\n", item_name.c_str(), quantity, milestone, instantiation_time);
 	return true;
+}
+
+int Item_Brain::get_instantiation_time()
+{
+	return instantiation_time;
 }
 
 //--

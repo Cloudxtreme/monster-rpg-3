@@ -94,16 +94,19 @@ private:
 
 class Item_Brain : public Brain {
 public:
-	Item_Brain(std::string item_name, int quantity, int milestone = -1);
+	Item_Brain(std::string item_name, int quantity, int milestone = -1, int instantiation_time = -1);
 
 	void activate(Map_Entity *activator);
 
 	bool save(std::string &out);
 
+	int get_instantiation_time();
+
 private:
 	std::string item_name;
 	int quantity;
 	int milestone;
+	int instantiation_time;
 };
 
 class Item_Drop_Brain : public Brain {
