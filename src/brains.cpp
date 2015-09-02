@@ -496,7 +496,7 @@ bool Shop_Brain::save(std::string &out)
 	int count = costs.size();
 	out += string_printf(
 		"brain=shop,%d\n%s,%s,%s,%d,",
-		2 + std::count(inventory_s.begin(), inventory_s.end(), '\n'),
+		1 + std::count(inventory_s.begin(), inventory_s.end(), '\n'),
 		escape_string(caption, ',').c_str(),
 		escape_string(yes_option, ',').c_str(),
 		escape_string(no_option, ',').c_str(),
@@ -506,7 +506,7 @@ bool Shop_Brain::save(std::string &out)
 		out += string_printf("%d%s", costs[i], i < count-1 ? "," : "");
 	}
 	out += "\n";
-	out += inventory_s + "\n";
+	out += inventory_s;
 	return true;
 }
 
