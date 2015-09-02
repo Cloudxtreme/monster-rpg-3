@@ -32,6 +32,7 @@ static bool use_item(Stats *stats, int index)
 	}
 	else if (item->id == "rotten_cabbage") {
 		DEC_HUNGER(0xffff/20);
+		stats->set_status(Stats::SICK);
 	}
 	else if (item->id == "wine") {
 		DEC_THIRST(0xffff/5);
@@ -126,11 +127,17 @@ Pause_GUI::Pause_GUI() :
 
 	stats = noo.map->get_entity(0)->get_stats();
 
-	if (stats->profile_pic != 0) {
-		profile_image = new Widget_Image(stats->profile_pic, false);
-		profile_image->set_padding_bottom(2);
-		profile_image->set_parent(column1);
-	}
+	TGUI_Widget *profile_container = new TGUI_Widget();
+	profile_container->set_parent(column1);
+
+	profile_image = new Widget_Image(stats->profile_pic, false);
+	profile_image->set_padding_bottom(2);
+	profile_image->set_parent(profile_container);
+
+	status = new Widget_Label("", -1);
+	status->set_center_y(true);
+	status->set_padding_left(2);
+	status->set_parent(profile_container);
 
 	name = new Widget_Label("", -1);
 	name->set_break_line(true);
@@ -384,6 +391,13 @@ void Pause_GUI::set_labels()
 	}
 
 	name->set_text(TRANSLATE("Eny")END); // FIXME
+
+	if (stats->status == Stats::SICK) {
+		status->set_text(TRANSLATE("Sick")END);
+	}
+	else {
+		status->set_text("");
+	}
 
 	if (stats->alignment == Stats::GOOD) {
 		alignment->set_text(TRANSLATE("Good")END);
