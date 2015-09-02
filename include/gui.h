@@ -101,7 +101,7 @@ private:
 	void set_labels();
 	void handle_dropped_items();
 	void set_list();
-	void drop_item(int index);
+	void remove_item(int index, bool drop);
 
 	Stats *stats;
 

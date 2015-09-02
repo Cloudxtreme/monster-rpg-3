@@ -1,6 +1,51 @@
 #include "brains.h"
 #include "gui.h"
 
+static bool use_item(Stats *stats, int index)
+{
+	#define DEC_HUNGER(amount) \
+		stats->hunger -= MIN(amount, stats->hunger);
+	#define DEC_THIRST(amount) \
+		stats->thirst -= MIN(amount, stats->thirst);
+	#define DEC_SOBRIETY(amount) \
+		stats->sobriety -= MIN(amount, stats->sobriety);
+
+	Item *item = stats->inventory->items[index][0];
+
+	bool remove = true;
+
+	if (item->id == "apple") {
+		DEC_HUNGER(0xffff/4);
+	}
+	else if (item->id == "beer") {
+		DEC_THIRST(0xffff/2);
+		DEC_SOBRIETY(0xffff/4);
+	}
+	else if (item->id == "cabbage") {
+		DEC_HUNGER(0xffff/6);
+	}
+	else if (item->id == "fish") {
+		DEC_HUNGER(0xffff/3);
+	}
+	else if (item->id == "pickled_egg") {
+		DEC_HUNGER(0xffff/8);
+	}
+	else if (item->id == "rotten_cabbage") {
+		DEC_HUNGER(0xffff/20);
+	}
+	else if (item->id == "wine") {
+		DEC_THIRST(0xffff/5);
+		DEC_SOBRIETY(0xffff/4);
+	}
+	else {
+		remove = false;
+	}
+
+	return remove;
+}
+
+//--
+
 bool Pause_GUI::quitting;
 bool Pause_GUI::quit;
 bool Pause_GUI::showing_items;
@@ -387,10 +432,10 @@ void Pause_GUI::set_labels()
 	strength->set_text(string_printf("%d", stats->strength));
 
 	karma->set_text(string_printf("%d%%", int((((float)stats->karma / 0xffff) * 2.0f - 1.0f) * 100)));
-	hunger->set_text(string_printf("%d%%", int((((float)stats->hunger / 0xffff) * 2.0f - 1.0f) * 100)));
-	thirst->set_text(string_printf("%d%%", int((((float)stats->thirst / 0xffff) * 2.0f - 1.0f) * 100)));
-	rest->set_text(string_printf("%d%%", int((((float)stats->rest / 0xffff) * 2.0f - 1.0f) * 100)));
-	sobriety->set_text(string_printf("%d%%", int((((float)stats->sobriety / 0xffff) * 2.0f - 1.0f) * 100)));
+	hunger->set_text(string_printf("%d%%", int(((float)stats->hunger / 0xffff) * 100)));
+	thirst->set_text(string_printf("%d%%", int(((float)stats->thirst / 0xffff) * 100)));
+	rest->set_text(string_printf("%d%%", int(((float)stats->rest / 0xffff) * 100)));
+	sobriety->set_text(string_printf("%d%%", int(((float)stats->sobriety / 0xffff) * 100)));
 
 	int max_w;
 
@@ -641,7 +686,9 @@ void Items_GUI::update()
 				}
 			}
 			else {
-				// FIXME
+				if (use_item(stats, index)) {
+					remove_item(index, false);
+				}
 			}
 		}
 		else if (drop_radio && drop_radio->is_selected()) {
@@ -654,7 +701,7 @@ void Items_GUI::update()
 				noo.guis.push_back(gngui);
 			}
 			else {
-				drop_item(index);
+				remove_item(index, true);
 			}
 		}
 	}
@@ -664,7 +711,7 @@ void Items_GUI::update()
 		if (number > 0) {
 			if (drop_radio->is_selected()) {
 				for (int i = 0; i < number; i++) {
-					drop_item(dropping_index);
+					remove_item(dropping_index, true);
 				}
 			}
 		}
@@ -779,7 +826,7 @@ void Items_GUI::set_list()
 	}
 }
 
-void Items_GUI::drop_item(int index)
+void Items_GUI::remove_item(int index, bool drop)
 {
 	int selected = list->get_selected();
 
@@ -808,7 +855,9 @@ void Items_GUI::drop_item(int index)
 		}
 	}
 
-	dropped_items->add(item);
+	if (drop) {
+		dropped_items->add(item);
+	}
 
 	if (index == stats->weapon_index) {
 		stats->weapon_index = -1;
