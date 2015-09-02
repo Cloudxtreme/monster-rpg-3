@@ -29,7 +29,7 @@ ML_cabbagetown::ML_cabbagetown(int last_visited_time)
 {
 	int now = noo.get_play_time();
 	int diff = now - last_visited_time;
-	cabbages_to_regrow = int((diff / 1800.0f) * 5);
+	cabbages_to_regrow = int((diff / 1800.0f) * (num_cabbages/2));
 }
 
 void ML_cabbagetown::start(bool been_here_before)
@@ -138,7 +138,7 @@ Map_Entity *ML_cabbagetown::mutate_loaded_entity(Map_Entity *entity)
 		int instantiation_time = brain->get_instantiation_time();
 		int now = noo.get_play_time();
 		int diff = now - instantiation_time;
-		int chance = int((diff / 1800.0f) * 3) * 100 / num_cabbages;
+		int chance = int((diff / 1800.0f) * 5) * 100 / num_cabbages;
 		// Someone picked it
 		if (rand() % 100 < chance) {
 			delete entity;
@@ -151,7 +151,7 @@ Map_Entity *ML_cabbagetown::mutate_loaded_entity(Map_Entity *entity)
 		int instantiation_time = brain->get_instantiation_time();
 		int now = noo.get_play_time();
 		int diff = now - instantiation_time;
-		int chance = int((diff / 1800.0f) * 5) * 100 / num_cabbages;
+		int chance = int((diff / 1800.0f) * 15) * 100 / num_cabbages;
 		// Someone picked it
 		if (rand() % 100 < chance) {
 			entity->set_name("rotten_cabbage");
