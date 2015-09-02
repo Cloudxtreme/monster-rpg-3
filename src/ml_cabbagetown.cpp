@@ -19,7 +19,7 @@ ML_cabbagetown::ML_cabbagetown()
 {
 }
 
-void ML_cabbagetown::start(bool been_here_before)
+void ML_cabbagetown::start(bool been_here_before, int last_visited_time)
 {
 	noo.play_music("cabbagetown.mml");
 

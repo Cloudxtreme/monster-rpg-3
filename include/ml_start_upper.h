@@ -7,7 +7,7 @@ using namespace Nooskewl_Engine;
 
 class ML_start_upper : public Map_Logic {
 public:
-	void start(bool been_here_before);
+	void start(bool been_here_before, int last_visited_time);
 	void trigger(Map_Entity *entity);
 };
 

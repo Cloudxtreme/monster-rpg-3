@@ -3,7 +3,7 @@
 #include "brains.h"
 #include "ml_start_upper.h"
 
-void ML_start_upper::start(bool been_here_before)
+void ML_start_upper::start(bool been_here_before, int last_visited_time)
 {
 	noo.play_music("pub.mml");
 

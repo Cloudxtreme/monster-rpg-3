@@ -11,7 +11,7 @@ public:
 
 	ML_cabbagetown();
 
-	void start(bool been_here_before);
+	void start(bool been_here_before, int last_visited_time);
 	void end();
 	void trigger(Map_Entity *entity);
 	void update();
