@@ -9,9 +9,9 @@ class ML_start : public Map_Logic {
 public:
 	static void callback(void *data);
 
-	ML_start();
+	ML_start(int last_visited_time);
 
-	void start(bool been_here_before, int last_visited_time);
+	void start(bool been_here_before);
 	void end();
 	void trigger(Map_Entity *entity);
 	void update();

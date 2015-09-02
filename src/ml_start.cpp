@@ -85,12 +85,12 @@ void ML_start::callback(void *data)
 	}
 }
 
-ML_start::ML_start()
+ML_start::ML_start(int last_visited_time)
 {
 	callback_data = 0;
 }
 
-void ML_start::start(bool been_here_before, int last_visited_time)
+void ML_start::start(bool been_here_before)
 {
 	noo.play_music("pub.mml");
 

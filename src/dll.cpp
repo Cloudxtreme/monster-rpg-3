@@ -18,18 +18,18 @@ void dll_end()
 	end_brains();
 }
 
-Map_Logic *dll_get_map_logic(std::string map_name)
+Map_Logic *dll_get_map_logic(std::string map_name, int last_visited_time)
 {
 	Map_Logic *ml = NULL;
 
 	if (map_name == "start.map") {
-		ml = new ML_start();
+		ml = new ML_start(last_visited_time);
 	}
 	else if (map_name == "start_upper.map") {
-		ml = new ML_start_upper();
+		ml = new ML_start_upper(last_visited_time);
 	}
 	else if (map_name == "cabbagetown.map") {
-		ml = new ML_cabbagetown();
+		ml = new ML_cabbagetown(last_visited_time);
 	}
 
 	return ml;

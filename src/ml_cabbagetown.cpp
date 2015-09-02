@@ -15,11 +15,11 @@ static void add_cabbage(int x, int y)
 	noo.map->add_entity(cabbage);
 }
 
-ML_cabbagetown::ML_cabbagetown()
+ML_cabbagetown::ML_cabbagetown(int last_visited_time)
 {
 }
 
-void ML_cabbagetown::start(bool been_here_before, int last_visited_time)
+void ML_cabbagetown::start(bool been_here_before)
 {
 	noo.play_music("cabbagetown.mml");
 
