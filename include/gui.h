@@ -56,6 +56,7 @@ private:
 	Widget_Label *sobriety_label;
 
 	Widget_Label *name;
+	Widget_Label *status;
 	Widget_Label *alignment;
 	Widget_Label *sex;
 	Widget_Label *gold;
