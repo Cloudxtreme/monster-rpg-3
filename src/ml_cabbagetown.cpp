@@ -22,6 +22,7 @@ static void add_cabbage(int x, int y, int chance)
 	cabbage->set_brain(new Growing_Brain("baby_cabbage", "cabbage", "rotten_cabbage", time));
 	cabbage->load_sprite("cabbage");
 	cabbage->set_position(Point<int>(x, y));
+	cabbage->get_brain()->update(); // set sprite frame
 	noo.map->add_entity(cabbage);
 }
 

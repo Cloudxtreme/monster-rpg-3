@@ -555,7 +555,7 @@ void Growing_Brain::activate(Map_Entity *activator)
 
 bool Growing_Brain::save(std::string &out)
 {
-	out += string_printf("brain=growing_brain,1\n,baby_item=%s,fresh_item=%s,rotten_item=%s,instantiation_time=%d\n", baby_item.c_str(), fresh_item.c_str(), rotten_item.c_str(), instantiation_time);
+	out += string_printf("brain=growing_brain,1\nbaby_item=%s,fresh_item=%s,rotten_item=%s,instantiation_time=%d\n", baby_item.c_str(), fresh_item.c_str(), rotten_item.c_str(), instantiation_time);
 	return true;
 }
 

@@ -61,7 +61,7 @@ Brain *dll_get_brain(std::string type, std::string data)
 	}
 	else if (type == "item_brain") {
 		Tokenizer t(data, ',');
-		
+
 		std::string option;
 
 		std::string name = "";;
@@ -137,6 +137,38 @@ Brain *dll_get_brain(std::string type, std::string data)
 		inventory->from_string(inventory_s);
 
 		return new Shop_Brain(caption, yes_option, no_option, inventory, costs);
+	}
+	else if (type == "growing_brain") {
+		Tokenizer t(data, ',');
+
+		std::string option;
+
+		std::string baby_item = "";
+		std::string fresh_item = "";
+		std::string rotten_item = "";
+		int instantiation_time = noo.get_play_time();
+
+		while ((option = t.next()) != "") {
+			Tokenizer t2(option, '=');
+
+			std::string key = t2.next();
+			std::string value = t2.next();
+
+			if (key == "baby_item") {
+				baby_item = value;
+			}
+			else if (key == "fresh_item") {
+				fresh_item = value;
+			}
+			else if (key == "rotten_item") {
+				rotten_item = value;
+			}
+			else if (key == "instantiation_time") {
+				instantiation_time = atoi(value.c_str());
+			}
+		}
+
+		return new Growing_Brain(baby_item, fresh_item, rotten_item, instantiation_time);
 	}
 
 	return 0;
