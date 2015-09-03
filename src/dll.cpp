@@ -67,7 +67,6 @@ Brain *dll_get_brain(std::string type, std::string data)
 		std::string name = "";;
 		int quantity = 1;
 		int milestone = -1;
-		int instantiation_time = -1;
 
 		while ((option = t.next()) != "") {
 			Tokenizer t2(option, '=');
@@ -84,12 +83,9 @@ Brain *dll_get_brain(std::string type, std::string data)
 			else if (key == "milestone") {
 				milestone = atoi(value.c_str());
 			}
-			else if (key == "instantiation_time") {
-				instantiation_time = atoi(value.c_str());
-			}
 		}
 
-		return new Item_Brain(name, quantity, milestone, instantiation_time);
+		return new Item_Brain(name, quantity, milestone);
 	}
 	else if (type == "item_drop") {
 		Inventory *inventory = new Inventory();

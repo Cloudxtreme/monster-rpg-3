@@ -17,10 +17,10 @@ static void add_cabbage(int x, int y, int chance)
 		return;
 	}
 
-	std::string name = rand() % 2 ? "cabbage" : "rotten_cabbage";
-	Map_Entity *cabbage = new Map_Entity(name);
-	cabbage->set_brain(new Item_Brain(name, 1));
-	cabbage->load_sprite(name);
+	Map_Entity *cabbage = new Map_Entity("cabbage");
+	int time = noo.get_play_time() - rand() % ((5 * 60) * 4);
+	cabbage->set_brain(new Growing_Brain("baby_cabbage", "cabbage", "rotten_cabbage", time));
+	cabbage->load_sprite("cabbage");
 	cabbage->set_position(Point<int>(x, y));
 	noo.map->add_entity(cabbage);
 }
@@ -129,37 +129,4 @@ void ML_cabbagetown::update()
 
 void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 {
-}
-
-Map_Entity *ML_cabbagetown::mutate_loaded_entity(Map_Entity *entity)
-{
-	if (entity->get_name() == "cabbage" || entity->get_name() == "rotten_cabbage") {
-		Item_Brain *brain = dynamic_cast<Item_Brain *>(entity->get_brain());
-		int instantiation_time = brain->get_instantiation_time();
-		int now = noo.get_play_time();
-		int diff = now - instantiation_time;
-		int chance = int((diff / 1800.0f) * 5) * 100 / num_cabbages;
-		// Someone picked it
-		if (rand() % 100 < chance) {
-			delete entity;
-			return 0;
-		}
-	}
-
-	if (entity->get_name() == "cabbage") {
-		Item_Brain *brain = dynamic_cast<Item_Brain *>(entity->get_brain());
-		int instantiation_time = brain->get_instantiation_time();
-		int now = noo.get_play_time();
-		int diff = now - instantiation_time;
-		int chance = int((diff / 1800.0f) * 15) * 100 / num_cabbages;
-		// Someone picked it
-		if (rand() % 100 < chance) {
-			entity->set_name("rotten_cabbage");
-			delete brain;
-			entity->set_brain(new Item_Brain("rotten_cabbage", 1));
-			entity->load_sprite("rotten_cabbage");
-		}
-	}
-
-	return entity;
 }

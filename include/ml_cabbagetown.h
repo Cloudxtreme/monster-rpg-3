@@ -16,7 +16,6 @@ public:
 	void trigger(Map_Entity *entity);
 	void update();
 	void activate(Map_Entity *activator, Map_Entity *activated);
-	Map_Entity *mutate_loaded_entity(Map_Entity *entity);
 
 private:
 	int cabbages_to_regrow;

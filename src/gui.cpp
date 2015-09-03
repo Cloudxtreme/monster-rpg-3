@@ -38,6 +38,9 @@ static bool use_item(Stats *stats, int index)
 		DEC_THIRST(0xffff/5);
 		DEC_SOBRIETY(0xffff/4);
 	}
+	else if (item->id == "baby_cabbage") {
+		DEC_HUNGER(0xffff/12);
+	}
 	else {
 		remove = false;
 	}
@@ -871,6 +874,9 @@ void Items_GUI::remove_item(int index, bool drop)
 
 	if (drop) {
 		dropped_items->add(item);
+	}
+	else {
+		delete item;
 	}
 
 	if (index == stats->weapon_index) {

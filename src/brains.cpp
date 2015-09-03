@@ -3,6 +3,50 @@
 #include "brains.h"
 #include "gui.h"
 
+static bool give_item(Map_Entity *activator, std::string item_name, int quantity, int milestone)
+{
+	Stats *stats = activator->get_stats();
+
+	if (stats) {
+		Inventory *inventory = stats->inventory;
+		if (inventory) {
+			if (quantity > 0) {
+				std::string name;
+				for (int i = 0; i < quantity; i++) {
+					Item *item = new Item(item_name);
+					inventory->add(item);
+					if (i == 0) {
+						name = item->name;
+					}
+				}
+				noo.item_mml->play(false);
+				// FIXME: a/an and adding s isn't foolproof
+				std::string found = TRANSLATE("Found")END;
+				if (quantity > 1) {
+					noo.map->add_speech(found + " " + itos(quantity) + " " + name + "s");
+				}
+				else {
+					char c = tolower(name.c_str()[0]);
+					if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+						noo.map->add_speech(found + " " + TRANSLATE("an")END + " " + name + "...");
+					}
+					else {
+						noo.map->add_speech(found + " " + TRANSLATE("a") + " " + name + "...");
+					}
+				}
+
+				if (milestone >= 0) {
+					noo.set_milestone(milestone, true);
+				}
+			}
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool start_brains()
 {
 	if (Door_Brain::start() == 0) {
@@ -351,66 +395,24 @@ void Door_Brain::do_close()
 
 //--
 
-Item_Brain::Item_Brain(std::string item_name, int quantity, int milestone, int instantiation_time) :
+Item_Brain::Item_Brain(std::string item_name, int quantity, int milestone) :
 	item_name(item_name),
 	quantity(quantity),
 	milestone(milestone)
 {
-	if (instantiation_time < 0) {
-		instantiation_time = noo.get_play_time();
-	}
 }
 
 void Item_Brain::activate(Map_Entity *activator)
 {
-	Stats *stats = activator->get_stats();
-
-	if (stats) {
-		Inventory *inventory = stats->inventory;
-		if (inventory) {
-			if (quantity > 0) {
-				std::string name;
-				for (int i = 0; i < quantity; i++) {
-					Item *item = new Item(item_name);
-					inventory->add(item);
-					if (i == 0) {
-						name = item->name;
-					}
-				}
-				noo.item_mml->play(false);
-				// FIXME: a/an and adding s isn't foolproof
-				std::string found = TRANSLATE("Found")END;
-				if (quantity > 1) {
-					noo.map->add_speech(found + " " + itos(quantity) + " " + name + "s");
-				}
-				else {
-					char c = tolower(name.c_str()[0]);
-					if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
-						noo.map->add_speech(found + " " + TRANSLATE("an")END + " " + name + "...");
-					}
-					else {
-						noo.map->add_speech(found + " " + TRANSLATE("a") + " " + name + "...");
-					}
-				}
-
-				if (milestone >= 0) {
-					noo.set_milestone(milestone, true);
-				}
-			}
-			noo.map->schedule_destroy(map_entity);
-		}
+	if (give_item(activator, item_name, quantity, milestone)) {
+		noo.map->schedule_destroy(map_entity);
 	}
 }
 
 bool Item_Brain::save(std::string &out)
 {
-	out += string_printf("brain=item_brain,1\nname=%s,quantity=%d,milestone=%d,instantiation_time=%d\n", item_name.c_str(), quantity, milestone, instantiation_time);
+	out += string_printf("brain=item_brain,1\nname=%s,quantity=%d,milestone=%d\n", item_name.c_str(), quantity, milestone);
 	return true;
-}
-
-int Item_Brain::get_instantiation_time()
-{
-	return instantiation_time;
 }
 
 //--
@@ -526,4 +528,72 @@ Inventory *Shop_Brain::get_inventory()
 std::vector<int> &Shop_Brain::get_costs()
 {
 	return costs;
+}
+
+//--
+
+Growing_Brain::Growing_Brain(std::string baby_item, std::string fresh_item, std::string rotten_item, int instantiation_time) :
+	baby_item(baby_item),
+	fresh_item(fresh_item),
+	rotten_item(rotten_item),
+	instantiation_time(instantiation_time),
+	item_name("")
+{
+}
+
+void Growing_Brain::activate(Map_Entity *activator)
+{
+	if (item_name == "") {
+		return;
+	}
+	else {
+		if (give_item(activator, item_name, 1, -1)) {
+			instantiation_time = noo.get_play_time();
+		}
+	}
+}
+
+bool Growing_Brain::save(std::string &out)
+{
+	out += string_printf("brain=growing_brain,1\n,baby_item=%s,fresh_item=%s,rotten_item=%s,instantiation_time=%d\n", baby_item.c_str(), fresh_item.c_str(), rotten_item.c_str(), instantiation_time);
+	return true;
+}
+
+void Growing_Brain::update()
+{
+	std::vector<Map_Entity *> v = noo.map->get_colliding_entities(-1, map_entity->get_position(), Size<int>(1, 1));
+
+	for (size_t i = 0; i < v.size(); i++) {
+		if (v[i] != map_entity) {
+			return;
+		}
+	}
+
+	int now = noo.get_play_time();
+	int diff = now - instantiation_time;
+
+	int stage = 60 * 5;
+
+	Sprite *sprite = map_entity->get_sprite();
+
+	if (diff > 3 * stage) {
+		item_name = rotten_item;
+		sprite->set_animation("rotten");
+		map_entity->set_solid(true);
+	}
+	else if (diff > 2 * stage) {
+		item_name = fresh_item;
+		sprite->set_animation("fresh");
+		map_entity->set_solid(true);
+	}
+	else if (diff > stage) {
+		item_name = baby_item;
+		sprite->set_animation("baby");
+		map_entity->set_solid(true);
+	}
+	else {
+		item_name = "";
+		sprite->set_animation("picked");
+		map_entity->set_solid(false);
+	}
 }
