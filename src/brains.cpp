@@ -546,9 +546,13 @@ Growing_Brain::Growing_Brain(std::string baby_item, std::string fresh_item, std:
 	baby_item(baby_item),
 	fresh_item(fresh_item),
 	rotten_item(rotten_item),
-	instantiation_time(instantiation_time),
 	item_name("")
 {
+	int now = noo.get_play_time();
+
+	if (instantiation_time < 0 || now - instantiation_time > STAGE_TIME * 10) {
+		this->instantiation_time = now - rand() % ((5 * 60) * 4);
+	}
 }
 
 bool Growing_Brain::activate(Map_Entity *activator)
@@ -581,21 +585,20 @@ void Growing_Brain::update()
 	int now = noo.get_play_time();
 	int diff = now - instantiation_time;
 
-	int stage = 60 * 5;
 
 	Sprite *sprite = map_entity->get_sprite();
 
-	if (diff > 3 * stage) {
+	if (diff > 3 * STAGE_TIME) {
 		item_name = rotten_item;
 		sprite->set_animation("rotten");
 		map_entity->set_solid(true);
 	}
-	else if (diff > 2 * stage) {
+	else if (diff > 2 * STAGE_TIME) {
 		item_name = fresh_item;
 		sprite->set_animation("fresh");
 		map_entity->set_solid(true);
 	}
-	else if (diff > stage) {
+	else if (diff > STAGE_TIME) {
 		item_name = baby_item;
 		sprite->set_animation("baby");
 		map_entity->set_solid(true);
@@ -605,4 +608,14 @@ void Growing_Brain::update()
 		sprite->set_animation("picked");
 		map_entity->set_solid(false);
 	}
+}
+
+int Growing_Brain::get_instantiation_time()
+{
+	return instantiation_time;
+}
+
+void Growing_Brain::set_instantiation_time(int instantiation_time)
+{
+	this->instantiation_time = instantiation_time;
 }
