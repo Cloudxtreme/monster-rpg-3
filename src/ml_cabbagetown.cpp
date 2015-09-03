@@ -7,22 +7,12 @@
 
 const int num_cabbages = 68;
 
-static void add_cabbage(int x, int y, int chance)
+static void add_cabbage(int x, int y)
 {
-	if (noo.map->get_colliding_entities(-1, Point<int>(x, y), Size<int>(1, 1)).size() > 0) {
-		return;
-	}
-
-	if (rand() % 100 > chance) {
-		return;
-	}
-
 	Map_Entity *cabbage = new Map_Entity("cabbage");
-	int time = noo.get_play_time() - rand() % ((5 * 60) * 4);
-	cabbage->set_brain(new Growing_Brain("baby_cabbage", "cabbage", "rotten_cabbage", time));
 	cabbage->load_sprite("cabbage");
+	cabbage->set_brain(new Growing_Brain("baby_cabbage", "cabbage", "rotten_cabbage", -1));
 	cabbage->set_position(Point<int>(x, y));
-	cabbage->get_brain()->update(); // set sprite frame
 	noo.map->add_entity(cabbage);
 }
 
@@ -37,76 +27,76 @@ void ML_cabbagetown::start(bool been_here_before)
 {
 	noo.play_music("cabbagetown.mml");
 
-	int chance = been_here_before ? cabbages_to_regrow * 100 / num_cabbages : 95;
-
-	for (int y = 17; y <= 17; y++) {
-		for (int x = 27; x <= 32; x++) {
-			add_cabbage(x, y, chance);
+	if (!been_here_before) {
+		for (int y = 17; y <= 17; y++) {
+			for (int x = 27; x <= 32; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 13; y <= 16; y++) {
-		for (int x = 32; x <= 32; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 13; y <= 16; y++) {
+			for (int x = 32; x <= 32; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 13; y <= 17; y++) {
-		for (int x = 36; x <= 36; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 13; y <= 17; y++) {
+			for (int x = 36; x <= 36; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 13; y <= 17; y++) {
-		for (int x = 41; x <= 41; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 13; y <= 17; y++) {
+			for (int x = 41; x <= 41; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 17; y <= 17; y++) {
-		for (int x = 37; x <= 40; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 17; y <= 17; y++) {
+			for (int x = 37; x <= 40; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 17; y <= 17; y++) {
-		for (int x = 46; x <= 50; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 17; y <= 17; y++) {
+			for (int x = 46; x <= 50; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 13; y <= 17; y++) {
-		for (int x = 45; x <= 45; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 13; y <= 17; y++) {
+			for (int x = 45; x <= 45; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 26; y <= 26; y++) {
-		for (int x = 27; x <= 32; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 26; y <= 26; y++) {
+			for (int x = 27; x <= 32; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 27; y <= 30; y++) {
-		for (int x = 32; x <= 32; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 27; y <= 30; y++) {
+			for (int x = 32; x <= 32; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 26; y <= 30; y++) {
-		for (int x = 36; x <= 36; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 26; y <= 30; y++) {
+			for (int x = 36; x <= 36; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 26; y <= 30; y++) {
-		for (int x = 41; x <= 41; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 26; y <= 30; y++) {
+			for (int x = 41; x <= 41; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 26; y <= 26; y++) {
-		for (int x = 37; x <= 40; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 26; y <= 26; y++) {
+			for (int x = 37; x <= 40; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 26; y <= 30; y++) {
-		for (int x = 45; x <= 45; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 26; y <= 30; y++) {
+			for (int x = 45; x <= 45; x++) {
+				add_cabbage(x, y);
+			}
 		}
-	}
-	for (int y = 26; y <= 26; y++) {
-		for (int x = 46; x <= 50; x++) {
-			add_cabbage(x, y, chance);
+		for (int y = 26; y <= 26; y++) {
+			for (int x = 46; x <= 50; x++) {
+				add_cabbage(x, y);
+			}
 		}
 	}
 }
