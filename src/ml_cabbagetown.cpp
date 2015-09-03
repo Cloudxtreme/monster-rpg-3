@@ -9,7 +9,7 @@ const int num_cabbages = 68;
 
 static void add_cabbage(int x, int y, int chance)
 {
-	if (noo.map->is_solid(-1, 0, Point<int>(x, y), Size<int>(1, 1), true, true)) {
+	if (noo.map->get_colliding_entities(-1, Point<int>(x, y), Size<int>(1, 1)).size() > 0) {
 		return;
 	}
 

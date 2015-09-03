@@ -23,7 +23,7 @@ public:
 	Talk_Brain(std::string name, Callback callback = NULL, void *callback_data = NULL);
 	~Talk_Brain();
 
-	void activate(Map_Entity *activator);
+	bool activate(Map_Entity *activator);
 
 	bool save(std::string &out);
 
@@ -62,7 +62,7 @@ public:
 
 	Talk_Then_Animate_Brain(std::string name);
 	
-	void activate(Map_Entity *activator);
+	bool activate(Map_Entity *activator);
 
 	bool save(std::string &out);
 
@@ -77,7 +77,7 @@ public:
 
 	Door_Brain(bool open);
 
-	void activate(Map_Entity *activator);
+	bool activate(Map_Entity *activator);
 	void collide(Map_Entity *collider);
 	void set_map_entity(Map_Entity *map_entity);
 
@@ -96,7 +96,7 @@ class Item_Brain : public Brain {
 public:
 	Item_Brain(std::string item_name, int quantity, int milestone = -1);
 
-	void activate(Map_Entity *activator);
+	bool activate(Map_Entity *activator);
 
 	bool save(std::string &out);
 
@@ -113,7 +113,7 @@ public:
 	Item_Drop_Brain(Inventory *inventory);
 	~Item_Drop_Brain();
 
-	void activate(Map_Entity *activator);
+	bool activate(Map_Entity *activator);
 
 	bool save(std::string &out);
 
@@ -130,7 +130,7 @@ public:
 	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs);
 	~Shop_Brain();
 
-	void activate(Map_Entity *activator);
+	bool activate(Map_Entity *activator);
 
 	bool save(std::string &out);
 
@@ -150,7 +150,7 @@ class Growing_Brain : public Brain {
 public:
 	Growing_Brain(std::string baby_item, std::string fresh_item, std::string rotten_item, int instantiation_time);
 
-	void activate(Map_Entity *activator);
+	bool activate(Map_Entity *activator);
 
 	bool save(std::string &out);
 

@@ -142,13 +142,15 @@ Talk_Brain::~Talk_Brain()
 	}
 }
 
-void Talk_Brain::activate(Map_Entity *activator)
+bool Talk_Brain::activate(Map_Entity *activator)
 {
 	std::string text = get_speech(activator, map_entity);
 	if (text != "") {
 		talking = true;
 		noo.map->add_speech(text, callback, &callback_data);
+		return true;
 	}
+	return false;
 }
 
 bool Talk_Brain::compare_milestones(Talk *a, Talk *b)
@@ -303,11 +305,13 @@ Talk_Then_Animate_Brain::Talk_Then_Animate_Brain(std::string name) :
 {
 }
 
-void Talk_Then_Animate_Brain::activate(Map_Entity *activator)
+bool Talk_Then_Animate_Brain::activate(Map_Entity *activator)
 {
 	if (!animating) {
 		Talk_Brain::activate(activator);
+		return true;
 	}
+	return false;
 }
 
 bool Talk_Then_Animate_Brain::save(std::string &out)
@@ -336,7 +340,7 @@ Door_Brain::Door_Brain(bool open) :
 {
 }
 
-void Door_Brain::activate(Map_Entity *activator)
+bool Door_Brain::activate(Map_Entity *activator)
 {
 	if (activator == noo.player) {
 		if (map_entity->entity_collides(activator) == false) {
@@ -351,7 +355,9 @@ void Door_Brain::activate(Map_Entity *activator)
 				do_close();
 			}
 		}
+		return true;
 	}
+	return false;
 }
 
 void Door_Brain::collide(Map_Entity *collider)
@@ -402,11 +408,13 @@ Item_Brain::Item_Brain(std::string item_name, int quantity, int milestone) :
 {
 }
 
-void Item_Brain::activate(Map_Entity *activator)
+bool Item_Brain::activate(Map_Entity *activator)
 {
 	if (give_item(activator, item_name, quantity, milestone)) {
 		noo.map->schedule_destroy(map_entity);
+		return true;
 	}
+	return false;
 }
 
 bool Item_Brain::save(std::string &out)
@@ -436,12 +444,13 @@ Item_Drop_Brain::~Item_Drop_Brain()
 	delete inventory;
 }
 
-void Item_Drop_Brain::activate(Map_Entity *activator)
+bool Item_Drop_Brain::activate(Map_Entity *activator)
 {
 	std::vector<int> unused;
 	Buy_Sell_GUI *gui = new Buy_Sell_GUI(inventory, unused, true, callback, this);
 	gui->start();
 	noo.guis.push_back(gui);
+	return true;
 }
 
 bool Item_Drop_Brain::save(std::string &out)
@@ -490,7 +499,7 @@ Shop_Brain::~Shop_Brain()
 	delete inventory;
 }
 
-void Shop_Brain::activate(Map_Entity *activator)
+bool Shop_Brain::activate(Map_Entity *activator)
 {
 	std::vector<std::string> choices;
 	choices.push_back(yes_option);
@@ -498,6 +507,7 @@ void Shop_Brain::activate(Map_Entity *activator)
 	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(caption, choices, callback, this);
 	gui->start();
 	noo.guis.push_back(gui);
+	return true;
 }
 
 bool Shop_Brain::save(std::string &out)
@@ -541,16 +551,15 @@ Growing_Brain::Growing_Brain(std::string baby_item, std::string fresh_item, std:
 {
 }
 
-void Growing_Brain::activate(Map_Entity *activator)
+bool Growing_Brain::activate(Map_Entity *activator)
 {
-	if (item_name == "") {
-		return;
-	}
-	else {
+	if (item_name != "") {
 		if (give_item(activator, item_name, 1, -1)) {
 			instantiation_time = noo.get_play_time();
+			return true;
 		}
 	}
+	return false;
 }
 
 bool Growing_Brain::save(std::string &out)
