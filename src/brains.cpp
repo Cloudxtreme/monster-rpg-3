@@ -712,6 +712,7 @@ void Growing_Brain::update()
 
 	for (size_t i = 0; i < v.size(); i++) {
 		if (v[i] != map_entity) {
+			instantiation_time = noo.get_play_time();
 			return;
 		}
 	}
