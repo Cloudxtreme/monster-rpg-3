@@ -13,6 +13,7 @@ static void add_cabbage(int x, int y)
 	cabbage->load_sprite("cabbage");
 	cabbage->set_brain(new Growing_Brain("baby_cabbage", "cabbage", "rotten_cabbage", -1));
 	cabbage->set_position(Point<int>(x, y));
+	cabbage->set_low(true);
 	noo.map->add_entity(cabbage);
 }
 
