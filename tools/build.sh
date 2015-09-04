@@ -57,7 +57,7 @@ echo "### Building Monster RPG 3 ###"
 pushd ${MO3_DIR}
 git pull --rebase
 mkdir -p build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_PATH="${TGUI3_DIR}/include;${NE_DIR}/include" -DUSER_LIBRARY_PATH="${TGUI3_DIR}/build;${NE_DIR}/build"
+cmake .. -DDEMO=off -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_PATH="${TGUI3_DIR}/include;${NE_DIR}/include" -DUSER_LIBRARY_PATH="${TGUI3_DIR}/build;${NE_DIR}/build"
 make -j${NODES}
 popd
 
