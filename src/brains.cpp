@@ -537,7 +537,82 @@ Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string 
 	original_inventory(original_inventory),
 	original_costs(original_costs)
 {
-	// FIXME: trend inventory towards original inventory
+	// All of this trends inventory back towards default
+
+	Inventory *added_items = inventory->clone();
+	Inventory *removed_items = original_inventory->clone();
+
+	added_items->remove(original_inventory);
+
+	removed_items->remove(inventory);
+	removed_items->remove(added_items);
+
+	int num_added = 0;
+	for (size_t i = 0; i < added_items->items.size(); i++) {
+		num_added += added_items->items[i].size();
+	}
+
+	int num_removed = 0;
+	for (size_t i = 0; i < removed_items->items.size(); i++) {
+		num_removed += removed_items->items[i].size();
+	}
+
+	int now = noo.get_play_time();
+	int diff = now - last_visit;
+	int num_to_change = diff / (2 * 60);
+
+	int num_to_remove = MIN(num_to_change / 2, num_added);
+	int num_to_add = MIN(num_to_change - num_to_remove, num_removed);
+
+	for (int i = 0; i < num_to_remove; i++) {
+		int r = rand() % num_added;
+		std::string id;
+		for (size_t ii = 0; ii < added_items->items.size(); ii++) {
+			int size = added_items->items[ii].size();
+			if (r < size) {
+				id = added_items->items[ii][0]->id;
+				break;
+			}
+			else {
+				r -= size;
+			}
+		}
+		if (id != "") {
+			for (size_t ii = 0; ii < inventory->items.size(); ii++) {
+				if (inventory->items[ii][0]->id == id) {
+					delete inventory->items[ii][0];
+					inventory->items[ii].erase(inventory->items[ii].begin());
+					if (inventory->items[ii].size() == 0) {
+						inventory->items.erase(inventory->items.begin() + ii);
+						costs.erase(costs.begin() + ii);
+					}
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < num_to_add; i++) {
+		int r = rand() % num_removed;
+		std::string id;
+		for (size_t ii = 0; ii < removed_items->items.size(); ii++) {
+			int size = removed_items->items[ii].size();
+			if (r < size) {
+				id = removed_items->items[ii][0]->id;
+				break;
+			}
+			else {
+				r -= size;
+			}
+		}
+		if (id != "") {
+			Item *item = new Item(id);
+			inventory->add(item);
+			inventory->gold += item->get_value();
+		}
+	}
+
+	delete added_items;
+	delete removed_items;
 }
 
 Shop_Brain::~Shop_Brain()
