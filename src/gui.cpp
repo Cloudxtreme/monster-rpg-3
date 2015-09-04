@@ -1083,9 +1083,9 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	properties_label->set_relative_position(100, 2 * int(noo.font->get_height() + 2));
 	properties_label->set_parent(info_column);
 
-	set_lists();
-
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
+
+	set_lists();
 
 	gui->set_focus(done_button);
 

@@ -101,42 +101,64 @@ Brain *dll_get_brain(std::string type, std::string data)
 
 		Tokenizer t2(line1, ',');
 
-		int len = 0;
-
 		std::string caption = t2.next();
-		len += caption.length() + 1;
 		caption = unescape_string(caption);
 
 		std::string yes_option = t2.next();
-		len += yes_option.length() + 1;
 		yes_option = unescape_string(yes_option);
 
 		std::string no_option = t2.next();
-		len += no_option.length() + 1;
 		no_option = unescape_string(no_option);
 
 		std::string inv_size_s = t2.next();
-		len += inv_size_s.length() + 1;
-
 		int inv_size = atoi(inv_size_s.c_str());
+
+		std::string original_inv_size_s = t2.next();
+		int original_inv_size = atoi(original_inv_size_s.c_str());
+
+		std::string last_visit_s = t2.next();
+		int last_visit = atoi(last_visit_s.c_str());
 
 		std::vector<int> costs;
 
 		for (int i = 0; i < inv_size; i++) {
 			std::string cost = t2.next();
-			len += cost.length() + 1;
-
 			costs.push_back(atoi(cost.c_str()));
 		}
 
-		std::string inventory_s = data.substr(line1.length());
+		std::vector<int> original_costs;
+
+		for (int i = 0; i < original_inv_size; i++) {
+			std::string cost = t2.next();
+			original_costs.push_back(atoi(cost.c_str()));
+		}
+
+		std::string inventory_s = t.next() + "\n";
+		std::string num_items_s = t.next() + "\n";
+		inventory_s += num_items_s;
+		int num_items = atoi(num_items_s.c_str());
+		for (int i = 0; i < num_items; i++) {
+			inventory_s += t.next() + "\n";
+		}
+
+		std::string original_inventory_s = t.next() + "\n";
+		std::string original_num_items_s = t.next() + "\n";
+		original_inventory_s += original_num_items_s;
+		int original_num_items = atoi(original_num_items_s.c_str());
+		for (int i = 0; i < original_num_items; i++) {
+			original_inventory_s += t.next() + "\n";
+		}
 
 		trim(inventory_s);
+		trim(original_inventory_s);
 
 		Inventory *inventory = new Inventory();
 		inventory->from_string(inventory_s);
 
-		return new Shop_Brain(caption, yes_option, no_option, inventory, costs);
+		Inventory *original_inventory = new Inventory();
+		original_inventory->from_string(original_inventory_s);
+
+		return new Shop_Brain(caption, yes_option, no_option, inventory, costs, original_inventory, original_costs, last_visit);
 	}
 	else if (type == "growing_brain") {
 		Tokenizer t(data, ',');

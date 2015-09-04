@@ -127,7 +127,7 @@ class Shop_Brain : public Brain {
 public:
 	static void callback(void *data);
 
-	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs);
+	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
 	~Shop_Brain();
 
 	bool activate(Map_Entity *activator);
@@ -144,6 +144,9 @@ private:
 
 	Inventory *inventory;
 	std::vector<int> costs;
+	Inventory *original_inventory;
+	std::vector<int> original_costs;
+	int last_visit;
 };
 
 class Growing_Brain : public Brain {

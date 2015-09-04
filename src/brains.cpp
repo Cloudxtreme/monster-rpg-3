@@ -485,18 +485,22 @@ void Shop_Brain::callback(void *data)
 	}
 }
 
-Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs) :
+Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
 	caption(caption),
 	yes_option(yes_option),
 	no_option(no_option),
 	inventory(inventory),
-	costs(costs)
+	costs(costs),
+	original_inventory(original_inventory),
+	original_costs(original_costs)
 {
+	// FIXME: trend inventory towards original inventory
 }
 
 Shop_Brain::~Shop_Brain()
 {
 	delete inventory;
+	delete original_inventory;
 }
 
 bool Shop_Brain::activate(Map_Entity *activator)
@@ -514,19 +518,27 @@ bool Shop_Brain::save(std::string &out)
 {
 	std::string inventory_s = inventory->to_string();
 	int count = costs.size();
+	std::string original_inventory_s = original_inventory->to_string();
+	int original_count = original_costs.size();
 	out += string_printf(
-		"brain=shop,%d\n%s,%s,%s,%d,",
-		1 + std::count(inventory_s.begin(), inventory_s.end(), '\n'),
+		"brain=shop,%d\n%s,%s,%s,%d,%d,%d,",
+		1 + std::count(inventory_s.begin(), inventory_s.end(), '\n') + std::count(original_inventory_s.begin(), original_inventory_s.end(), '\n'),
 		escape_string(caption, ',').c_str(),
 		escape_string(yes_option, ',').c_str(),
 		escape_string(no_option, ',').c_str(),
-		count
+		count,
+		original_count,
+		noo.get_play_time()
 	);
 	for (int i = 0; i < count; i++) {
-		out += string_printf("%d%s", costs[i], i < count-1 ? "," : "");
+		out += string_printf("%d,", costs[i]);
+	}
+	for (int i = 0; i < original_count; i++) {
+		out += string_printf("%d%s", original_costs[i], i < count-1 ? "," : "");
 	}
 	out += "\n";
 	out += inventory_s;
+	out += original_inventory_s;
 	return true;
 }
 

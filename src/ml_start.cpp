@@ -132,6 +132,9 @@ void ML_start::start(bool been_here_before)
 		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "wine", 2, 40);
 		bartender_inventory->sort();
 
+		Inventory *bartender_original_inventory = bartender_inventory->clone();
+		std::vector<int> bartender_original_costs = bartender_costs;
+
 		bartender = new Map_Entity("bartender");
 		bartender->load_sprite("bartender");
 		bartender->set_brain(new Shop_Brain(
@@ -139,7 +142,10 @@ void ML_start::start(bool been_here_before)
 			TRANSLATE("Let me see what you've got.")END,
 			TRANSLATE("I was just leaving...")END,
 			bartender_inventory,
-			bartender_costs
+			bartender_costs,
+			bartender_original_inventory,
+			bartender_original_costs,
+			noo.get_play_time()
 		)
 		);
 		bartender->set_position(Point<int>(19, 19));
