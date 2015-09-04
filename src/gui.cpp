@@ -403,6 +403,9 @@ void Pause_GUI::set_labels()
 	if (stats->status == Stats::SICK) {
 		status->set_text(TRANSLATE("Sick")END);
 	}
+	else if (stats->status == Stats::DRUNK) {
+		status->set_text(TRANSLATE("Drunk")END);
+	}
 	else {
 		status->set_text("");
 	}
