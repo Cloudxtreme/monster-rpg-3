@@ -89,6 +89,7 @@ private:
 class Items_GUI : public GUI {
 public:
 	static void get_number_callback(void *data);
+	static void discard_callback(void *data);
 
 	Items_GUI(Item::Type type, Callback callback);
 
@@ -98,6 +99,7 @@ public:
 private:
 	static bool got_number;
 	static int number;
+	static bool discard_item;
 
 	void set_labels();
 	void handle_dropped_items();
@@ -136,6 +138,8 @@ private:
 	Widget *weight_header;
 	Widget_Label *carrying_label;
 	Widget_Label *capacity_label;
+
+	int discard_index;
 };
 
 class Buy_Sell_GUI : public GUI {

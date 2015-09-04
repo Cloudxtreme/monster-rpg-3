@@ -518,11 +518,17 @@ bool Pause_GUI::fade_done(bool fading_in) {
 
 bool Items_GUI::got_number;
 int Items_GUI::number;
+bool Items_GUI::discard_item;
 
 void Items_GUI::get_number_callback(void *data)
 {
 	number = (int64_t)data;
 	got_number = true;
+}
+
+void Items_GUI::discard_callback(void *data)
+{
+	discard_item = data != 0;
 }
 
 Items_GUI::Items_GUI(Item::Type type, Callback callback) :
@@ -532,6 +538,7 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	callback(callback)
 {
 	got_number = false;
+	discard_item = false;
 
 	stats = noo.map->get_entity(0)->get_stats();
 
@@ -683,6 +690,22 @@ void Items_GUI::update()
 {
 	int pressed;
 
+	if (got_number) {
+		got_number = false;
+		if (number > 0) {
+			if (drop_radio->is_selected()) {
+				for (int i = 0; i < number; i++) {
+					remove_item(dropping_index, true);
+				}
+			}
+		}
+	}
+
+	if (discard_item) {
+		discard_item = false;
+		remove_item(discard_index, false);
+	}
+
 	if (done_button->pressed() || exit_menu) {
 		callback(0);
 		handle_dropped_items();
@@ -732,15 +755,19 @@ void Items_GUI::update()
 				remove_item(index, true);
 			}
 		}
-	}
+		else {
+			// discard selected
+			discard_index = index;
 
-	if (got_number) {
-		got_number = false;
-		if (number > 0) {
-			if (drop_radio->is_selected()) {
-				for (int i = 0; i < number; i++) {
-					remove_item(dropping_index, true);
-				}
+			int milestone = noo.milestone_name_to_number("Always Discard");
+
+			if (noo.check_milestone(milestone) == true) {
+				discard_item = true;
+			}
+			else {
+				Yes_No_Always_GUI *gui = new Yes_No_Always_GUI(TRANSLATE("Discard this item (NO UNDO)?")END, milestone, discard_callback);
+				gui->start();
+				noo.guis.push_back(gui);
 			}
 		}
 	}
