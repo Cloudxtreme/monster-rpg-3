@@ -574,6 +574,10 @@ bool Growing_Brain::save(std::string &out)
 
 void Growing_Brain::update()
 {
+	if (noo.map == 0) {
+		return;
+	}
+
 	std::vector<Map_Entity *> v = noo.map->get_colliding_entities(-1, map_entity->get_position(), Size<int>(1, 1));
 
 	for (size_t i = 0; i < v.size(); i++) {
