@@ -753,7 +753,7 @@ void Items_GUI::set_labels()
 
 			int condition = 100 * item->condition / 0xffff;
 
-			weight_label->set_text(TRANSLATE("Weight")END + ": " + itos(item->weight));
+			weight_label->set_text(TRANSLATE("Weight")END + ": " + item->weight_to_string());
 
 			if (item->type != Item::OTHER) {
 				condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
@@ -1219,7 +1219,7 @@ void Buy_Sell_GUI::set_labels()
 
 		int condition = 100 * item->condition / 0xffff;
 
-		weight_label->set_text(TRANSLATE("Weight")END + ": " + itos(item->weight));
+		weight_label->set_text(TRANSLATE("Weight")END + ": " + item->weight_to_string());
 
 		if (item->type != Item::OTHER) {
 			condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
