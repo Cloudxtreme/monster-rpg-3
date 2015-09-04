@@ -441,6 +441,40 @@ Item_Drop_Brain::Item_Drop_Brain(Inventory *inventory, int drop_time) :
 	inventory(inventory),
 	drop_time(drop_time)
 {
+	int now = noo.get_play_time();
+	int diff = now - drop_time;
+	int items_to_remove = diff / (5 * 60); // lose one item every 5 minutes
+
+	int count = 0;
+
+	for (size_t i = 0; i < inventory->items.size(); i++) {
+		count += inventory->items[i].size();
+	}
+
+	if (count <= items_to_remove) {
+		die = true;
+	}
+	else {
+		die = false;
+		for (int i = 0; i < items_to_remove; i++) {
+			int r = rand() % count;
+			count--;
+
+			for (size_t i = 0; i < inventory->items.size(); i++) {
+				int size = inventory->items[i].size();
+				if (r < size) {
+					inventory->items[i].erase(inventory->items[i].begin());
+					if (inventory->items[i].size() == 0) {
+						inventory->items.erase(inventory->items.begin() + i);
+					}
+					break;
+				}
+				else {
+					r -= size;
+				}
+			}
+		}
+	}
 }
 
 Item_Drop_Brain::~Item_Drop_Brain()
@@ -462,6 +496,11 @@ bool Item_Drop_Brain::save(std::string &out)
 	std::string inventory_s = inventory->to_string();
 	out += "brain=item_drop," + itos(std::count(inventory_s.begin(), inventory_s.end(), '\n')+1) + "\n" + itos(drop_time) + "\n" + inventory->to_string();
 	return true;
+}
+
+bool Item_Drop_Brain::killme()
+{
+	return die;
 }
 
 Inventory *Item_Drop_Brain::get_inventory()

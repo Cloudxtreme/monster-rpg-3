@@ -114,14 +114,16 @@ public:
 	~Item_Drop_Brain();
 
 	bool activate(Map_Entity *activator);
-
 	bool save(std::string &out);
+	bool killme();
 
 	Inventory *get_inventory();
 
 private:
 	Inventory *inventory;
 	int drop_time;
+
+	bool die;
 };
 
 class Shop_Brain : public Brain {
