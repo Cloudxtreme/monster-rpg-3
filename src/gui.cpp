@@ -3,12 +3,21 @@
 
 static bool use_item(Stats *stats, int index)
 {
+	#define DEC_KARMA(amount) \
+		stats->karma -= MIN(amount, stats->karma);
 	#define DEC_HUNGER(amount) \
 		stats->hunger -= MIN(amount, stats->hunger);
 	#define DEC_THIRST(amount) \
 		stats->thirst -= MIN(amount, stats->thirst);
-	#define DEC_SOBRIETY(amount) \
-		stats->sobriety -= MIN(amount, stats->sobriety);
+	#define DEC_SOBRIETY(amount) { \
+			int amt = MIN(amount, stats->sobriety); \
+			if (stats->sobriety > 0 && stats->sobriety - amt == 0) { \
+				noo.add_notification(TRANSLATE("You're drunk...")END); \
+				noo.add_notification(TRANSLATE("You lost karma...")END); \
+				DEC_KARMA(500) \
+			} \
+			stats->sobriety -= MIN(amount, stats->sobriety); \
+		}
 
 	Item *item = stats->inventory->items[index][0];
 
