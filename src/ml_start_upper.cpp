@@ -59,15 +59,15 @@ void ML_start_upper::start(bool been_here_before)
 		noo.map->add_entity(door5);
 
 		Map_Entity *bottle = new Map_Entity("bottle");
-		bottle->set_brain(new Item_Brain("bottle", 1));
 		bottle->load_sprite("bottle_tipped");
+		bottle->set_brain(new Item_Brain("bottle", 1));
 		bottle->set_position(Point<int>(11, 3));
 		bottle->set_solid(false);
 		noo.map->add_entity(bottle);
 
 		Map_Entity *apple1 = new Map_Entity("apple");
-		apple1->set_brain(new Item_Brain("apple", 1));
 		apple1->load_sprite("apple");
+		apple1->set_brain(new Item_Brain("apple", 1));
 		apple1->set_position(Point<int>(7, 5));
 		apple1->set_z(noo.tile_size);
 		apple1->set_high(true);
@@ -75,8 +75,8 @@ void ML_start_upper::start(bool been_here_before)
 		noo.map->add_entity(apple1);
 
 		Map_Entity *apple2 = new Map_Entity("apple");
-		apple2->set_brain(new Item_Brain("apple", 1));
 		apple2->load_sprite("apple");
+		apple2->set_brain(new Item_Brain("apple", 1));
 		apple2->set_position(Point<int>(20, 16));
 		apple2->set_z(noo.tile_size);
 		apple2->set_high(true);

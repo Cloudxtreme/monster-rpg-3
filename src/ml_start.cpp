@@ -101,25 +101,25 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_speech("+milestone=Input Help,top,right,name=Eny|" + noo.game_t->translate(0), callback, &callback_data);
 
 		coro = new Map_Entity("coro");
-		coro->set_brain(new Talk_Brain("coro"));
 		coro->load_sprite("coro");
+		coro->set_brain(new Talk_Brain("coro"));
 		coro->set_position(Point<int>(3, 19));
 		coro->set_direction(S);
 		coro->set_sitting(true);
 		sunshine = new Map_Entity("sunshine");
-		sunshine->set_brain(new Talk_Brain("sunshine"));
 		sunshine->load_sprite("sunshine");
+		sunshine->set_brain(new Talk_Brain("sunshine"));
 		sunshine->set_position(Point<int>(1, 21));
 		sunshine->set_direction(E);
 		sunshine->set_sitting(true);
 		business_man = new Map_Entity("business_man");
-		business_man->set_brain(new Talk_Brain("business_man"));
 		business_man->load_sprite("business_man");
+		business_man->set_brain(new Talk_Brain("business_man"));
 		business_man->set_position(Point<int>(16, 19));
 		business_man->set_direction(E);
 		legendary_warrior = new Map_Entity("legendary_warrior");
-		legendary_warrior->set_brain(new Talk_Brain("legendary_warrior"));
 		legendary_warrior->load_sprite("legendary_warrior");
+		legendary_warrior->set_brain(new Talk_Brain("legendary_warrior"));
 		legendary_warrior->set_position(Point<int>(12, 15));
 		legendary_warrior->set_direction(S);
 		legendary_warrior->set_sitting(true);
@@ -133,6 +133,7 @@ void ML_start::start(bool been_here_before)
 		bartender_inventory->sort();
 
 		bartender = new Map_Entity("bartender");
+		bartender->load_sprite("bartender");
 		bartender->set_brain(new Shop_Brain(
 			TRANSLATE("No loitering, kid! Either get drunk or get out!")END,
 			TRANSLATE("Let me see what you've got.")END,
@@ -141,23 +142,22 @@ void ML_start::start(bool been_here_before)
 			bartender_costs
 		)
 		);
-		bartender->load_sprite("bartender");
 		bartender->set_position(Point<int>(19, 19));
 
 		sitting_lady = new Map_Entity("sitting_lady");
-		sitting_lady->set_brain(new Talk_Brain("sitting_lady"));
 		sitting_lady->load_sprite("sitting_lady");
+		sitting_lady->set_brain(new Talk_Brain("sitting_lady"));
 		sitting_lady->set_position(Point<int>(16, 13));
 		sitting_lady->set_direction(E);
 		sitting_lady->set_sitting(true);
 		laughing_man = new Map_Entity("laughing_man");
-		laughing_man->set_brain(new Animated_Brain("laughing_man"));
 		laughing_man->load_sprite("laughing_man");
+		laughing_man->set_brain(new Animated_Brain("laughing_man"));
 		laughing_man->set_position(Point<int>(8, 7));
 		laughing_man->set_direction(S);
 		drinker = new Map_Entity("drinker");
-		drinker->set_brain(new Talk_Then_Animate_Brain("drinker"));
 		drinker->load_sprite("drinker");
+		drinker->set_brain(new Talk_Then_Animate_Brain("drinker"));
 		drinker->set_position(Point<int>(14, 8));
 
 		noo.map->add_entity(coro);
@@ -171,29 +171,29 @@ void ML_start::start(bool been_here_before)
 
 		int drinker_bottle_milestone = noo.milestone_name_to_number("Drinker's bottle");
 		drinker_bottle = new Map_Entity("drinker_bottle");
-		drinker_bottle->set_brain(new Item_Brain("bottle", 1, drinker_bottle_milestone));
 		drinker_bottle->load_sprite("drinker_bottle");
+		drinker_bottle->set_brain(new Item_Brain("bottle", 1, drinker_bottle_milestone));
 		drinker_bottle->set_position(Point<int>(13, 8));
 		drinker_bottle->set_z_add(1);
 		noo.map->add_entity(drinker_bottle);
 
 		Map_Entity *bottle1 = new Map_Entity("bottle");
-		bottle1->set_brain(new Item_Brain("bottle", 1));
 		bottle1->load_sprite("bottle_tipped");
+		bottle1->set_brain(new Item_Brain("bottle", 1));
 		bottle1->set_position(Point<int>(1, 11));
 		bottle1->set_solid(false);
 		noo.map->add_entity(bottle1);
 
 		Map_Entity *bottle2 = new Map_Entity("bottle");
-		bottle2->set_brain(new Item_Brain("bottle", 1));
 		bottle2->load_sprite("bottle_tipped");
+		bottle2->set_brain(new Item_Brain("bottle", 1));
 		bottle2->set_position(Point<int>(14, 13));
 		bottle2->set_solid(false);
 		noo.map->add_entity(bottle2);
 
 		Map_Entity *bottle3 = new Map_Entity("bottle");
-		bottle3->set_brain(new Item_Brain("bottle", 1));
 		bottle3->load_sprite("bottle_tipped");
+		bottle3->set_brain(new Item_Brain("bottle", 1));
 		bottle3->set_position(Point<int>(17, 20));
 		bottle3->set_z(noo.tile_size);
 		bottle3->set_high(true);
@@ -201,8 +201,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(bottle3);
 
 		Map_Entity *bottle4 = new Map_Entity("bottle");
-		bottle4->set_brain(new Item_Brain("bottle", 1));
 		bottle4->load_sprite("bottle");
+		bottle4->set_brain(new Item_Brain("bottle", 1));
 		bottle4->set_position(Point<int>(17, 19));
 		bottle4->set_z(noo.tile_size);
 		bottle4->set_high(true);
@@ -210,8 +210,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(bottle4);
 
 		Map_Entity *fish1 = new Map_Entity("fish");
-		fish1->set_brain(new Item_Brain("fish", 1));
 		fish1->load_sprite("fish");
+		fish1->set_brain(new Item_Brain("fish", 1));
 		fish1->set_position(Point<int>(9, 7));
 		fish1->set_z(noo.tile_size);
 		fish1->set_high(true);
@@ -219,8 +219,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(fish1);
 
 		Map_Entity *fish2 = new Map_Entity("fish");
-		fish2->set_brain(new Item_Brain("fish", 1));
 		fish2->load_sprite("fish");
+		fish2->set_brain(new Item_Brain("fish", 1));
 		fish2->set_position(Point<int>(17, 17));
 		fish2->set_z(noo.tile_size);
 		fish2->set_high(true);
@@ -228,8 +228,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(fish2);
 
 		Map_Entity *wineglass1 = new Map_Entity("wineglass");
-		wineglass1->set_brain(new Item_Brain("wineglass", 1));
 		wineglass1->load_sprite("wineglass");
+		wineglass1->set_brain(new Item_Brain("wineglass", 1));
 		wineglass1->set_position(Point<int>(17, 18));
 		wineglass1->set_z(noo.tile_size);
 		wineglass1->set_high(true);
@@ -237,8 +237,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(wineglass1);
 
 		Map_Entity *wineglass2 = new Map_Entity("wineglass");
-		wineglass2->set_brain(new Item_Brain("wineglass", 1));
 		wineglass2->load_sprite("wineglass");
+		wineglass2->set_brain(new Item_Brain("wineglass", 1));
 		wineglass2->set_position(Point<int>(3, 21));
 		wineglass2->set_z(noo.tile_size);
 		wineglass2->set_high(true);
@@ -246,8 +246,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(wineglass2);
 
 		Map_Entity *wineglass3 = new Map_Entity("wineglass");
-		wineglass3->set_brain(new Item_Brain("wineglass", 1));
 		wineglass3->load_sprite("wineglass_tipped");
+		wineglass3->set_brain(new Item_Brain("wineglass", 1));
 		wineglass3->set_position(Point<int>(10, 16));
 		wineglass3->set_z(noo.tile_size);
 		wineglass3->set_high(true);
@@ -255,8 +255,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(wineglass3);
 
 		Map_Entity *wineglass4 = new Map_Entity("wineglass_broken");
-		wineglass4->set_brain(new Item_Brain("wineglass_broken", 1));
 		wineglass4->load_sprite("wineglass_broken");
+		wineglass4->set_brain(new Item_Brain("wineglass_broken", 1));
 		wineglass4->set_position(Point<int>(3, 13));
 		wineglass4->set_z(noo.tile_size);
 		wineglass4->set_high(true);
@@ -264,8 +264,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(wineglass4);
 
 		Map_Entity *mug1 = new Map_Entity("mug");
-		mug1->set_brain(new Item_Brain("mug", 1));
 		mug1->load_sprite("mug_left");
+		mug1->set_brain(new Item_Brain("mug", 1));
 		mug1->set_position(Point<int>(4, 6));
 		mug1->set_z(noo.tile_size);
 		mug1->set_high(true);
@@ -273,8 +273,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(mug1);
 
 		Map_Entity *mug2 = new Map_Entity("mug");
-		mug2->set_brain(new Item_Brain("mug", 1));
 		mug2->load_sprite("mug_left");
+		mug2->set_brain(new Item_Brain("mug", 1));
 		mug2->set_position(Point<int>(2, 21));
 		mug2->set_z(noo.tile_size);
 		mug2->set_high(true);
@@ -282,8 +282,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(mug2);
 
 		Map_Entity *mug3 = new Map_Entity("mug");
-		mug3->set_brain(new Item_Brain("mug", 1));
 		mug3->load_sprite("mug_left");
+		mug3->set_brain(new Item_Brain("mug", 1));
 		mug3->set_position(Point<int>(9, 8));
 		mug3->set_z(noo.tile_size);
 		mug3->set_high(true);
@@ -291,8 +291,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(mug3);
 
 		Map_Entity *mug4 = new Map_Entity("mug");
-		mug4->set_brain(new Item_Brain("mug", 1));
 		mug4->load_sprite("mug_left");
+		mug4->set_brain(new Item_Brain("mug", 1));
 		mug4->set_position(Point<int>(17, 16));
 		mug4->set_z(noo.tile_size);
 		mug4->set_high(true);
@@ -300,8 +300,8 @@ void ML_start::start(bool been_here_before)
 		noo.map->add_entity(mug4);
 
 		Map_Entity *monsterslayer = new Map_Entity("monsterslayer");
-		monsterslayer->set_brain(new Item_Brain("monsterslayer", 1));
 		monsterslayer->load_sprite("monsterslayer");
+		monsterslayer->set_brain(new Item_Brain("monsterslayer", 1));
 		monsterslayer->set_position(Point<int>(12, 17));
 		monsterslayer->set_size(Size<int>(noo.tile_size*2, noo.tile_size*2));
 		monsterslayer->set_high(true);
