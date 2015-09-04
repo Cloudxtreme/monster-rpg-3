@@ -550,9 +550,20 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	pad->set_padding(5);
 	pad->set_parent(window);
 
+	weight_header = new Widget(1.0f, int(noo.font->get_height() + 5));
+	weight_header->set_padding_bottom(2);
+	weight_header->set_parent(pad);
+	carrying_label = new Widget_Label("", 100);
+	carrying_label->set_padding(1);
+	carrying_label->set_parent(weight_header);
+	capacity_label = new Widget_Label("", 100);
+	capacity_label->set_padding(1);
+	capacity_label->set_float_right(true);
+	capacity_label->set_parent(weight_header);
+
 	set_list();
 
-	TGUI_Widget *info = new TGUI_Widget(0.4f, 1.0f);
+	TGUI_Widget *info = new TGUI_Widget(0.4f, -1.0f);
 	info->set_parent(pad);
 
 	action_label = new Widget_Label(TRANSLATE("Action")END + ":", 70);
@@ -753,7 +764,7 @@ void Items_GUI::set_labels()
 
 			int condition = 100 * item->condition / 0xffff;
 
-			weight_label->set_text(TRANSLATE("Weight")END + ": " + item->weight_to_string());
+			weight_label->set_text(TRANSLATE("Weight")END + ": " + Inventory::weight_to_string(item->weight));
 
 			if (item->type != Item::OTHER) {
 				condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
@@ -772,6 +783,21 @@ void Items_GUI::set_labels()
 				properties_label->set_text(TRANSLATE("Attack")END + ": " + itos(attack));
 			}
 		}
+	}
+
+	int carrying = stats->inventory->get_total_weight();
+	int capacity = stats->strength * 1000;
+
+	carrying_label->set_text(TRANSLATE("Carrying")END + " " + Inventory::weight_to_string(carrying));
+	capacity_label->set_text(Inventory::weight_to_string(capacity) + " " + TRANSLATE("Capacity")END);
+
+	if (carrying > capacity) {
+		SDL_Colour red = { 255, 0, 0, 255 };
+		weight_header->set_background_colour(red);
+	}
+	else {
+		SDL_Colour transparent = { 0, 0, 0, 0 };
+		weight_header->set_background_colour(transparent);
 	}
 
 	gui->layout();
@@ -827,7 +853,7 @@ void Items_GUI::set_list()
 	}
 
 	if (list == 0 && item_list.size() == 0) {
-		TGUI_Widget *parent = new TGUI_Widget(0.4f, 1.0f);
+		TGUI_Widget *parent = new TGUI_Widget(0.4f, -1.0f);
 		parent->set_parent(pad);
 		Widget_Label *label = new Widget_Label("Inventory empty", -1);
 		label->set_parent(parent);
@@ -835,7 +861,7 @@ void Items_GUI::set_list()
 	else {
 		bool exists = list != 0;
 		if (exists == false) {
-			list = new Widget_List(0.4f, 1.0f);
+			list = new Widget_List(0.4f, -1.0f);
 			list->set_parent(pad);
 		}
 		list->set_items(item_list);
@@ -1219,7 +1245,7 @@ void Buy_Sell_GUI::set_labels()
 
 		int condition = 100 * item->condition / 0xffff;
 
-		weight_label->set_text(TRANSLATE("Weight")END + ": " + item->weight_to_string());
+		weight_label->set_text(TRANSLATE("Weight")END + ": " + Inventory::weight_to_string(item->weight));
 
 		if (item->type != Item::OTHER) {
 			condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");

@@ -132,6 +132,10 @@ private:
 	Inventory *dropped_items;
 
 	int dropping_index;
+
+	Widget *weight_header;
+	Widget_Label *carrying_label;
+	Widget_Label *capacity_label;
 };
 
 class Buy_Sell_GUI : public GUI {
