@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project("monster-rpg-3" CXX)
 
+option(DEMO "Build demo version" OFF)
+
 include_directories("include")
 
 set(USER_INCLUDE_PATH "" CACHE FILEPATH "Any extra include directories you want")
@@ -19,6 +21,16 @@ set(SRC
 	src/ml_cabbagetown.cpp
 	src/tweens.cpp
 )
+
+if(WIN32)
+	if(DEMO)
+		set(FLAGS "${FLAGS} /DDEMO")
+	endif()
+else()
+	if(DEMO)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEMO")
+	endif()
+endif()
 
 if(WIN32)
 	add_library(MonsterRPG3 SHARED ${SRC})

@@ -328,10 +328,12 @@ void ML_start::trigger(Map_Entity *entity)
 			entity->stop();
 			noo.map->change_map("start_upper.map", Point<int>(22, 5), S);
 		}
+#ifndef DEMO
 		else if (entity->tiles_collide(Point<int>(10, 25), Size<int>(3, 1), collide_pos)) {
 			entity->stop();
 			noo.map->change_map("cabbagetown.map", Point<int>(38, 11), S);
 		}
+#endif
 	}
 }
 
