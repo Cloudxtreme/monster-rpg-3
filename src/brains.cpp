@@ -443,7 +443,7 @@ Item_Drop_Brain::Item_Drop_Brain(Inventory *inventory, int drop_time) :
 {
 	int now = noo.get_play_time();
 	int diff = now - drop_time;
-	int items_to_remove = diff / (5 * 60); // lose one item every 5 minutes
+	int items_to_remove = diff / (10 * 60); // lose one item every 10 minutes
 
 	int count = 0;
 
