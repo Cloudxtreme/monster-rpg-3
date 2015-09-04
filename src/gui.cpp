@@ -9,7 +9,7 @@ static bool use_item(Stats *stats, int index)
 		stats->thirst -= MIN(amount, stats->thirst);
 	#define DEC_SOBRIETY(amount) { \
 			int amt = MIN(amount, stats->sobriety); \
-			if (stats->sobriety > 0 && stats->sobriety - amt == 0) { \
+			if (stats->sobriety > 0 && stats->sobriety - amt <= 0xffff / 100) { \
 				stats->set_status(Stats::DRUNK); \
 			} \
 			stats->sobriety -= amt; \
