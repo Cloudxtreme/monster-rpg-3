@@ -231,6 +231,10 @@ void Animated_Brain::update()
 
 	Sprite *sprite = map_entity->get_sprite();
 
+	if (sprite == 0) {
+		return;
+	}
+
 	if (!sprite->is_started()) {
 		sprite->start();
 	}
