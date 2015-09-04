@@ -29,7 +29,10 @@ public:
 
 protected:
 	struct Talk {
+		bool all_milestones;
 		int milestone;
+		bool has_status;
+		Stats::Status status;
 		std::string text;
 	};
 

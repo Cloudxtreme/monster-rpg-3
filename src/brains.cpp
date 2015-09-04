@@ -112,15 +112,50 @@ Talk_Brain::Talk_Brain(std::string name, Callback callback, void *callback_data)
 			printf("Malformed character speech file: %s.utf8\n", name.c_str());
 		}
 		else {
-			std::string milestone_s = line.substr(0, pipepos);
+			std::string conditions_s = line.substr(0, pipepos);
+
+			bool all_milestones = false;
+			std::string milestone_s;
+			bool has_status = false;
+			Stats::Status status;
+
+			Tokenizer tok(conditions_s, ',');
+
+			std::string option;
+
+			while ((option = tok.next()) != "") {
+				if (option.substr(0, 7) == "status=") {
+					std::string s = option.substr(7);
+					if (s == "SICK") {
+						has_status = true;
+						status = Stats::SICK;
+					}
+					else if (s == "DRUNK") {
+						has_status = true;
+						status = Stats::DRUNK;
+					}
+				}
+				else {
+					if (option == "all") {
+						all_milestones = true;
+					}
+					else {
+						milestone_s = option;
+					}
+				}
+			}
+
 			std::string speech = line.substr(pipepos+1);
 			Talk *t = new Talk;
+			t->all_milestones = all_milestones;
 			if (milestone_s == "") {
 				t->milestone = -1;
 			}
 			else {
 				t->milestone = noo.milestone_name_to_number(milestone_s);
 			}
+			t->has_status = has_status;
+			t->status = status;
 			t->text = speech;
 			sayings.push_back(t);
 		}
@@ -155,6 +190,9 @@ bool Talk_Brain::activate(Map_Entity *activator)
 
 bool Talk_Brain::compare_milestones(Talk *a, Talk *b)
 {
+	if (a->all_milestones || a->milestone == b->milestone) {
+		return a->has_status ? true : false;
+	}
 	return a->milestone >= b->milestone;
 }
 
@@ -162,7 +200,7 @@ std::string Talk_Brain::get_speech(Map_Entity *activator, Map_Entity *activated)
 {
 	for (size_t i = 0; i < sayings.size(); i++) {
 		Talk *t = sayings[i];
-		if (t->milestone < 0 || noo.check_milestone(t->milestone)) {
+		if ((t->milestone < 0 || noo.check_milestone(t->milestone)) && (t->has_status == false || t->status == activator->get_stats()->status)){
 			callback_data.direction = activated->get_direction();
 			callback_data.entity = activated;
 			callback_data.user_callback = user_callback;
