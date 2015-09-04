@@ -432,10 +432,14 @@ void Item_Drop_Brain::callback(void *data)
 	if (brain->get_inventory()->items.size() == 0) {
 		noo.map->schedule_destroy(brain->get_map_entity());
 	}
+	else {
+		brain->drop_time = noo.get_play_time();
+	}
 }
 
-Item_Drop_Brain::Item_Drop_Brain(Inventory *inventory) :
-	inventory(inventory)
+Item_Drop_Brain::Item_Drop_Brain(Inventory *inventory, int drop_time) :
+	inventory(inventory),
+	drop_time(drop_time)
 {
 }
 
@@ -456,7 +460,7 @@ bool Item_Drop_Brain::activate(Map_Entity *activator)
 bool Item_Drop_Brain::save(std::string &out)
 {
 	std::string inventory_s = inventory->to_string();
-	out += "brain=item_drop," + itos(std::count(inventory_s.begin(), inventory_s.end(), '\n')+1) + "\n" + inventory->to_string() + "\n";
+	out += "brain=item_drop," + itos(std::count(inventory_s.begin(), inventory_s.end(), '\n')+1) + "\n" + itos(drop_time) + "\n" + inventory->to_string();
 	return true;
 }
 

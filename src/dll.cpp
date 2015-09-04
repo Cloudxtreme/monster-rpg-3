@@ -90,9 +90,14 @@ Brain *dll_get_brain(std::string type, std::string data)
 	else if (type == "item_drop") {
 		Inventory *inventory = new Inventory();
 
-		inventory->from_string(data);
+		Tokenizer t(data, '\n');
 
-		return new Item_Drop_Brain(inventory);
+		std::string drop_time_s = t.next();
+		int drop_time = atoi(drop_time_s.c_str());
+
+		inventory->from_string(data.substr(drop_time_s.length()+1));
+
+		return new Item_Drop_Brain(inventory, drop_time);
 	}
 	else if (type == "shop") {
 		Tokenizer t(data, '\n');

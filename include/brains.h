@@ -110,7 +110,7 @@ class Item_Drop_Brain : public Brain {
 public:
 	static void callback(void *data);
 
-	Item_Drop_Brain(Inventory *inventory);
+	Item_Drop_Brain(Inventory *inventory, int drop_time);
 	~Item_Drop_Brain();
 
 	bool activate(Map_Entity *activator);
@@ -121,6 +121,7 @@ public:
 
 private:
 	Inventory *inventory;
+	int drop_time;
 };
 
 class Shop_Brain : public Brain {

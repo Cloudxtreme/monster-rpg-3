@@ -809,7 +809,7 @@ void Items_GUI::handle_dropped_items()
 		if (dropped_items->items.size() > 0) {
 			if (created_dropped_items) {
 				Map_Entity *drop = new Map_Entity("item_drop");
-				drop->set_brain(new Item_Drop_Brain(dropped_items));
+				drop->set_brain(new Item_Drop_Brain(dropped_items, noo.get_play_time()));
 				drop->load_sprite("item_drop");
 				drop->set_position(noo.player->get_position());
 				drop->set_solid(false);
