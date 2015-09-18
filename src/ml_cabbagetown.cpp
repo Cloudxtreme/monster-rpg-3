@@ -24,10 +24,13 @@ ML_cabbagetown::ML_cabbagetown(int last_visited_time)
 	cabbages_to_regrow = int((diff / 1800.0f) * (num_cabbages/2));
 }
 
-void ML_cabbagetown::start(bool been_here_before)
+void ML_cabbagetown::start_audio()
 {
 	noo.play_music("cabbagetown.mml");
+}
 
+void ML_cabbagetown::start(bool been_here_before)
+{
 	if (!been_here_before) {
 		for (int y = 17; y <= 17; y++) {
 			for (int x = 27; x <= 32; x++) {

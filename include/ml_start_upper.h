@@ -9,6 +9,7 @@ class ML_start_upper : public Map_Logic {
 public:
 	ML_start_upper(int last_visited_time);
 
+	void start_audio();
 	void start(bool been_here_before);
 	void trigger(Map_Entity *entity);
 };

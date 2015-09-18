@@ -302,11 +302,25 @@ Pause_GUI::Pause_GUI() :
 
 	weapons_button = new Widget_Text_Button(TRANSLATE("Weapons")END, 1.0f, -1);
 	weapons_button->set_padding_top(2);
-	weapons_button->set_padding_bottom(2);
 	weapons_button->set_parent(column3);
 
 	armour_button = new Widget_Text_Button(TRANSLATE("Armour")END, 1.0f, -1);
+	armour_button->set_padding_top(2);
 	armour_button->set_parent(column3);
+
+	Widget *audio_toggle_container = new Widget(1.0f, 5);
+	Sprite *audio_toggle_sprite = new Sprite("audio_toggle");
+	if (noo.mute) {
+		audio_toggle_sprite->set_animation("off");
+	}
+	else {
+		audio_toggle_sprite->set_animation("on");
+	}
+	audio_toggle = new Widget_Sprite_Toggle(audio_toggle_sprite, !noo.mute, true);
+	audio_toggle->set_padding_top(2);
+	audio_toggle->set_float_right(true);
+	audio_toggle->set_parent(audio_toggle_container);
+	audio_toggle_container->set_parent(column3);
 
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
 
@@ -368,6 +382,18 @@ void Pause_GUI::update()
 		Items_GUI *items_gui = new Items_GUI(Item::ARMOUR, callback);
 		items_gui->start();
 		noo.guis.push_back(items_gui);
+	}
+
+	if (audio_toggle->get_value() == noo.mute) { // if toggle changed
+		noo.mute = !noo.mute;
+		if (noo.mute) {
+			audio_toggle->set_animation("off");
+			MML::pause_all();
+		}
+		else {
+			audio_toggle->set_animation("on");
+			noo.map->start_audio();
+		}
 	}
 
 	if (set_the_labels) {

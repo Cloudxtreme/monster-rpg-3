@@ -90,10 +90,13 @@ ML_start::ML_start(int last_visited_time)
 	callback_data = 0;
 }
 
-void ML_start::start(bool been_here_before)
+void ML_start::start_audio()
 {
 	noo.play_music("pub.mml");
+}
 
+void ML_start::start(bool been_here_before)
+{
 	if (!been_here_before) {
 		noo.player->set_input_enabled(false);
 		noo.player->set_position(Point<int>(11, 24));
