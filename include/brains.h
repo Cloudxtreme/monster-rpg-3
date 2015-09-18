@@ -159,7 +159,9 @@ class Growing_Brain : public Brain {
 public:
 	static const int STAGE_TIME = 60 * 5;
 
-	Growing_Brain(std::string baby_item, std::string fresh_item, std::string rotten_item, int instantiation_time);
+	static void callback(void *data);
+
+	Growing_Brain(std::string baby_item, std::string fresh_item, std::string rotten_item, int instantiation_time, int karma);
 
 	bool activate(Map_Entity *activator);
 	bool save(std::string &out);
@@ -169,6 +171,13 @@ public:
 	void set_instantiation_time(int instantiation_time);
 
 private:
+	struct Callback_Data {
+		Growing_Brain *brain;
+		Map_Entity *activator;
+	};
+
+	bool give(Map_Entity *activator);
+
 	std::string baby_item;
 	std::string fresh_item;
 	std::string rotten_item;
@@ -176,6 +185,9 @@ private:
 	std::string item_name;
 
 	int instantiation_time;
+
+	int karma;
+	Callback_Data callback_data;
 };
 
 #endif // BRAINS_H

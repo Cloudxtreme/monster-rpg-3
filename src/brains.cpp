@@ -1,5 +1,6 @@
 #include <Nooskewl_Engine/Nooskewl_Engine.h>
 
+#include "monster-rpg-3.h"
 #include "brains.h"
 #include "gui.h"
 
@@ -710,11 +711,24 @@ std::vector<int> &Shop_Brain::get_costs()
 
 //--
 
-Growing_Brain::Growing_Brain(std::string baby_item, std::string fresh_item, std::string rotten_item, int instantiation_time) :
+void Growing_Brain::callback(void *data)
+{
+	Yes_No_GUI::Callback_Data *d = static_cast<Yes_No_GUI::Callback_Data *>(data);
+
+	if (d->choice == true) {
+		Callback_Data *cbd = static_cast<Callback_Data *>(d->userdata);
+		Stats *stats = cbd->activator->get_stats();
+		DEC_KARMA(cbd->brain->karma);
+		cbd->brain->give(cbd->activator);
+	}
+}
+
+Growing_Brain::Growing_Brain(std::string baby_item, std::string fresh_item, std::string rotten_item, int instantiation_time, int karma) :
 	baby_item(baby_item),
 	fresh_item(fresh_item),
 	rotten_item(rotten_item),
-	item_name("")
+	item_name(""),
+	karma(karma)
 {
 	int now = noo.get_play_time();
 
@@ -725,18 +739,28 @@ Growing_Brain::Growing_Brain(std::string baby_item, std::string fresh_item, std:
 
 bool Growing_Brain::activate(Map_Entity *activator)
 {
-	if (item_name != "") {
-		if (give_item(activator, item_name, 1, -1)) {
-			instantiation_time = noo.get_play_time();
-			return true;
-		}
+	if (item_name == "") {
+		return false;
 	}
-	return false;
+
+	if (karma != 0) {
+		callback_data.brain = this;
+		callback_data.activator = activator;
+
+		Yes_No_GUI *gui = new Yes_No_GUI(TRANSLATE("This is owned by someone. Really take it?")END, callback, &callback_data);
+		gui->start();
+		noo.guis.push_back(gui);
+
+		return true;
+	}
+	else {
+		return give(activator);
+	}
 }
 
 bool Growing_Brain::save(std::string &out)
 {
-	out += string_printf("brain=growing_brain,1\nbaby_item=%s,fresh_item=%s,rotten_item=%s,instantiation_time=%d\n", baby_item.c_str(), fresh_item.c_str(), rotten_item.c_str(), instantiation_time);
+	out += string_printf("brain=growing_brain,1\nbaby_item=%s,fresh_item=%s,rotten_item=%s,instantiation_time=%d,karma=%d\n", baby_item.c_str(), fresh_item.c_str(), rotten_item.c_str(), instantiation_time, karma);
 	return true;
 }
 
@@ -791,4 +815,13 @@ int Growing_Brain::get_instantiation_time()
 void Growing_Brain::set_instantiation_time(int instantiation_time)
 {
 	this->instantiation_time = instantiation_time;
+}
+
+bool Growing_Brain::give(Map_Entity *activator)
+{
+	if (give_item(activator, item_name, 1, -1)) {
+		instantiation_time = noo.get_play_time();
+		return true;
+	}
+	return false;
 }

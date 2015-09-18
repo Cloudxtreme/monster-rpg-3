@@ -1,20 +1,9 @@
+#include "monster-rpg-3.h"
 #include "brains.h"
 #include "gui.h"
 
 static bool use_item(Stats *stats, int index)
 {
-	#define DEC_HUNGER(amount) \
-		stats->hunger -= MIN(amount, stats->hunger);
-	#define DEC_THIRST(amount) \
-		stats->thirst -= MIN(amount, stats->thirst);
-	#define DEC_SOBRIETY(amount) { \
-			int amt = MIN(amount, stats->sobriety); \
-			if (stats->sobriety > 0 && stats->sobriety - amt <= 0xffff / 100) { \
-				stats->set_status(Stats::DRUNK); \
-			} \
-			stats->sobriety -= amt; \
-		}
-
 	Item *item = stats->inventory->items[index][0];
 
 	bool remove = true;
@@ -28,6 +17,9 @@ static bool use_item(Stats *stats, int index)
 	}
 	else if (item->id == "cabbage") {
 		DEC_HUNGER(0xffff/6);
+	}
+	else if (item->id == "red_cabbage") {
+		DEC_HUNGER(0xffff);
 	}
 	else if (item->id == "fish") {
 		DEC_HUNGER(0xffff/3);
@@ -64,7 +56,7 @@ void Pause_GUI::callback(void *data)
 {
 	if (quitting) {
 		quitting = false;
-		quit = data != 0;
+		quit = ((Yes_No_GUI::Callback_Data *)data)->choice;
 		if (quit) {
 			showing_items = false;
 			set_the_labels = false;
@@ -1000,7 +992,7 @@ void Buy_Sell_GUI::add_item(Inventory *inventory, std::vector<int> &costs, std::
 
 void Buy_Sell_GUI::confirm_callback(void *data)
 {
-	if (data != 0) {
+	if (((Yes_No_GUI::Callback_Data *)data)->choice == true) {
 		cancel = true;
 	}
 }

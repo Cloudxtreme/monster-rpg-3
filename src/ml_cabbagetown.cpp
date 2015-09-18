@@ -11,7 +11,17 @@ static void add_cabbage(int x, int y)
 {
 	Map_Entity *cabbage = new Map_Entity("cabbage");
 	cabbage->load_sprite("cabbage");
-	cabbage->set_brain(new Growing_Brain("baby_cabbage", "cabbage", "rotten_cabbage", -1));
+	cabbage->set_brain(new Growing_Brain("baby_cabbage", "cabbage", "rotten_cabbage", -1, 0));
+	cabbage->set_position(Point<int>(x, y));
+	cabbage->set_low(true);
+	noo.map->add_entity(cabbage);
+}
+
+static void add_red_cabbage(int x, int y)
+{
+	Map_Entity *cabbage = new Map_Entity("red_cabbage");
+	cabbage->load_sprite("red_cabbage");
+	cabbage->set_brain(new Growing_Brain("baby_cabbage", "red_cabbage", "rotten_cabbage", -1, 250));
 	cabbage->set_position(Point<int>(x, y));
 	cabbage->set_low(true);
 	noo.map->add_entity(cabbage);
@@ -100,6 +110,13 @@ void ML_cabbagetown::start(bool been_here_before)
 		for (int y = 26; y <= 26; y++) {
 			for (int x = 46; x <= 50; x++) {
 				add_cabbage(x, y);
+			}
+		}
+
+		// red cabbages
+		for (int y = 36; y <= 37; y++) {
+			for (int x = 56; x <= 60; x++) {
+				add_red_cabbage(x, y);
 			}
 		}
 	}

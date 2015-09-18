@@ -174,6 +174,7 @@ Brain *dll_get_brain(std::string type, std::string data)
 		std::string fresh_item = "";
 		std::string rotten_item = "";
 		int instantiation_time = noo.get_play_time();
+		int karma = 0;
 
 		while ((option = t.next()) != "") {
 			Tokenizer t2(option, '=');
@@ -193,9 +194,12 @@ Brain *dll_get_brain(std::string type, std::string data)
 			else if (key == "instantiation_time") {
 				instantiation_time = atoi(value.c_str());
 			}
+			else if (key == "karma") {
+				karma = atoi(value.c_str());
+			}
 		}
 
-		return new Growing_Brain(baby_item, fresh_item, rotten_item, instantiation_time);
+		return new Growing_Brain(baby_item, fresh_item, rotten_item, instantiation_time, karma);
 	}
 
 	return 0;
