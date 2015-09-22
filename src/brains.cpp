@@ -658,9 +658,9 @@ std::vector<int> &Shop_Brain::get_costs()
 
 void Growing_Brain::callback(void *data)
 {
-	Yes_No_GUI::Callback_Data *d = static_cast<Yes_No_GUI::Callback_Data *>(data);
+	Multiple_Choice_GUI::Callback_Data *d = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
 
-	if (d->choice == true) {
+	if (d->choice == 0) {
 		Callback_Data *cbd = static_cast<Callback_Data *>(d->userdata);
 		Stats *stats = cbd->activator->get_stats();
 		DEC_KARMA(cbd->brain->karma);
@@ -692,7 +692,11 @@ bool Growing_Brain::activate(Map_Entity *activator)
 		callback_data.brain = this;
 		callback_data.activator = activator;
 
-		Yes_No_GUI *gui = new Yes_No_GUI(TRANSLATE("This is owned by someone. Really take it?")END, callback, &callback_data);
+		std::vector<std::string> choices;
+		choices.push_back(TRANSLATE("Yes")END);
+		choices.push_back(TRANSLATE("No")END);
+
+		Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("This is owned by someone. Really take it?")END, choices, callback, &callback_data);
 		gui->start();
 		noo.guis.push_back(gui);
 
