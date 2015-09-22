@@ -4,50 +4,6 @@
 #include "brains.h"
 #include "gui.h"
 
-static bool give_item(Map_Entity *activator, std::string item_name, int quantity, int milestone)
-{
-	Stats *stats = activator->get_stats();
-
-	if (stats) {
-		Inventory *inventory = stats->inventory;
-		if (inventory) {
-			if (quantity > 0) {
-				std::string name;
-				for (int i = 0; i < quantity; i++) {
-					Item *item = new Item(item_name);
-					inventory->add(item);
-					if (i == 0) {
-						name = item->name;
-					}
-				}
-				noo.item_mml->play(false);
-				// FIXME: a/an and adding s isn't foolproof
-				std::string found = TRANSLATE("Found")END;
-				if (quantity > 1) {
-					noo.map->add_speech(found + " " + itos(quantity) + " " + name + "s");
-				}
-				else {
-					char c = tolower(name.c_str()[0]);
-					if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
-						noo.map->add_speech(found + " " + TRANSLATE("an")END + " " + name + "...");
-					}
-					else {
-						noo.map->add_speech(found + " " + TRANSLATE("a") + " " + name + "...");
-					}
-				}
-
-				if (milestone >= 0) {
-					noo.set_milestone(milestone, true);
-				}
-			}
-
-			return true;
-		}
-	}
-
-	return false;
-}
-
 bool start_brains()
 {
 	if (Door_Brain::start() == 0) {
@@ -206,19 +162,8 @@ std::string Talk_Brain::get_speech(Map_Entity *activator, Map_Entity *activated)
 			callback_data.entity = activated;
 			callback_data.user_callback = user_callback;
 			callback_data.user_callback_data = user_callback_data;
-			Point<int> offset = activator->get_position() - activated->get_position();
-			if (offset.x < 0) {
-				activated->set_direction(W);
-			}
-			else if (offset.x > 0) {
-				activated->set_direction(E);
-			}
-			else if (offset.y < 0) {
-				activated->set_direction(N);
-			}
-			else {
-				activated->set_direction(S);
-			}
+			Direction dir = get_facing_direction(activator, activated);
+			activated->set_direction(dir);
 			Point<float> entity_pos = (activated->get_position() + activated->get_offset()) * noo.tile_size + noo.map->get_offset();
 			int pipe = t->text.find('|');
 			if (pipe != std::string::npos) {
