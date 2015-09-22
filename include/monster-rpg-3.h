@@ -16,4 +16,11 @@
 	stats->karma -= MIN(amount, stats->karma); \
 	noo.add_notification(TRANSLATE("You lost karma...")END);
 
+#include <Nooskewl_Engine/Nooskewl_Engine.h>
+
+using namespace Nooskewl_Engine;
+
+bool give_item(Map_Entity *activator, std::string item_name, int quantity, int milestone);
+Direction get_facing_direction(Map_Entity *activator, Map_Entity *activated);
+
 #endif
