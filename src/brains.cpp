@@ -207,6 +207,10 @@ Animated_Brain::Animated_Brain(std::string name) :
 {
 }
 
+Animated_Brain::~Animated_Brain()
+{
+}
+
 void Animated_Brain::update()
 {
 	if (map_entity == 0) {
@@ -286,6 +290,10 @@ void Talk_Then_Animate_Brain::speech_callback(void *data)
 Talk_Then_Animate_Brain::Talk_Then_Animate_Brain(std::string name) :
 	Talk_Brain(name, speech_callback),
 	animating(false)
+{
+}
+
+Talk_Then_Animate_Brain::~Talk_Then_Animate_Brain()
 {
 }
 
@@ -774,3 +782,68 @@ bool Growing_Brain::give(Map_Entity *activator)
 	}
 	return false;
 }
+
+Wander_Brain::Wander_Brain(std::string name, int max_distance, int delay, Point<int> start_pos, Callback callback, void *callback_data) :
+	Talk_Brain(name, callback, callback_data),
+	max_distance(max_distance),
+	delay(delay),
+	start_pos(start_pos),
+	count(delay)
+{
+}
+
+Wander_Brain::~Wander_Brain()
+{
+}
+
+void Wander_Brain::update()
+{
+	if (talking == false) {
+		count++;
+		if (count >= delay) {
+			count = 0;
+			Point<int> pos = map_entity->get_position();
+			Point<int> diff = pos - start_pos;
+			if (diff.x <= -max_distance) {
+				r = true;
+			}
+			else if (diff.x >= max_distance) {
+				l = true;
+			}
+			else if (diff.y <= -max_distance) {
+				d = true;
+			}
+			else if (diff.y >= max_distance) {
+				u = true;
+			}
+			else {
+				int r = rand() % 4;
+				if (r == 0) {
+					l = true;
+				}
+				else if (r == 1) {
+					r = true;
+				}
+				else if (r == 2) {
+					u = true;
+				}
+				else {
+					d = true;
+				}
+			}
+		}
+		else {
+			l = r = u = d = false;
+		}
+	}
+	else {
+		l = r = u = d = false;
+	}
+}
+
+bool Wander_Brain::save(std::string &out)
+{
+	out += string_printf("brain=wander_brain,1\nname=%s,max_distance=%d,delay=%d,start_pos=%d:%d\n", name.c_str(), max_distance, delay, start_pos.x, start_pos.y);
+	return true;
+}
+

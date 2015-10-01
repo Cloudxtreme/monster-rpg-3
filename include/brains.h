@@ -21,7 +21,7 @@ public:
 
 	// The user callback is called with a Talk_Brain::Callback_Data which has the user data inside!
 	Talk_Brain(std::string name, Callback callback = NULL, void *callback_data = NULL);
-	~Talk_Brain();
+	virtual ~Talk_Brain();
 
 	bool activate(Map_Entity *activator);
 
@@ -53,6 +53,7 @@ protected:
 class Animated_Brain : public Talk_Brain {
 public:
 	Animated_Brain(std::string name);
+	virtual ~Animated_Brain();
 
 	void update();
 	bool save(std::string &out);
@@ -64,6 +65,7 @@ public:
 	static void animation_callback(void *data);
 
 	Talk_Then_Animate_Brain(std::string name);
+	virtual ~Talk_Then_Animate_Brain();
 	
 	bool activate(Map_Entity *activator);
 
@@ -188,6 +190,23 @@ private:
 
 	int karma;
 	Callback_Data callback_data;
+};
+
+class Wander_Brain : public Talk_Brain {
+public:
+	// delay is in ticks and includes time to move between tiles
+	Wander_Brain(std::string name, int max_distance, int delay, Point<int> start_pos, Callback callback = NULL, void *callback_data = NULL);
+	~Wander_Brain();
+
+	void update();
+
+	bool save(std::string &out);
+
+protected:
+	int max_distance;
+	int delay;
+	Point<int> start_pos;
+	int count;
 };
 
 #endif // BRAINS_H

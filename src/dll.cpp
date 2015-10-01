@@ -201,6 +201,43 @@ Brain *dll_get_brain(std::string type, std::string data)
 
 		return new Growing_Brain(baby_item, fresh_item, rotten_item, instantiation_time, karma);
 	}
+	else if (type == "wander_brain") {
+		Tokenizer t(data, ',');
+
+		std::string option;
+
+		std::string name;
+		int max_distance;
+		int delay;
+		Point<int> start_pos;
+
+		while ((option = t.next()) != "") {
+			Tokenizer t2(option, '=');
+
+			std::string key = t2.next();
+			std::string value = t2.next();
+
+			if (key == "name") {
+				name = value;
+			}
+			else if (key == "max_distance") {
+				max_distance = atoi(value.c_str());
+			}
+			else if (key == "delay") {
+				delay = atoi(value.c_str());
+			}
+			else if (key == "start_pos") {
+				Tokenizer t3(value, ':');
+
+				std::string x = t3.next();
+				std::string y = t3.next();
+
+				start_pos = Point<int>(atoi(x.c_str()), atoi(y.c_str()));
+			}
+		}
+
+		return new Wander_Brain(name, max_distance, delay, start_pos);
+	}
 
 	return 0;
 }
