@@ -128,8 +128,15 @@ void ML_cabbagetown::start(bool been_here_before)
 		alfred->set_position(Point<int>(29, 10));
 		alfred->set_direction(S);
 		alfred->set_sitting(true);
-
 		noo.map->add_entity(alfred);
+
+		Map_Entity *little_old_lady = new Map_Entity("little_old_lady");
+		little_old_lady->load_sprite("little_old_lady");
+		little_old_lady->set_position(Point<int>(34, 24));
+		little_old_lady->set_brain(new Wander_Brain("little_old_lady", 7, 120, little_old_lady->get_position()));
+		little_old_lady->set_direction(S);
+		little_old_lady->set_speed(0.045f);
+		noo.map->add_entity(little_old_lady);
 	}
 }
 
