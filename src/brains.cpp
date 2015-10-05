@@ -817,14 +817,14 @@ void Wander_Brain::update()
 				u = true;
 			}
 			else {
-				int r = rand() % 4;
-				if (r == 0) {
+				int n = rand() % 4;
+				if (n == 0) {
 					l = true;
 				}
-				else if (r == 1) {
+				else if (n == 1) {
 					r = true;
 				}
-				else if (r == 2) {
+				else if (n == 2) {
 					u = true;
 				}
 				else {
