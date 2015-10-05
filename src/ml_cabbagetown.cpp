@@ -173,6 +173,13 @@ void ML_cabbagetown::start(bool been_here_before)
 		horse2->set_direction(W);
 		horse2->set_should_face_activator(false);
 		noo.map->add_entity(horse2);
+
+		Map_Entity *earl = new Map_Entity("earl");
+		earl->load_sprite("earl");
+		earl->set_position(Point<int>(38, 36));
+		earl->set_brain(new Talk_Brain("earl"));
+		earl->set_direction(S);
+		noo.map->add_entity(earl);
 	}
 }
 
