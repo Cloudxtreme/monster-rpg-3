@@ -162,6 +162,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		horse1->set_brain(new Talk_Brain("horse"));
 		horse1->set_size(Size<int>(noo.tile_size*3, noo.tile_size));
 		horse1->set_direction(E);
+		horse1->set_should_face_activator(false);
 		noo.map->add_entity(horse1);
 
 		Map_Entity *horse2 = new Map_Entity("horse");
@@ -170,6 +171,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		horse2->set_brain(new Talk_Brain("horse"));
 		horse2->set_size(Size<int>(noo.tile_size*3, noo.tile_size));
 		horse2->set_direction(W);
+		horse2->set_should_face_activator(false);
 		noo.map->add_entity(horse2);
 	}
 }
