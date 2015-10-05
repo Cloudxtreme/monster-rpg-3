@@ -156,12 +156,21 @@ void ML_cabbagetown::start(bool been_here_before)
 		chicken3->set_brain(new Wander_Brain("chicken", 5, 100, chicken3->get_position()));
 		noo.map->add_entity(chicken3);
 
-		Map_Entity *horse = new Map_Entity("horse");
-		horse->load_sprite("horse");
-		horse->set_position(Point<int>(32, 46));
-		horse->set_brain(new Talk_Brain("horse"));
-		horse->set_size(Size<int>(noo.tile_size*3, noo.tile_size));
-		noo.map->add_entity(horse);
+		Map_Entity *horse1 = new Map_Entity("horse");
+		horse1->load_sprite("horse");
+		horse1->set_position(Point<int>(32, 46));
+		horse1->set_brain(new Talk_Brain("horse"));
+		horse1->set_size(Size<int>(noo.tile_size*3, noo.tile_size));
+		horse1->set_direction(E);
+		noo.map->add_entity(horse1);
+
+		Map_Entity *horse2 = new Map_Entity("horse");
+		horse2->load_sprite("horse");
+		horse2->set_position(Point<int>(48, 48));
+		horse2->set_brain(new Talk_Brain("horse"));
+		horse2->set_size(Size<int>(noo.tile_size*3, noo.tile_size));
+		horse2->set_direction(W);
+		noo.map->add_entity(horse2);
 	}
 }
 
