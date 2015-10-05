@@ -22,7 +22,9 @@ void Talk_Brain::callback(void *data)
 {
 	Callback_Data *d = (Callback_Data *)data;
 
-	d->entity->set_direction(d->direction);
+	if (d->entity->should_face_activator()) {
+		d->entity->set_direction(d->direction);
+	}
 
 	if (d->user_callback) {
 		d->user_callback(data);
@@ -162,8 +164,10 @@ std::string Talk_Brain::get_speech(Map_Entity *activator, Map_Entity *activated)
 			callback_data.entity = activated;
 			callback_data.user_callback = user_callback;
 			callback_data.user_callback_data = user_callback_data;
-			Direction dir = get_facing_direction(activator, activated);
-			activated->set_direction(dir);
+			if (activated->should_face_activator()) {
+				Direction dir = get_facing_direction(activator, activated);
+				activated->set_direction(dir);
+			}
 			Point<float> entity_pos = (activated->get_position() + activated->get_offset()) * noo.tile_size + noo.map->get_offset();
 			int pipe = t->text.find('|');
 			if (pipe != std::string::npos) {
