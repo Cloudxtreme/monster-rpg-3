@@ -133,10 +133,11 @@ private:
 
 class Shop_Brain : public Brain {
 public:
+	static void buy_sell_callback(void *data);
 	static void callback(void *data);
 
 	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
-	~Shop_Brain();
+	virtual ~Shop_Brain();
 
 	bool activate(Map_Entity *activator);
 
@@ -145,7 +146,9 @@ public:
 	Inventory *get_inventory();
 	std::vector<int> &get_costs();
 
-private:
+protected:
+	void real_save(std::string brain_name, std::string &out);
+
 	std::string caption;
 	std::string yes_option;
 	std::string no_option;
@@ -155,6 +158,8 @@ private:
 	Inventory *original_inventory;
 	std::vector<int> original_costs;
 	int last_visit;
+	Direction original_direction;
+	bool direction_set;
 };
 
 class Growing_Brain : public Brain {
@@ -207,6 +212,18 @@ protected:
 	int delay;
 	Point<int> start_pos;
 	int count;
+};
+
+class No_Activate_Shop_Brain : public Shop_Brain {
+public:
+	No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, Inventory *inventory, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
+	virtual ~No_Activate_Shop_Brain();
+
+	bool activate(Map_Entity *activator);
+
+	bool save(std::string &out);
+
+	void manual_activate();
 };
 
 #endif // BRAINS_H

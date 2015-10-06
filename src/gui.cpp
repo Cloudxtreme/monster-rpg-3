@@ -38,6 +38,9 @@ static bool use_item(Stats *stats, int index)
 	else if (item->id == "baby_cabbage") {
 		DEC_HUNGER(0xffff/12);
 	}
+	else if (item->id == "chicken") {
+		DEC_HUNGER(0xffff);
+	}
 	else {
 		remove = false;
 	}

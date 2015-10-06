@@ -129,10 +129,10 @@ void ML_start::start(bool been_here_before)
 
 		Inventory *bartender_inventory = new Inventory();
 		std::vector<int> bartender_costs;
-		bartender_inventory->gold = 48;
-		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "pickled_egg", 1, 12);
-		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "beer", 1, 75);
-		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "wine", 2, 40);
+		bartender_inventory->gold = 40+rand()%20;
+		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "pickled_egg", 1, 8+rand()%6);
+		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "beer", 1, 15+rand()%10);
+		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "wine", 2, 10+rand()%10);
 		bartender_inventory->sort();
 
 		Inventory *bartender_original_inventory = bartender_inventory->clone();

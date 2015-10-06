@@ -174,11 +174,58 @@ void ML_cabbagetown::start(bool been_here_before)
 		horse2->set_should_face_activator(false);
 		noo.map->add_entity(horse2);
 
+		Inventory *earl_inventory = new Inventory();
+		std::vector<int> earl_costs;
+		earl_inventory->gold = 30+rand()%10;
+		Buy_Sell_GUI::add_item(earl_inventory, earl_costs, "chicken", 3, 5+rand()%5);
+		earl_inventory->sort();
+		Inventory *earl_original_inventory = earl_inventory->clone();
+		std::vector<int> earl_original_costs = earl_costs;
 		Map_Entity *earl = new Map_Entity("earl");
 		earl->load_sprite("earl");
+		earl->set_brain(new No_Activate_Shop_Brain(
+			"",
+			"",
+			"",
+			earl_inventory,
+			earl_costs,
+			earl_original_inventory,
+			earl_original_costs,
+			noo.get_play_time()
+		)
+		);
 		earl->set_position(Point<int>(38, 36));
 		earl->set_direction(S);
 		noo.map->add_entity(earl);
+
+		Inventory *suzy_inventory = new Inventory();
+		std::vector<int> suzy_costs;
+		suzy_inventory->gold = 100+rand()%50;
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "bandages", 5, 10+rand()%5);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "beer", 1, 5+rand()%5);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "cowboyhat", 14, 4);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "pitchfork", 30, 2);
+		suzy_inventory->sort();
+
+		Inventory *suzy_original_inventory = suzy_inventory->clone();
+		std::vector<int> suzy_original_costs = suzy_costs;
+
+		Map_Entity *suzy = new Map_Entity("suzy");
+		suzy->load_sprite("suzy");
+		suzy->set_brain(new Shop_Brain(
+			TRANSLATE("Howdy, pardner! See anything you like?")END,
+			TRANSLATE("Let me see what you've got.")END,
+			TRANSLATE("Just passing by...")END,
+			suzy_inventory,
+			suzy_costs,
+			suzy_original_inventory,
+			suzy_original_costs,
+			noo.get_play_time()
+		)
+		);
+		suzy->set_position(Point<int>(45, 45));
+		suzy->set_direction(W);
+		noo.map->add_entity(suzy);
 	}
 }
 
@@ -239,7 +286,12 @@ static void earl_answer(void *data)
 	Multiple_Choice_GUI::Callback_Data *d = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
 
 	if (d->choice == 0) {
-		noo.map->add_speech("name=Earl|" + TRANSLATE("Sorry, I'm all out of meat.")END, face_south, d->userdata);
+		Map_Entity *earl = static_cast<Map_Entity *>(d->userdata);
+		Brain *brain = earl->get_brain();
+		No_Activate_Shop_Brain *nasb = dynamic_cast<No_Activate_Shop_Brain *>(brain);
+		if (nasb) {
+			nasb->manual_activate();
+		}
 	}
 	else {
 		noo.map->add_speech("name=Earl|" + TRANSLATE("There are some jumbo size roosters in the woods south of here. I'll put a spring in your step, if you can catch me one. Dead or alive.")END, face_south, d->userdata);
