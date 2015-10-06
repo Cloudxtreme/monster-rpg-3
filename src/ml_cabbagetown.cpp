@@ -7,6 +7,44 @@
 #include "monster-rpg-3.h"
 #include "tweens.h"
 
+int ML_cabbagetown::tiggy_callback_data;
+
+void ML_cabbagetown::tiggy_callback(void *data)
+{
+	START_CALLBACK
+
+	NEXT_STAGE {
+		noo.map->add_speech("name=Tiggy|" + TRANSLATE("You were looking for me? You should know better.")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Eny|" + TRANSLATE("The old man wants you to join us on another one of his whacky adventures... you know, the usual... gold, jewels, fame.")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Gold and jewels? I'm tempted, but right now I'm a little hungry.")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Eny|" + TRANSLATE("Hungry? Come on Tiggy, let's go. You can grab an apple on the way...")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Actually I was thinking chicken pot pie... the kind Auntie May makes.")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Eny|" + TRANSLATE("Grrr! Do you promise you'll come if I get you pie?")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Life is too short to make promises.")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Eny|" + TRANSLATE("If you don't, I'll tell all the girls in town how I beat you in a sword fight!")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Just get the pie.")END, tiggy_callback, data);
+	}
+	NEXT_STAGE {
+		noo.map->add_speech("name=Eny|" + TRANSLATE("I'll be back soon...")END, tiggy_callback, data);
+	}
+}
+
 const int num_cabbages = 68;
 
 static void add_cabbage(int x, int y)
@@ -205,6 +243,8 @@ void ML_cabbagetown::start(bool been_here_before)
 		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "beer", 1, 5+rand()%5);
 		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "cowboyhat", 14, 4);
 		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "pitchfork", 30, 2);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "wheat", 2, 10+rand()%5);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "vegetables", 3, 5+rand()%5);
 		suzy_inventory->sort();
 
 		Inventory *suzy_original_inventory = suzy_inventory->clone();
@@ -226,6 +266,13 @@ void ML_cabbagetown::start(bool been_here_before)
 		suzy->set_position(Point<int>(45, 45));
 		suzy->set_direction(W);
 		noo.map->add_entity(suzy);
+
+		Map_Entity *tiggy = new Map_Entity("tiggy");
+		tiggy->load_sprite("tiggy");
+		tiggy->set_position(Point<int>(35, 47));
+		tiggy->set_size(Size<int>(noo.tile_size*2, noo.tile_size));
+		tiggy->set_should_face_activator(false);
+		noo.map->add_entity(tiggy);
 	}
 }
 
@@ -353,5 +400,9 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 	else if (activator == noo.player && activated->get_name() == "earl") {
 		activated->set_direction(get_facing_direction(activator, activated));
 		noo.map->add_speech("name=Earl|" + TRANSLATE("How's it hangin?^Are you looking for meat or quests?")END, earl_prompt, activated);
+	}
+	else if (activator == noo.player && activated->get_name() == "tiggy") {
+		tiggy_callback_data = 0;
+		noo.map->add_speech("name=Eny|" + TRANSLATE("Tiggy! There you are!")END, tiggy_callback, &tiggy_callback_data);
 	}
 }

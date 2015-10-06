@@ -7,7 +7,7 @@ using namespace Nooskewl_Engine;
 
 class ML_cabbagetown : public Map_Logic {
 public:
-	static void callback(void *data);
+	static void tiggy_callback(void *data);
 
 	ML_cabbagetown(int last_visited_time);
 
@@ -19,6 +19,8 @@ public:
 	void activate(Map_Entity *activator, Map_Entity *activated);
 
 private:
+	static int tiggy_callback_data;
+
 	int cabbages_to_regrow;
 };
 
