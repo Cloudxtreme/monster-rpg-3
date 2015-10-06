@@ -177,7 +177,6 @@ void ML_cabbagetown::start(bool been_here_before)
 		Map_Entity *earl = new Map_Entity("earl");
 		earl->load_sprite("earl");
 		earl->set_position(Point<int>(38, 36));
-		earl->set_brain(new Talk_Brain("earl"));
 		earl->set_direction(S);
 		noo.map->add_entity(earl);
 	}
@@ -210,7 +209,7 @@ struct Apple_Callback_Data {
 
 static Apple_Callback_Data acd;
 
-static void face_alfred_south(void *data)
+static void face_south(void *data)
 {
 	Map_Entity *alfred = static_cast<Map_Entity *>(data);
 	alfred->set_direction(S);
@@ -232,7 +231,29 @@ static void apple_callback(void *data)
 			noo.set_milestone(acd->ms1, true);
 		}
 	}
-	face_alfred_south(acd->alfred);
+	face_south(acd->alfred);
+}
+
+static void earl_answer(void *data)
+{
+	Multiple_Choice_GUI::Callback_Data *d = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
+
+	if (d->choice == 0) {
+		noo.map->add_speech("name=Earl|" + TRANSLATE("Sorry, I'm all out of meat.")END, face_south, d->userdata);
+	}
+	else {
+		noo.map->add_speech("name=Earl|" + TRANSLATE("There are some jumbo size roosters in the woods south of here. I'll put a spring in your step, if you can catch me one. Dead or alive.")END, face_south, d->userdata);
+	}
+}
+
+static void earl_prompt(void *data)
+{
+	std::vector<std::string> choices;
+	choices.push_back("Meat");
+	choices.push_back("Quests");
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("What are you looking for?")END, choices, earl_answer, data);
+	gui->start();
+	noo.guis.push_back(gui);
 }
 
 void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
@@ -254,11 +275,11 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 		choices.push_back(TRANSLATE("No")END);
 
 		if (acd.ms2_complete) {
-			noo.map->add_speech("name=Alfred|" + TRANSLATE("I'm not starving.")END, face_alfred_south, activated);
+			noo.map->add_speech("name=Alfred|" + TRANSLATE("I'm not starving.")END, face_south, activated);
 		}
 		else if (acd.ms1_complete) {
 			if (apple_index < 0) {
-				noo.map->add_speech("name=Alfred|" + TRANSLATE("Hey hey! Got any apples? I love apples.")END, face_alfred_south, activated);
+				noo.map->add_speech("name=Alfred|" + TRANSLATE("Hey hey! Got any apples? I love apples.")END, face_south, activated);
 			}
 			else {
 				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Got another apple? I'll make it worth it.")END, choices, apple_callback, &acd);
@@ -268,7 +289,7 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 		}
 		else {
 			if (apple_index < 0) {
-				noo.map->add_speech("name=Alfred|" + TRANSLATE("Hey hey! Got any apples? I love apples.")END, face_alfred_south, activated);
+				noo.map->add_speech("name=Alfred|" + TRANSLATE("Hey hey! Got any apples? I love apples.")END, face_south, activated);
 			}
 			else {
 				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Oh! Ohhh! Can I have that apple?")END, choices, apple_callback, &acd);
@@ -276,5 +297,9 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 				noo.guis.push_back(gui);
 			}
 		}
+	}
+	else if (activator == noo.player && activated->get_name() == "earl") {
+		activated->set_direction(get_facing_direction(activator, activated));
+		noo.map->add_speech("name=Earl|" + TRANSLATE("How's it hangin?^Are you looking for meat or quests?")END, earl_prompt, activated);
 	}
 }
