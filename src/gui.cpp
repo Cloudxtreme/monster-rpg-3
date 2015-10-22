@@ -303,6 +303,10 @@ Pause_GUI::Pause_GUI() :
 	armour_button->set_padding_top(2);
 	armour_button->set_parent(column3);
 
+	quests_button = new Widget_Text_Button(TRANSLATE("Quests")END, 1.0f, -1);
+	quests_button->set_padding_top(2);
+	quests_button->set_parent(column3);
+
 	Widget *audio_toggle_container = new Widget(1.0f, 5);
 	Sprite *audio_toggle_sprite = new Sprite("audio_toggle");
 	if (noo.mute) {
