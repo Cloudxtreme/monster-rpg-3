@@ -6,6 +6,7 @@
 #include "ml_cabbagetown.h"
 #include "ml_start.h"
 #include "ml_start_upper.h"
+#include "quest.h"
 
 bool dll_start()
 {
@@ -16,6 +17,11 @@ bool dll_start()
 void dll_end()
 {
 	end_brains();
+}
+
+void dll_game_started()
+{
+	init_quests();
 }
 
 Map_Logic *dll_get_map_logic(std::string map_name, int last_visited_time)
