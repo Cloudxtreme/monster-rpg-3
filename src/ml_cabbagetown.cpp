@@ -41,7 +41,7 @@ void ML_cabbagetown::tiggy_callback(void *data)
 		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Just get the pie.")END, tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Eny|" + TRANSLATE("I'll be back soon...")END, tiggy_callback, data);
+		noo.map->add_speech("name=Eny,+milestone=Get Pie|" + TRANSLATE("I'll be back soon...")END, tiggy_callback, data);
 	}
 }
 
@@ -341,7 +341,7 @@ static void earl_answer(void *data)
 		}
 	}
 	else {
-		noo.map->add_speech("name=Earl|" + TRANSLATE("There are some jumbo size roosters in the woods south of here. I'll put a spring in your step, if you can catch me one. Dead or alive.")END, face_south, d->userdata);
+		noo.map->add_speech("name=Earl,+milestone=Rooster Quest|" + TRANSLATE("There are some jumbo size roosters in the woods south of here. I'll put a spring in your step, if you can catch me one. Dead or alive.")END, face_south, d->userdata);
 	}
 }
 
