@@ -20,6 +20,7 @@ set(SRC
 	src/ml_start_upper.cpp
 	src/ml_cabbagetown.cpp
 	src/monster-rpg-3.cpp
+	src/quest.cpp
 	src/tweens.cpp
 )
 
