@@ -1,6 +1,7 @@
 #include "monster-rpg-3.h"
 #include "brains.h"
 #include "gui.h"
+#include "quest.h"
 
 static bool use_item(Stats *stats, int index)
 {
@@ -382,7 +383,11 @@ void Pause_GUI::update()
 		items_gui->start();
 		noo.guis.push_back(items_gui);
 	}
-
+	else if (quests_button->pressed()) {
+		Quests_GUI *quests_gui = new Quests_GUI();
+		quests_gui->start();
+		noo.guis.push_back(quests_gui);
+	}
 	if (audio_toggle->get_value() == noo.mute) { // if toggle changed
 		noo.mute = !noo.mute;
 		if (noo.mute) {
@@ -1720,3 +1725,74 @@ void Multiple_Choice_GUI::update()
 		exit();
 	}
 }
+
+//--
+
+Quests_GUI::Quests_GUI() :
+	exit_menu(false)
+{
+	for (size_t i = 0; i < quests.size(); i++) {
+		quests[i]->update();
+	}
+
+	Widget *modal_main_widget = new Widget(1.0f, 1.0f);
+	SDL_Colour background_colour = { 0, 0, 0, 192 };
+	modal_main_widget->set_background_colour(background_colour);
+
+	Widget_Window *window = new Widget_Window(0.95f, 0.95f);
+	window->set_center_x(true);
+	window->set_center_y(true);
+	window->set_parent(modal_main_widget);
+
+	TGUI_Widget *pad = new TGUI_Widget(1.0f, 1.0f);
+	pad->set_center_x(true);
+	pad->set_center_y(true);
+	pad->set_padding(5);
+	pad->set_parent(window);
+
+	std::vector<std::string> list_strings;
+
+	for (size_t i = 0; i < quests.size(); i++) {
+		Quest::Step *step = quests[i]->get_start_step();
+		if (step->is_finished()) {
+			indices.push_back(i);
+			list_strings.push_back(step->get_description());
+		}
+	}
+
+	list = new Widget_List(0.4f, 1.0f);
+	list->set_parent(pad);
+	list->set_items(list_strings);
+
+	Widget *tmp = new Widget(0.4f, 1.0f);
+	tmp->set_parent(pad);
+
+	done_button = new Widget_Text_Button(TRANSLATE("Done")END, -1, -1);
+	done_button->set_parent(pad);
+
+	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
+
+	gui->set_focus(list);
+}
+
+void Quests_GUI::handle_event(TGUI_Event *event)
+{
+	if ((event->type == TGUI_KEY_DOWN && event->keyboard.code == TGUIK_ESCAPE) ||
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
+
+		noo.button_mml->play(false);
+		exit_menu = true;
+	}
+	else {
+		GUI::handle_event(event);
+	}
+}
+
+void Quests_GUI::update()
+{
+	if (done_button->pressed() || exit_menu) {
+		exit();
+		return;
+	}
+}
+

@@ -241,4 +241,25 @@ private:
 	bool exit_menu;
 };
 
+class Quests_GUI : public GUI {
+public:
+	Quests_GUI();
+
+	void handle_event(TGUI_Event *event);
+	void update();
+
+private:
+	Widget_List *list;
+
+	Widget_Label *active_label_label;
+	Widget_Label *active_label;
+	Widget_Label *complete_label_label;
+	Widget_Label *complete_label;
+	Widget_Text_Button *done_button;
+
+	std::vector<int> indices; // where list items fall into quests vector
+
+	bool exit_menu;
+};
+
 #endif // M3_GUI_H

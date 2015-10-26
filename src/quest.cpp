@@ -130,4 +130,6 @@ void init_quests()
 	steps.push_back(step);
 	step = new Quest::Step(TRANSLATE("Jumbo Rooster")END, "Rooster Quest");
 	quests.push_back(new Quest(step, steps));
+
+	printf("pushed quests\n");
 }
