@@ -332,16 +332,21 @@ static void earl_answer(void *data)
 {
 	Multiple_Choice_GUI::Callback_Data *d = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
 
+	Map_Entity *earl = static_cast<Map_Entity *>(d->userdata);
+
 	if (d->choice == 0) {
-		Map_Entity *earl = static_cast<Map_Entity *>(d->userdata);
 		Brain *brain = earl->get_brain();
 		No_Activate_Shop_Brain *nasb = dynamic_cast<No_Activate_Shop_Brain *>(brain);
 		if (nasb) {
 			nasb->manual_activate();
 		}
+		face_south(earl);
 	}
 	else if (d->choice == 1) {
 		noo.map->add_speech("name=Earl,+milestone=Rooster Quest|" + TRANSLATE("There are some jumbo size roosters in the woods south of here. I'll put a spring in your step, if you can catch me one. Dead or alive.")END, face_south, d->userdata);
+	}
+	else {
+		face_south(earl);
 	}
 }
 
