@@ -136,7 +136,9 @@ void Widget_Quest_Details::draw()
 			check->draw_single(Point<int>(calculated_x + 5, y));
 		}
 
+		noo.font->enable_shadow(noo.shadow_colour, Font::DROP_SHADOW);
 		noo.font->draw_wrapped(noo.white, "  " + steps[i]->get_description(), Point<float>(calculated_x + 5.0f, (float)y), calculated_w - 10, line_height, -1, -1, 0, false, full, num_lines, width);
+		noo.font->disable_shadow();
 
 		y += line_height * (num_lines+1);
 	}

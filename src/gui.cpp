@@ -596,6 +596,22 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	pad->set_padding(5);
 	pad->set_parent(window);
 
+	Widget *title_container = new Widget(1.0f, int(noo.font->get_height() + 5));
+	title_container->set_parent(pad);
+	std::string title_text;
+	if (type == Item::OTHER) {
+		title_text = TRANSLATE("Items")END;
+	}
+	else if (type == Item::WEAPON) {
+		title_text = TRANSLATE("Weapons")END;
+	}
+	else if (type == Item::ARMOUR) {
+		title_text = TRANSLATE("Armour")END;
+	}
+	Widget_Label *title = new Widget_Label(title_text, 100);
+	title->set_center_x(true);
+	title->set_parent(title_container);
+
 	weight_header = new Widget(1.0f, int(noo.font->get_height() + 5));
 	weight_header->set_padding_bottom(2);
 	weight_header->set_parent(pad);
@@ -1751,6 +1767,12 @@ Quests_GUI::Quests_GUI() :
 	pad->set_padding(5);
 	pad->set_parent(window);
 
+	Widget *title_container = new Widget(1.0f, int(noo.font->get_height() + 5));
+	title_container->set_parent(pad);
+	Widget_Label *title = new Widget_Label(TRANSLATE("Quests")END, 100);
+	title->set_center_x(true);
+	title->set_parent(title_container);
+
 	std::vector<std::string> list_strings;
 
 	for (size_t i = 0; i < quests.size(); i++) {
@@ -1761,11 +1783,11 @@ Quests_GUI::Quests_GUI() :
 		}
 	}
 
-	list = new Widget_List(0.4f, 1.0f);
+	list = new Widget_List(0.4f, -1.0f);
 	list->set_parent(pad);
 	list->set_items(list_strings);
 	
-	TGUI_Widget *w = new TGUI_Widget(0.4f, 1.0f);
+	TGUI_Widget *w = new TGUI_Widget(0.4f, -1.0f);
 	w->set_parent(pad);
 	// Widget_Quest_Details takes all the space it can, so we need a container for it
 	Widget_Quest_Details *qd = new Widget_Quest_Details(list, indices);
