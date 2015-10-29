@@ -340,7 +340,7 @@ static void earl_answer(void *data)
 			nasb->manual_activate();
 		}
 	}
-	else {
+	else if (d->choice == 1) {
 		noo.map->add_speech("name=Earl,+milestone=Rooster Quest|" + TRANSLATE("There are some jumbo size roosters in the woods south of here. I'll put a spring in your step, if you can catch me one. Dead or alive.")END, face_south, d->userdata);
 	}
 }
@@ -348,8 +348,9 @@ static void earl_answer(void *data)
 static void earl_prompt(void *data)
 {
 	std::vector<std::string> choices;
-	choices.push_back("Meat");
-	choices.push_back("Quests");
+	choices.push_back(TRANSLATE("Meat")END);
+	choices.push_back(TRANSLATE("Quests")END);
+	choices.push_back(TRANSLATE("Nevermind...")END);
 	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("What are you looking for?")END, choices, earl_answer, data);
 	gui->start();
 	noo.guis.push_back(gui);
