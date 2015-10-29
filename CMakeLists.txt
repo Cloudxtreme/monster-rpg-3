@@ -22,6 +22,7 @@ set(SRC
 	src/monster-rpg-3.cpp
 	src/quest.cpp
 	src/tweens.cpp
+	src/widgets.cpp
 )
 
 if(WIN32)

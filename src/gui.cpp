@@ -2,6 +2,7 @@
 #include "brains.h"
 #include "gui.h"
 #include "quest.h"
+#include "widgets.h"
 
 static bool use_item(Stats *stats, int index)
 {
@@ -1763,9 +1764,12 @@ Quests_GUI::Quests_GUI() :
 	list = new Widget_List(0.4f, 1.0f);
 	list->set_parent(pad);
 	list->set_items(list_strings);
-
-	Widget *tmp = new Widget(0.4f, 1.0f);
-	tmp->set_parent(pad);
+	
+	TGUI_Widget *w = new TGUI_Widget(0.4f, 1.0f);
+	w->set_parent(pad);
+	// Widget_Quest_Details takes all the space it can, so we need a container for it
+	Widget_Quest_Details *qd = new Widget_Quest_Details(list, indices);
+	qd->set_parent(w);
 
 	done_button = new Widget_Text_Button(TRANSLATE("Done")END, -1, -1);
 	done_button->set_parent(pad);
