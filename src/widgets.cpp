@@ -14,6 +14,15 @@ Widget_Quest_Details::Widget_Quest_Details(Widget_List *list, std::vector<int> i
 	accepts_focus = true;
 
 	current_quest = list->get_selected();
+
+	minus = new Image("minus.tga");
+	check = new Image("check.tga");
+}
+
+Widget_Quest_Details::~Widget_Quest_Details()
+{
+	delete minus;
+	delete check;
 }
 
 void Widget_Quest_Details::handle_event(TGUI_Event *event)
@@ -87,7 +96,7 @@ void Widget_Quest_Details::draw()
 		bool full;
 		int num_lines;
 		int width;
-		noo.font->draw_wrapped(noo.white, "   " + steps[i]->get_description(), Point<float>(0.0f, 0.0f), calculated_w - 10, line_height, -1, -1, 0, true, full, num_lines, width);
+		noo.font->draw_wrapped(noo.white, "  " + steps[i]->get_description(), Point<float>(0.0f, 0.0f), calculated_w - 10, line_height, -1, -1, 0, true, full, num_lines, width);
 
 		total_lines += num_lines;
 	}
@@ -119,7 +128,15 @@ void Widget_Quest_Details::draw()
 		bool full;
 		int num_lines;
 		int width;
-		noo.font->draw_wrapped(noo.white, "   " + steps[i]->get_description(), Point<float>(calculated_x + 5.0f, (float)y), calculated_w - 10, line_height, -1, -1, 0, false, full, num_lines, width);
+
+		if (display_unfinished_step && i == steps_to_display) {
+			minus->draw_single(Point<int>(calculated_x + 5, y));
+		}
+		else {
+			check->draw_single(Point<int>(calculated_x + 5, y));
+		}
+
+		noo.font->draw_wrapped(noo.white, "  " + steps[i]->get_description(), Point<float>(calculated_x + 5.0f, (float)y), calculated_w - 10, line_height, -1, -1, 0, false, full, num_lines, width);
 
 		y += line_height * (num_lines+1);
 	}
