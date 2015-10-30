@@ -1496,7 +1496,7 @@ void Buy_Sell_GUI::add_item(Item *item, bool buying)
 		v.push_back(item);
 		if (new_item) {
 			inventory->items.insert(inventory->items.begin() + offset, v);
-			inventory->sort(0, max+1);
+			inventory->sort(0, max);
 		}
 		else {
 			bool found = false;
@@ -1512,7 +1512,7 @@ void Buy_Sell_GUI::add_item(Item *item, bool buying)
 				inventory->sort(max);
 			}
 			else {
-				inventory->sort(0, max+1);
+				inventory->sort(0, max);
 			}
 		}
 		if (buying) {
