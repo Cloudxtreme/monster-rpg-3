@@ -151,7 +151,7 @@ public:
 	static void confirm_callback(void *data);
 	static void get_number_callback(void *data);
 
-	Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller_costs, bool is_storage, Callback done_callback = 0, void *callback_data = 0);
+	Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, std::vector<int> &seller_costs, bool is_storage, Callback done_callback = 0, void *callback_data = 0);
 	virtual ~Buy_Sell_GUI();
 
 	void handle_event(TGUI_Event *event);
@@ -175,6 +175,8 @@ private:
 	void merge(Inventory *inventory, int count);
 	void move_original(Inventory *inventory, int count, std::vector<Item *> &move_from, std::vector<Item *> &move_to);
 	void maybe_confirm();
+	int get_your_gold();
+	int get_their_gold();
 
 	Widget_Label *your_gold_label;
 	Widget_List *your_list;
@@ -218,6 +220,10 @@ private:
 
 	Item *start_weapon;
 	Item *start_armour;
+
+	int seller_multiplier;
+
+	int transaction;
 };
 
 class Multiple_Choice_GUI : public GUI {

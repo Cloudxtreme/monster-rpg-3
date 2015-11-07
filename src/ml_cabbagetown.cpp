@@ -215,7 +215,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		Inventory *earl_inventory = new Inventory();
 		std::vector<int> earl_costs;
 		earl_inventory->gold = 30+rand()%10;
-		Buy_Sell_GUI::add_item(earl_inventory, earl_costs, "chicken", 3, 5+rand()%5);
+		Buy_Sell_GUI::add_item(earl_inventory, earl_costs, "chicken", 300, 5+rand()%5);
 		earl_inventory->sort();
 		Inventory *earl_original_inventory = earl_inventory->clone();
 		std::vector<int> earl_original_costs = earl_costs;
@@ -225,6 +225,7 @@ void ML_cabbagetown::start(bool been_here_before)
 			"",
 			"",
 			"",
+			125,
 			earl_inventory,
 			earl_costs,
 			earl_original_inventory,
@@ -239,12 +240,12 @@ void ML_cabbagetown::start(bool been_here_before)
 		Inventory *suzy_inventory = new Inventory();
 		std::vector<int> suzy_costs;
 		suzy_inventory->gold = 100+rand()%50;
-		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "bandages", 5, 10+rand()%5);
-		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "beer", 1, 5+rand()%5);
-		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "cowboyhat", 14, 4);
-		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "pitchfork", 30, 2);
-		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "wheat", 2, 10+rand()%5);
-		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "vegetables", 3, 5+rand()%5);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "bandages", 500, 10+rand()%5);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "beer", 100, 5+rand()%5);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "cowboyhat", 1400, 4);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "pitchfork", 3000, 2);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "wheat", 200, 10+rand()%5);
+		Buy_Sell_GUI::add_item(suzy_inventory, suzy_costs, "vegetables", 300, 5+rand()%5);
 		suzy_inventory->sort();
 
 		Inventory *suzy_original_inventory = suzy_inventory->clone();
@@ -256,6 +257,7 @@ void ML_cabbagetown::start(bool been_here_before)
 			TRANSLATE("Howdy, pardner! See anything you like?")END,
 			TRANSLATE("Let me see what you've got.")END,
 			TRANSLATE("Just passing by...")END,
+			110,
 			suzy_inventory,
 			suzy_costs,
 			suzy_original_inventory,

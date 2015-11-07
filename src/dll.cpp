@@ -121,6 +121,8 @@ Brain *dll_get_brain(std::string type, std::string data)
 		std::string no_option = t2.next();
 		no_option = unescape_string(no_option);
 
+		int multiplier = atoi(t2.next().c_str());
+
 		std::string inv_size_s = t2.next();
 		int inv_size = atoi(inv_size_s.c_str());
 
@@ -170,10 +172,10 @@ Brain *dll_get_brain(std::string type, std::string data)
 		original_inventory->from_string(original_inventory_s);
 
 		if (type == "shop") {
-			return new Shop_Brain(caption, yes_option, no_option, inventory, costs, original_inventory, original_costs, last_visit);
+			return new Shop_Brain(caption, yes_option, no_option, multiplier, inventory, costs, original_inventory, original_costs, last_visit);
 		}
 		else {
-			return new No_Activate_Shop_Brain(caption, yes_option, no_option, inventory, costs, original_inventory, original_costs, last_visit);
+			return new No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, inventory, costs, original_inventory, original_costs, last_visit);
 		}
 	}
 	else if (type == "growing_brain") {

@@ -846,7 +846,7 @@ void Items_GUI::set_labels()
 
 			int condition = 100 * item->condition / 0xffff;
 
-			weight_label->set_text(TRANSLATE("Weight")END + ": " + Inventory::weight_to_string(item->weight));
+			weight_label->set_text(TRANSLATE("Weight")END + ": " + Inventory::decimal_to_string(item->weight));
 
 			if (item->type != Item::OTHER) {
 				condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
@@ -857,7 +857,7 @@ void Items_GUI::set_labels()
 
 			int value = item->get_value();
 
-			value_label->set_text(TRANSLATE("Value")END + ": " + itos(value));
+			value_label->set_text(TRANSLATE("Value")END + ": " + Inventory::decimal_to_string(value));
 
 			int attack = int(item->min_attack + ((condition / 100.0f) * (item->max_attack - item->min_attack)));
 
@@ -870,8 +870,8 @@ void Items_GUI::set_labels()
 	int carrying = stats->inventory->get_total_weight();
 	int capacity = stats->strength * 1000;
 
-	carrying_label->set_text(TRANSLATE("Carrying")END + " " + Inventory::weight_to_string(carrying));
-	capacity_label->set_text(Inventory::weight_to_string(capacity) + " " + TRANSLATE("Capacity")END);
+	carrying_label->set_text(TRANSLATE("Carrying")END + " " + Inventory::decimal_to_string(carrying));
+	capacity_label->set_text(Inventory::decimal_to_string(capacity) + " " + TRANSLATE("Capacity")END);
 
 	if (carrying > capacity) {
 		SDL_Colour red = { 255, 0, 0, 255 };
@@ -1032,7 +1032,7 @@ void Buy_Sell_GUI::get_number_callback(void *data)
 	got_number = true;
 }
 
-Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller_costs, bool is_storage, Callback done_callback, void *callback_data) :
+Buy_Sell_GUI::Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, std::vector<int> &seller_costs, bool is_storage, Callback done_callback, void *callback_data) :
 	seller_inventory(seller_inventory),
 	seller_costs(seller_costs),
 	sell_count(0),
@@ -1040,7 +1040,9 @@ Buy_Sell_GUI::Buy_Sell_GUI(Inventory *seller_inventory, std::vector<int> &seller
 	is_storage(is_storage),
 	exit_menu(false),
 	done_callback(done_callback),
-	callback_data(callback_data)
+	callback_data(callback_data),
+	transaction(0),
+	seller_multiplier(seller_multiplier)
 {
 	cancel = false; // statics, can't use initializer list
 	got_number = false;
@@ -1224,12 +1226,12 @@ void Buy_Sell_GUI::update()
 	int pressed;
 
 	if (accept_button->pressed()) {
-		if (stats->inventory->gold < 0) {
+		if (get_your_gold() < 0) {
 			Notification_GUI *gui = new Notification_GUI(TRANSLATE("You don't have enough gold for this transaction.")END);
 			gui->start();
 			noo.guis.push_back(gui);
 		}
-		else if (seller_inventory->gold < 0) {
+		else if (get_their_gold() < 0) {
 			Notification_GUI *gui = new Notification_GUI(TRANSLATE("Seller doesn't have enough gold for this transaction.")END);
 			gui->start();
 			noo.guis.push_back(gui);
@@ -1242,6 +1244,9 @@ void Buy_Sell_GUI::update()
 			buy_count = 0;
 			sell_count = 0;
 			clear_hilights();
+			stats->inventory->sort();
+			seller_inventory->sort();
+
 			if (is_storage == false) {
 				seller_costs.clear();
 				for (size_t i = 0; i < seller_inventory->items.size(); i++) {
@@ -1249,12 +1254,14 @@ void Buy_Sell_GUI::update()
 				}
 			}
 
-			stats->inventory->sort();
-			seller_inventory->sort();
-
 			set_lists();
 
 			cha_ching->play(false);
+
+			stats->inventory->gold = get_your_gold();
+			seller_inventory->gold = get_their_gold();
+
+			transaction = 0;
 		}
 	}
 	else if (done_button->pressed()) {
@@ -1327,7 +1334,7 @@ void Buy_Sell_GUI::set_labels()
 
 		int condition = 100 * item->condition / 0xffff;
 
-		weight_label->set_text(TRANSLATE("Weight")END + ": " + Inventory::weight_to_string(item->weight));
+		weight_label->set_text(TRANSLATE("Weight")END + ": " + Inventory::decimal_to_string(item->weight));
 
 		if (item->type != Item::OTHER) {
 			condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
@@ -1338,7 +1345,7 @@ void Buy_Sell_GUI::set_labels()
 
 		int value = item->get_value();
 
-		value_label->set_text(TRANSLATE("Value")END + ": " + itos(value));
+		value_label->set_text(TRANSLATE("Value")END + ": " + Inventory::decimal_to_string(value));
 
 		std::string cost_text;
 		if (is_storage == false) {
@@ -1348,7 +1355,8 @@ void Buy_Sell_GUI::set_labels()
 			else {
 				cost_text = TRANSLATE("Sell price")END + ": ";
 			}
-			cost_text += itos(get_cost(is_your_list));
+			cost_text += Inventory::decimal_to_string(
+				is_your_list ? get_cost(is_your_list) : get_cost(is_your_list) * seller_multiplier / 100);
 		}
 		else {
 			cost_text = "-";
@@ -1364,8 +1372,8 @@ void Buy_Sell_GUI::set_labels()
 	}
 
 	if (is_storage == false) {
-		your_gold_label->set_text(itos(stats->inventory->gold) + " gold (You)");
-		their_gold_label->set_text(itos(seller_inventory->gold) + " gold (Them)");
+		your_gold_label->set_text(itos(get_your_gold()) + " gold (You)");
+		their_gold_label->set_text(itos(get_their_gold()) + " gold (Them)");
 	}
 
 	gui->layout();
@@ -1409,6 +1417,7 @@ Item *Buy_Sell_GUI::remove_item(int index, bool buying)
 
 	Item *item = inventory->items[index][0];
 	int count = inventory->items[index].size();
+	bool is_original = false;
 
 	if (count == 1) {
 		if (index == inventory->items.size()-1) {
@@ -1422,22 +1431,38 @@ Item *Buy_Sell_GUI::remove_item(int index, bool buying)
 		inventory->items.erase(inventory->items.begin() + index);
 		if (buying && index < sell_count) {
 			sell_count--;
+			is_original = true;
 		}
 		else if (!buying && index < buy_count) {
 			buy_count--;
+			is_original = true;
 		}
 	}
 	else {
 		inventory->items[index].erase(inventory->items[index].begin());
+		if (buying && index < sell_count) {
+			is_original = true;
+		}
+		else if (!buying && index < buy_count) {
+			is_original = true;
+		}
 	}
 
 	if (buying) {
-		stats->inventory->gold -= costs[item];
-		seller_inventory->gold += costs[item];
+		if (is_original) {
+			transaction -= costs[item];
+		}
+		else {
+			transaction -= costs[item] * seller_multiplier / 100;
+		}
 	}
 	else {
-		stats->inventory->gold += costs[item];
-		seller_inventory->gold -= costs[item];
+		if (is_original) {
+			transaction += costs[item] * seller_multiplier / 100;
+		}
+		else {
+			transaction += costs[item];
+		}
 	}
 
 	return item;
@@ -1684,6 +1709,29 @@ void Buy_Sell_GUI::maybe_confirm()
 		}
 		exit();
 	}
+}
+
+int Buy_Sell_GUI::get_your_gold()
+{
+	int gold = stats->inventory->gold * 100;
+
+	if (transaction < 0) {
+		gold = int(floor((gold + transaction) / 100.0f));
+	}
+	else {
+		gold = (gold + transaction) / 100;
+	}
+
+	return gold;
+}
+
+int Buy_Sell_GUI::get_their_gold()
+{
+	int gold = seller_inventory->gold * 100;
+
+	gold = int(ceil((gold - transaction) / 100.0f));
+
+	return gold;
 }
 
 //--
