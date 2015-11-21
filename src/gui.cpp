@@ -334,7 +334,7 @@ void Pause_GUI::handle_event(TGUI_Event *event)
 {
 	if (
 		(event->type == TGUI_KEY_DOWN && event->keyboard.code == TGUIK_ESCAPE) ||
-		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b2)) {
 		noo.button_mml->play(false);
 		exit_menu = true;
 	}
@@ -739,7 +739,7 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 void Items_GUI::handle_event(TGUI_Event *event)
 {
 	if ((event->type == TGUI_KEY_DOWN && event->keyboard.code == TGUIK_ESCAPE) ||
-		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b2)) {
 
 		noo.button_mml->play(false);
 		exit_menu = true;
@@ -1208,7 +1208,7 @@ Buy_Sell_GUI::~Buy_Sell_GUI()
 void Buy_Sell_GUI::handle_event(TGUI_Event *event)
 {
 	if ((event->type == TGUI_KEY_DOWN && event->keyboard.code == TGUIK_ESCAPE) ||
-		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b2)) {
 
 		noo.button_mml->play(false);
 		maybe_confirm();
@@ -1860,7 +1860,7 @@ Quests_GUI::Quests_GUI() :
 void Quests_GUI::handle_event(TGUI_Event *event)
 {
 	if ((event->type == TGUI_KEY_DOWN && event->keyboard.code == TGUIK_ESCAPE) ||
-		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b1)) {
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b2)) {
 
 		noo.button_mml->play(false);
 		exit_menu = true;
