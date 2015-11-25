@@ -345,10 +345,6 @@ void Pause_GUI::handle_event(TGUI_Event *event)
 
 void Pause_GUI::update()
 {
-	if (this == noo.guis[noo.guis.size()-1]) {
-		hidden = false;
-	}
-
 	if (check_quit() == false || resume_button->pressed() || exit_menu) {
 		noo.game_unpaused();
 		exit();
@@ -373,7 +369,6 @@ void Pause_GUI::update()
 		Items_GUI *items_gui = new Items_GUI(Item::OTHER, callback);
 		items_gui->start();
 		noo.guis.push_back(items_gui);
-		hidden = true;
 	}
 	else if (weapons_button->pressed()) {
 		showing_items = true;
@@ -381,7 +376,6 @@ void Pause_GUI::update()
 		Items_GUI *items_gui = new Items_GUI(Item::WEAPON, callback);
 		items_gui->start();
 		noo.guis.push_back(items_gui);
-		hidden = true;
 	}
 	else if (armour_button->pressed()) {
 		showing_items = true;
@@ -389,13 +383,11 @@ void Pause_GUI::update()
 		Items_GUI *items_gui = new Items_GUI(Item::ARMOUR, callback);
 		items_gui->start();
 		noo.guis.push_back(items_gui);
-		hidden = true;
 	}
 	else if (quests_button->pressed()) {
 		Quests_GUI *quests_gui = new Quests_GUI();
 		quests_gui->start();
 		noo.guis.push_back(quests_gui);
-		hidden = true;
 	}
 	if (audio_toggle->get_value() == noo.mute) { // if toggle changed
 		noo.mute = !noo.mute;
