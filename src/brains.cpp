@@ -639,7 +639,7 @@ bool Shop_Brain::activate(Map_Entity *activator)
 	std::vector<std::string> choices;
 	choices.push_back(yes_option);
 	choices.push_back(no_option);
-	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(caption, choices, -1, callback, this);
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(caption, choices, 1, callback, this);
 	gui->start();
 	noo.guis.push_back(gui);
 	return true;
