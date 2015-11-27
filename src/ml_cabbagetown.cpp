@@ -358,7 +358,7 @@ static void earl_prompt(void *data)
 	choices.push_back(TRANSLATE("Meat")END);
 	choices.push_back(TRANSLATE("Quests")END);
 	choices.push_back(TRANSLATE("Nevermind...")END);
-	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("What are you looking for?")END, choices, earl_answer, data);
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("What are you looking for?")END, choices, 2, earl_answer, data);
 	gui->start();
 	noo.guis.push_back(gui);
 }
@@ -389,7 +389,7 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 				noo.map->add_speech("name=Alfred|" + TRANSLATE("Hey hey! Got any apples? I love apples.")END, face_south, activated);
 			}
 			else {
-				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Got another apple? I'll make it worth it.")END, choices, apple_callback, &acd);
+				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Got another apple? I'll make it worth it.")END, choices, 1, apple_callback, &acd);
 				gui->start();
 				noo.guis.push_back(gui);
 			}
@@ -399,7 +399,7 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 				noo.map->add_speech("name=Alfred|" + TRANSLATE("Hey hey! Got any apples? I love apples.")END, face_south, activated);
 			}
 			else {
-				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Oh! Ohhh! Can I have that apple?")END, choices, apple_callback, &acd);
+				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Oh! Ohhh! Can I have that apple?")END, choices, 1, apple_callback, &acd);
 				gui->start();
 				noo.guis.push_back(gui);
 			}

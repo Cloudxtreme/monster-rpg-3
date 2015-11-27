@@ -233,8 +233,9 @@ public:
 		void *userdata;
 	};
 
-	Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, Callback callback, void *callback_data);
+	Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, int escape_choice, Callback callback, void *callback_data);
 
+	void handle_event(TGUI_Event *event);
 	void update();
 
 private:
@@ -245,6 +246,8 @@ private:
 	void *callback_data;
 
 	bool exit_menu;
+
+	int escape_choice; // escape is the same as this one unless this is -1 then escape does nothing
 };
 
 class Quests_GUI : public GUI {

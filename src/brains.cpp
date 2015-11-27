@@ -639,7 +639,7 @@ bool Shop_Brain::activate(Map_Entity *activator)
 	std::vector<std::string> choices;
 	choices.push_back(yes_option);
 	choices.push_back(no_option);
-	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(caption, choices, callback, this);
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(caption, choices, -1, callback, this);
 	gui->start();
 	noo.guis.push_back(gui);
 	return true;
@@ -736,7 +736,7 @@ bool Growing_Brain::activate(Map_Entity *activator)
 		choices.push_back(TRANSLATE("Yes")END);
 		choices.push_back(TRANSLATE("No")END);
 
-		Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("This is owned by someone. Really take it?")END, choices, callback, &callback_data);
+		Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("This is owned by someone. Really take it?")END, choices, 1, callback, &callback_data);
 		gui->start();
 		noo.guis.push_back(gui);
 

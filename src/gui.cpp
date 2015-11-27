@@ -1736,10 +1736,11 @@ int Buy_Sell_GUI::get_their_gold()
 
 //--
 
-Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, Callback callback, void *callback_data) :
+Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::string> choices, int escape_choice, Callback callback, void *callback_data) :
 	callback(callback),
 	callback_data(callback_data),
-	exit_menu(false)
+	exit_menu(false),
+	escape_choice(escape_choice)
 {
 	int w = 150;
 
@@ -1788,6 +1789,22 @@ void Multiple_Choice_GUI::update()
 		data.userdata = callback_data;
 		callback((void *)&data);
 		exit();
+	}
+}
+
+void Multiple_Choice_GUI::handle_event(TGUI_Event *event)
+{
+	if (escape_choice >= 0 && ((event->type == TGUI_KEY_DOWN && event->keyboard.code == TGUIK_ESCAPE) ||
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b2))) {
+		noo.button_mml->play(false);
+		Callback_Data data;
+		data.choice = escape_choice;
+		data.userdata = callback_data;
+		callback((void *)&data);
+		exit();
+	}
+	else {
+		GUI::handle_event(event);
 	}
 }
 

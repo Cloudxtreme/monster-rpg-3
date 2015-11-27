@@ -140,10 +140,10 @@ void ML_start::start(bool been_here_before)
 
 		bartender = new Map_Entity("bartender");
 		bartender->load_sprite("bartender");
-		bartender->set_brain(new Shop_Brain(
-			TRANSLATE("No loitering, kid! Either get drunk or get out!")END,
-			TRANSLATE("Let me see what you've got.")END,
-			TRANSLATE("I was just leaving...")END,
+		bartender->set_brain(new No_Activate_Shop_Brain(
+			"",
+			"",
+			"",
 			125,
 			bartender_inventory,
 			bartender_costs,
@@ -345,6 +345,39 @@ void ML_start::update()
 {
 }
 
+static void bartender_answer(void *data)
+{
+	Multiple_Choice_GUI::Callback_Data *d = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
+
+	Map_Entity *bartender = static_cast<Map_Entity *>(d->userdata);
+
+	if (d->choice == 0) {
+		Brain *brain = bartender->get_brain();
+		No_Activate_Shop_Brain *nasb = dynamic_cast<No_Activate_Shop_Brain *>(brain);
+		if (nasb) {
+			nasb->manual_activate();
+		}
+	}
+}
+
+static void bartender_prompt(void *data)
+{
+	std::vector<std::string> choices;
+	choices.push_back(TRANSLATE("Let me see what you've got.")END);
+	choices.push_back(TRANSLATE("I was just leaving...")END);
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("No loitering, kid! Either get drunk or get out!")END, choices, 1, bartender_answer, data);
+	gui->start();
+	noo.guis.push_back(gui);
+}
+
 void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
+	if (activated->get_name() == "bartender") {
+		if (noo.player->get_stats()->status == Stats::DRUNK) {
+			noo.map->add_speech("name=" + TRANSLATE("Bartender")END + "|" + TRANSLATE("Whoa whoa whoa! I think you've had enough!")END);
+		}
+		else {
+			bartender_prompt(activated);
+		}
+	}
 }
