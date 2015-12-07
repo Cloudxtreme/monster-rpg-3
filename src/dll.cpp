@@ -262,15 +262,6 @@ Brain *dll_get_brain(std::string type, std::string data)
 	return 0;
 }
 
-std::vector<std::string> dll_get_actions(Map_Entity *entity)
-{
-	std::vector<std::string> v;
-
-	v.push_back("Activate");
-
-	return v;
-}
-
-void dll_take_action(std::string action, Map_Entity *entity)
+void dll_choose_action(Map_Entity *entity)
 {
 }
