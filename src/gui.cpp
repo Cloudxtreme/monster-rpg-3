@@ -1743,15 +1743,21 @@ Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::s
 	escape_choice(escape_choice)
 {
 	int w = 150;
+	int h;
 
 	bool full;
 	int num_lines;
 	int width;
 
 	// Get caption # lines
-	noo.font->draw_wrapped(noo.white, caption, Point<float>(0, 0), w, (int)noo.font->get_height() + 3, -1, 0, 0, true, full, num_lines, width);
-
-	int h = int((noo.font->get_height() + 3) * (3 + num_lines + 1));
+	if (caption == "") {
+		num_lines = -1;
+		h = int((noo.font->get_height() + 3) * 3);
+	}
+	else {
+		noo.font->draw_wrapped(noo.white, caption, Point<float>(0, 0), w, (int)noo.font->get_height() + 3, -1, 0, 0, true, full, num_lines, width);
+		h = int((noo.font->get_height() + 3) * (3 + num_lines + 1));
+	}
 
 	TGUI_Widget *modal_main_widget = new TGUI_Widget(1.0f, 1.0f);
 
@@ -1766,9 +1772,11 @@ Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::s
 	pad->set_padding(5);
 	pad->set_parent(window);
 
-	caption_label = new Widget_Label(caption, w);
-	caption_label->set_center_x(true);
-	caption_label->set_parent(pad);
+	if (caption != "") {
+		caption_label = new Widget_Label(caption, w);
+		caption_label->set_center_x(true);
+		caption_label->set_parent(pad);
+	}
 
 	list = new Widget_List(1.0f, int(h - (num_lines + 1) * (noo.font->get_height() + 3)));
 	list->set_items(choices);

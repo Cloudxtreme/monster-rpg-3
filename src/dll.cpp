@@ -262,8 +262,16 @@ Brain *dll_get_brain(std::string type, std::string data)
 	return 0;
 }
 
+static void choose_action_callback(void *data)
+{
+	noo.map->activate(noo.player);
+}
+
 bool dll_choose_action(Map_Entity *entity)
 {
-	printf("choose action: %p\n", entity);
-	return false;
+	std::vector<std::string> choices;
+	choices.push_back("Activate");
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI("", choices, -1, choose_action_callback, NULL);
+	noo.guis.push_back(gui);
+	return true;
 }
