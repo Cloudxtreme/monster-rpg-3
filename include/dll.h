@@ -15,9 +15,11 @@ extern "C" {
 	MONSTERRPG3_EXPORT bool dll_start();
 	MONSTERRPG3_EXPORT void dll_end();
 	MONSTERRPG3_EXPORT void dll_game_started();
+	MONSTERRPG3_EXPORT void dll_pause();
 	MONSTERRPG3_EXPORT Map_Logic *dll_get_map_logic(std::string map_name, int last_visited_time);
 	MONSTERRPG3_EXPORT Brain *dll_get_brain(std::string type, std::string data);
-	MONSTERRPG3_EXPORT void dll_pause();
+	MONSTERRPG3_EXPORT std::vector<std::string> dll_get_actions(Map_Entity *entity);
+	MONSTERRPG3_EXPORT void dll_take_action(std::string action, Map_Entity *entity);
 }
 
 #endif // DLL_H

@@ -24,6 +24,13 @@ void dll_game_started()
 	init_quests();
 }
 
+void dll_pause()
+{
+	Pause_GUI *gui = new Pause_GUI();
+	gui->start();
+	noo.guis.push_back(gui);
+}
+
 Map_Logic *dll_get_map_logic(std::string map_name, int last_visited_time)
 {
 	Map_Logic *ml = NULL;
@@ -255,9 +262,15 @@ Brain *dll_get_brain(std::string type, std::string data)
 	return 0;
 }
 
-void dll_pause()
+std::vector<std::string> dll_get_actions(Map_Entity *entity)
 {
-	Pause_GUI *gui = new Pause_GUI();
-	gui->start();
-	noo.guis.push_back(gui);
+	std::vector<std::string> v;
+
+	v.push_back("Activate");
+
+	return v;
+}
+
+void dll_take_action(std::string action, Map_Entity *entity)
+{
 }
