@@ -262,6 +262,8 @@ Brain *dll_get_brain(std::string type, std::string data)
 	return 0;
 }
 
-void dll_choose_action(Map_Entity *entity)
+bool dll_choose_action(Map_Entity *entity)
 {
+	printf("choose action: %p\n", entity);
+	return false;
 }
