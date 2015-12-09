@@ -196,7 +196,7 @@ void ML_cabbagetown::start(bool been_here_before)
 
 		Map_Entity *horse1 = new Map_Entity("horse");
 		horse1->load_sprite("horse");
-		horse1->set_position(Point<int>(32, 46));
+		horse1->set_position(Point<int>(30, 46));
 		horse1->set_brain(new Talk_Brain("horse"));
 		horse1->set_size(Size<int>(noo.tile_size*3, noo.tile_size));
 		horse1->set_direction(E);
@@ -205,7 +205,7 @@ void ML_cabbagetown::start(bool been_here_before)
 
 		Map_Entity *horse2 = new Map_Entity("horse");
 		horse2->load_sprite("horse");
-		horse2->set_position(Point<int>(48, 48));
+		horse2->set_position(Point<int>(46, 48));
 		horse2->set_brain(new Talk_Brain("horse"));
 		horse2->set_size(Size<int>(noo.tile_size*3, noo.tile_size));
 		horse2->set_direction(W);

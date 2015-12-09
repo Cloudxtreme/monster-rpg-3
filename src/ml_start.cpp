@@ -153,6 +153,7 @@ void ML_start::start(bool been_here_before)
 		)
 		);
 		bartender->set_position(Point<int>(19, 19));
+		bartender->set_draw_offset(Point<int>(-10, 0));
 
 		sitting_lady = new Map_Entity("sitting_lady");
 		sitting_lady->load_sprite("sitting_lady");
@@ -169,6 +170,7 @@ void ML_start::start(bool been_here_before)
 		drinker->load_sprite("drinker");
 		drinker->set_brain(new Talk_Then_Animate_Brain("drinker"));
 		drinker->set_position(Point<int>(14, 8));
+		drinker->set_draw_offset(Point<int>(-7, 0));
 
 		noo.map->add_entity(coro);
 		noo.map->add_entity(sunshine);
@@ -185,6 +187,7 @@ void ML_start::start(bool been_here_before)
 		drinker_bottle->set_brain(new Item_Brain("bottle", 1, drinker_bottle_milestone));
 		drinker_bottle->set_position(Point<int>(13, 8));
 		drinker_bottle->set_z_add(1);
+		drinker_bottle->set_draw_offset(Point<int>(6, 0));
 		noo.map->add_entity(drinker_bottle);
 
 		Map_Entity *bottle1 = new Map_Entity("bottle");
