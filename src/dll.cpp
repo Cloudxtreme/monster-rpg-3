@@ -1,5 +1,6 @@
 #include <Nooskewl_Engine/Nooskewl_Engine.h>
 
+#include "brain_actions.h"
 #include "brains.h"
 #include "dll.h"
 #include "gui.h"
@@ -250,16 +251,50 @@ Brain *dll_get_brain(std::string type, std::string data)
 	return 0;
 }
 
+struct Choose_Action_Data {
+	Map_Entity *initiator;
+	Map_Entity *target;
+	std::vector<std::string> choices;
+};
+
 static void choose_action_callback(void *data)
 {
-	noo.map->activate(noo.player);
+	Multiple_Choice_GUI::Callback_Data *mccd = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
+	Choose_Action_Data *cad = static_cast<Choose_Action_Data *>(mccd->userdata);
+
+	std::string action = cad->choices[mccd->choice];
+
+	// FIXME: localization
+	if (action == "Activate") {
+		noo.map->activate(noo.player);
+	}
+	else if (action == "Pick Pocket") {
+		Brain *brain = cad->target->get_brain();
+		Pick_Pocketable_Brain *ppb = dynamic_cast<Pick_Pocketable_Brain *>(brain);
+		if (ppb) {
+			ppb->pick_pocket(cad->initiator, cad->target);
+		}
+	}
 }
 
 bool dll_choose_action(Map_Entity *entity)
 {
-	std::vector<std::string> choices;
-	choices.push_back("Activate");
-	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI("", choices, -1, choose_action_callback, NULL);
+	Choose_Action_Data *data = new Choose_Action_Data;
+	data->initiator = noo.player; // FIXME
+	data->target = entity;
+
+	// FIXME: Localization
+	data->choices.push_back("Activate");
+
+	Brain *brain = entity->get_brain();
+
+	if (dynamic_cast<Pick_Pocketable_Brain *>(brain)) {
+		data->choices.push_back("Pick Pocket");
+	}
+
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI("", data->choices, -1, choose_action_callback, data);
+	gui->start();
 	noo.guis.push_back(gui);
+
 	return true;
 }

@@ -13,6 +13,7 @@ include_directories(${USER_INCLUDE_PATH})
 link_directories(${USER_LIBRARY_PATH})
 
 set(SRC
+	src/brain_actions.cpp
 	src/brains.cpp
 	src/dll.cpp
 	src/gui.cpp

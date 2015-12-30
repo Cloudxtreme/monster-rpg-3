@@ -3,6 +3,8 @@
 
 #include <Nooskewl_Engine/Nooskewl_Engine.h>
 
+#include "brain_actions.h"
+
 using namespace Nooskewl_Engine;
 
 bool start_brains();
@@ -131,7 +133,7 @@ private:
 	bool die;
 };
 
-class Shop_Brain : public Brain {
+class Shop_Brain : public Brain, public Pick_Pocketable_Brain {
 public:
 	static void buy_sell_callback(void *data);
 	static void callback(void *data);
