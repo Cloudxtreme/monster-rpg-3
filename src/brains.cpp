@@ -523,7 +523,7 @@ void Shop_Brain::callback(void *data)
 
 	if (choice == 0) {
 		int multiplier = brain->get_multiplier();
-		Inventory *inventory = brain->get_inventory();
+		Inventory *inventory = brain->map_entity->get_stats()->inventory;
 		std::vector<int> &costs = brain->get_costs();
 
 		Buy_Sell_GUI *gui = new Buy_Sell_GUI(multiplier, inventory, costs, false, buy_sell_callback, brain);
@@ -535,17 +535,27 @@ void Shop_Brain::callback(void *data)
 	}
 }
 
-Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, Inventory *inventory, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
+Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
 	caption(caption),
 	yes_option(yes_option),
 	no_option(no_option),
 	multiplier(multiplier),
-	inventory(inventory),
 	costs(costs),
 	original_inventory(original_inventory),
 	original_costs(original_costs),
 	direction_set(false)
 {
+}
+
+Shop_Brain::~Shop_Brain()
+{
+	delete original_inventory;
+}
+
+void Shop_Brain::init()
+{
+	Inventory *inventory = map_entity->get_stats()->inventory;
+
 	// All of this trends inventory back towards default
 
 	Inventory *added_items = inventory->clone();
@@ -624,12 +634,6 @@ Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string 
 	delete removed_items;
 }
 
-Shop_Brain::~Shop_Brain()
-{
-	delete inventory;
-	delete original_inventory;
-}
-
 bool Shop_Brain::activate(Map_Entity *activator)
 {
 	original_direction = map_entity->get_direction();
@@ -651,11 +655,6 @@ bool Shop_Brain::save(std::string &out)
 	return true;
 }
 
-Inventory *Shop_Brain::get_inventory()
-{
-	return inventory;
-}
-
 std::vector<int> &Shop_Brain::get_costs()
 {
 	return costs;
@@ -663,13 +662,12 @@ std::vector<int> &Shop_Brain::get_costs()
 
 void Shop_Brain::real_save(std::string brain_name, std::string &out)
 {
-	std::string inventory_s = inventory->to_string();
-	int count = costs.size();
 	std::string original_inventory_s = original_inventory->to_string();
+	int count = costs.size();
 	int original_count = original_costs.size();
 	out += string_printf(
 		"brain=%s,%d\n%s,%s,%s,%d,%d,%d,%d,", brain_name.c_str(),
-		1 + std::count(inventory_s.begin(), inventory_s.end(), '\n') + std::count(original_inventory_s.begin(), original_inventory_s.end(), '\n'),
+		1 + std::count(original_inventory_s.begin(), original_inventory_s.end(), '\n'),
 		escape_string(caption, ',').c_str(),
 		escape_string(yes_option, ',').c_str(),
 		escape_string(no_option, ',').c_str(),
@@ -685,7 +683,6 @@ void Shop_Brain::real_save(std::string brain_name, std::string &out)
 		out += string_printf("%d%s", original_costs[i], i < count-1 ? "," : "");
 	}
 	out += "\n";
-	out += inventory_s;
 	out += original_inventory_s;
 }
 
@@ -881,13 +878,18 @@ bool Wander_Brain::save(std::string &out)
 
 //--
 
-No_Activate_Shop_Brain::No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, Inventory *inventory, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
-	Shop_Brain(caption, yes_option, no_option, multiplier, inventory, costs, original_inventory, original_costs, last_visit)
+No_Activate_Shop_Brain::No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
+	Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit)
 {
 }
 
 No_Activate_Shop_Brain::~No_Activate_Shop_Brain()
 {
+}
+
+void No_Activate_Shop_Brain::init()
+{
+	Shop_Brain::init();
 }
 
 bool No_Activate_Shop_Brain::activate(Map_Entity *activator)
@@ -903,7 +905,7 @@ bool No_Activate_Shop_Brain::save(std::string &out)
 
 void No_Activate_Shop_Brain::manual_activate()
 {
-	Buy_Sell_GUI *gui = new Buy_Sell_GUI(multiplier, inventory, costs, false);
+	Buy_Sell_GUI *gui = new Buy_Sell_GUI(multiplier, map_entity->get_stats()->inventory, costs, false);
 	gui->start();
 	noo.guis.push_back(gui);
 }

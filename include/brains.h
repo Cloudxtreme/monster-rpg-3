@@ -136,14 +136,15 @@ public:
 	static void buy_sell_callback(void *data);
 	static void callback(void *data);
 
-	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, Inventory *inventory, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
+	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
 	virtual ~Shop_Brain();
+
+	void init();
 
 	bool activate(Map_Entity *activator);
 
 	bool save(std::string &out);
 
-	Inventory *get_inventory();
 	std::vector<int> &get_costs();
 
 protected:
@@ -155,7 +156,6 @@ protected:
 	std::string no_option;
 
 	int multiplier; // later divided by 100, so 110 would be 10%
-	Inventory *inventory;
 	std::vector<int> costs;
 	Inventory *original_inventory;
 	std::vector<int> original_costs;
@@ -218,8 +218,10 @@ protected:
 
 class No_Activate_Shop_Brain : public Shop_Brain {
 public:
-	No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, Inventory *inventory, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
+	No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
 	virtual ~No_Activate_Shop_Brain();
+
+	void init();
 
 	bool activate(Map_Entity *activator);
 

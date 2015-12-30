@@ -153,14 +153,6 @@ Brain *dll_get_brain(std::string type, std::string data)
 			original_costs.push_back(atoi(cost.c_str()));
 		}
 
-		std::string inventory_s = t.next() + "\n";
-		std::string num_items_s = t.next() + "\n";
-		inventory_s += num_items_s;
-		int num_items = atoi(num_items_s.c_str());
-		for (int i = 0; i < num_items; i++) {
-			inventory_s += t.next() + "\n";
-		}
-
 		std::string original_inventory_s = t.next() + "\n";
 		std::string original_num_items_s = t.next() + "\n";
 		original_inventory_s += original_num_items_s;
@@ -169,20 +161,16 @@ Brain *dll_get_brain(std::string type, std::string data)
 			original_inventory_s += t.next() + "\n";
 		}
 
-		trim(inventory_s);
 		trim(original_inventory_s);
-
-		Inventory *inventory = new Inventory();
-		inventory->from_string(inventory_s);
 
 		Inventory *original_inventory = new Inventory();
 		original_inventory->from_string(original_inventory_s);
 
 		if (type == "shop") {
-			return new Shop_Brain(caption, yes_option, no_option, multiplier, inventory, costs, original_inventory, original_costs, last_visit);
+			return new Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
 		}
 		else {
-			return new No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, inventory, costs, original_inventory, original_costs, last_visit);
+			return new No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
 		}
 	}
 	else if (type == "growing_brain") {

@@ -127,25 +127,27 @@ void ML_start::start(bool been_here_before)
 		legendary_warrior->set_direction(S);
 		legendary_warrior->set_sitting(true);
 
-		Inventory *bartender_inventory = new Inventory();
+		Stats *bartender_stats = new Stats();
+		bartender_stats->inventory = new Inventory();
 		std::vector<int> bartender_costs;
-		bartender_inventory->gold = 40+rand()%20;
-		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "pickled_egg", 100, 8+rand()%6);
-		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "beer", 100, 15+rand()%10);
-		Buy_Sell_GUI::add_item(bartender_inventory, bartender_costs, "wine", 200, 10+rand()%10);
-		bartender_inventory->sort();
+		bartender_stats->inventory->gold = 40+rand()%20;
+		Buy_Sell_GUI::add_item(bartender_stats->inventory, bartender_costs, "pickled_egg", 100, 8+rand()%6);
+		Buy_Sell_GUI::add_item(bartender_stats->inventory, bartender_costs, "beer", 100, 15+rand()%10);
+		Buy_Sell_GUI::add_item(bartender_stats->inventory, bartender_costs, "wine", 200, 10+rand()%10);
+		bartender_stats->inventory->sort();
+		bartender_stats->profile_pic = new Image("profile_pics/male.tga", true);
 
-		Inventory *bartender_original_inventory = bartender_inventory->clone();
+		Inventory *bartender_original_inventory = bartender_stats->inventory->clone();
 		std::vector<int> bartender_original_costs = bartender_costs;
 
 		bartender = new Map_Entity("bartender");
 		bartender->load_sprite("bartender");
+		bartender->set_stats(bartender_stats);
 		bartender->set_brain(new No_Activate_Shop_Brain(
 			"",
 			"",
 			"",
 			125,
-			bartender_inventory,
 			bartender_costs,
 			bartender_original_inventory,
 			bartender_original_costs,
