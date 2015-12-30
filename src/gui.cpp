@@ -309,6 +309,14 @@ Pause_GUI::Pause_GUI() :
 	quests_button->set_padding_top(2);
 	quests_button->set_parent(column3);
 
+	Widget *time_and_audio_toggle_container = new Widget(1.0f, -1.0f);
+	time_and_audio_toggle_container->set_parent(column3);
+
+	time_label = new Widget_Label(get_time_string(noo.get_play_time()), -1);
+	time_label->set_padding_top(2);
+	time_label->set_float_left(true);
+	time_label->set_parent(time_and_audio_toggle_container);
+
 	Widget *audio_toggle_container = new Widget(1.0f, 5);
 	Sprite *audio_toggle_sprite = new Sprite("audio_toggle");
 	if (noo.mute) {
@@ -321,7 +329,7 @@ Pause_GUI::Pause_GUI() :
 	audio_toggle->set_padding_top(2);
 	audio_toggle->set_float_right(true);
 	audio_toggle->set_parent(audio_toggle_container);
-	audio_toggle_container->set_parent(column3);
+	audio_toggle_container->set_parent(time_and_audio_toggle_container);
 
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
 
@@ -535,6 +543,8 @@ void Pause_GUI::set_labels()
 	thirst_label->set_width(max_w);
 	rest_label->set_width(max_w);
 	sobriety_label->set_width(max_w);
+
+	time_label->set_text(get_time_string(noo.get_play_time()));
 
 	gui->layout();
 }

@@ -62,3 +62,23 @@ Direction get_facing_direction(Map_Entity *activator, Map_Entity *activated)
 		return S;
 	}
 }
+
+std::string get_time_string(int seconds)
+{
+	if (seconds < 60) {
+		return itos(seconds) + "s";
+	}
+	else if (seconds < 60*60) {
+		return itos(seconds/60) + "m";
+	}
+	else {
+		int hours = seconds / (60*60);
+		seconds -= hours * 60 * 60;
+		int minutes = seconds / 60;
+
+		char buf[100];
+		sprintf(buf, "%dh%dm", hours, minutes);
+
+		return std::string(buf);
+	}
+}

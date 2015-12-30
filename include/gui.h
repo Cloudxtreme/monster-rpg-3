@@ -84,6 +84,7 @@ private:
 	Widget_Text_Button *armour_button;
 	Widget_Text_Button *quests_button;
 
+	Widget_Label *time_label;
 	Widget_Sprite_Toggle *audio_toggle;
 
 	bool exit_menu;
