@@ -247,7 +247,7 @@ private:
 
 	bool exit_menu;
 
-	int escape_choice; // escape is the same as this one unless this is -1 then escape does nothing
+	int escape_choice; // escape activates this choice. If it's -1, escape does nothing. If it's -2, escape dismisses the dialog with no action.
 };
 
 class Quests_GUI : public GUI {

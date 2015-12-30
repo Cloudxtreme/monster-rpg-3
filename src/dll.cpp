@@ -290,7 +290,7 @@ bool dll_choose_action(Map_Entity *entity)
 		data->choices.push_back(noo.game_t->translate(114));
 	}
 
-	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI("", data->choices, -1, choose_action_callback, data);
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI("", data->choices, -2, choose_action_callback, data);
 	gui->start();
 	noo.guis.push_back(gui);
 

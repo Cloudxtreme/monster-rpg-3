@@ -1811,6 +1811,11 @@ void Multiple_Choice_GUI::handle_event(TGUI_Event *event)
 		callback((void *)&data);
 		exit();
 	}
+	if (escape_choice == -2 && ((event->type == TGUI_KEY_DOWN && event->keyboard.code == noo.key_b2) ||
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b2))) {
+		noo.button_mml->play(false);
+		exit();
+	}
 	else {
 		GUI::handle_event(event);
 	}
