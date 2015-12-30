@@ -11,7 +11,11 @@
 
 bool dll_start()
 {
+#ifdef DEMO
+	noo.window_title = "Monster RPG 3 Demo";
+#else
 	noo.window_title = "Monster RPG 3";
+#endif
 	return start_brains();
 }
 
