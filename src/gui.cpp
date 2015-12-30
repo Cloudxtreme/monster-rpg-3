@@ -148,7 +148,7 @@ Pause_GUI::Pause_GUI() :
 	name->set_break_line(true);
 	name->set_parent(column1);
 
-	alignment_label = new Widget_Label(TRANSLATE("Align")END + ": ", -1);
+	alignment_label = new Widget_Label(noo.game_t->translate(26) + ": ", -1);
 	alignment_label->set_break_line(true);
 	alignment_label->set_padding_top((int)noo.font->get_height()+2);
 	alignment_label->set_parent(column1);
@@ -157,21 +157,21 @@ Pause_GUI::Pause_GUI() :
 	alignment->set_padding_top((int)noo.font->get_height()+2);
 	alignment->set_parent(column1);
 
-	sex_label = new Widget_Label(TRANSLATE("Sex")END + ": ", -1);
+	sex_label = new Widget_Label(noo.game_t->translate(121) + ": ", -1);
 	sex_label->set_break_line(true);
 	sex_label->set_parent(column1);
 
 	sex = new Widget_Label("", -1);
 	sex->set_parent(column1);
 
-	gold_label = new Widget_Label(TRANSLATE("Gold")END + ": ", -1);
+	gold_label = new Widget_Label(noo.game_t->translate(74) + ": ", -1);
 	gold_label->set_break_line(true);
 	gold_label->set_parent(column1);
 
 	gold = new Widget_Label("", -1);
 	gold->set_parent(column1);
 
-	hp_label = new Widget_Label(TRANSLATE("HP")END + ": ", -1);
+	hp_label = new Widget_Label(noo.game_t->translate(85) + ": ", -1);
 	hp_label->set_break_line(true);
 	hp_label->set_padding_top((int)noo.font->get_height()+2);
 	hp_label->set_parent(column1);
@@ -180,14 +180,14 @@ Pause_GUI::Pause_GUI() :
 	hp->set_padding_top((int)noo.font->get_height()+2);
 	hp->set_parent(column1);
 
-	mp_label = new Widget_Label(TRANSLATE("MP")END + ": ", -1);
+	mp_label = new Widget_Label(noo.game_t->translate(102) + ": ", -1);
 	mp_label->set_break_line(true);
 	mp_label->set_parent(column1);
 
 	mp = new Widget_Label("", -1);
 	mp->set_parent(column1);
 
-	experience_label = new Widget_Label(TRANSLATE("Exp")END + ": ", -1);
+	experience_label = new Widget_Label(noo.game_t->translate(69) + ": ", -1);
 	experience_label->set_break_line(true);
 	experience_label->set_parent(column1);
 
@@ -210,7 +210,7 @@ Pause_GUI::Pause_GUI() :
 	armour = new Widget_Label("", -1);
 	armour->set_parent(column1);
 
-	attack_label = new Widget_Label(TRANSLATE("Attack")END + ": ", -1);
+	attack_label = new Widget_Label(noo.game_t->translate(49) + ": ", -1);
 	attack_label->set_break_line(true);
 	attack_label->set_padding_top(18);
 	attack_label->set_parent(column2);
@@ -219,70 +219,70 @@ Pause_GUI::Pause_GUI() :
 	attack->set_padding_top(18);
 	attack->set_parent(column2);
 
-	defense_label = new Widget_Label(TRANSLATE("Defense")END + ": ", -1);
+	defense_label = new Widget_Label(noo.game_t->translate(59) + ": ", -1);
 	defense_label->set_break_line(true);
 	defense_label->set_parent(column2);
 
 	defense = new Widget_Label("", -1);
 	defense->set_parent(column2);
 
-	agility_label = new Widget_Label(TRANSLATE("Agility")END + ": ", -1);
+	agility_label = new Widget_Label(noo.game_t->translate(25) + ": ", -1);
 	agility_label->set_break_line(true);
 	agility_label->set_parent(column2);
 
 	agility = new Widget_Label("", -1);
 	agility->set_parent(column2);
 
-	luck_label = new Widget_Label(TRANSLATE("Luck")END + ": ", -1);
+	luck_label = new Widget_Label(noo.game_t->translate(99) + ": ", -1);
 	luck_label->set_break_line(true);
 	luck_label->set_parent(column2);
 
 	luck = new Widget_Label("", -1);
 	luck->set_parent(column2);
 
-	speed_label = new Widget_Label(TRANSLATE("Speed")END + ": ", -1);
+	speed_label = new Widget_Label(noo.game_t->translate(125) + ": ", -1);
 	speed_label->set_break_line(true);
 	speed_label->set_parent(column2);
 
 	speed = new Widget_Label("", -1);
 	speed->set_parent(column2);
 
-	strength_label = new Widget_Label(TRANSLATE("Strength")END + ": ", -1);
+	strength_label = new Widget_Label(noo.game_t->translate(126) + ": ", -1);
 	strength_label->set_break_line(true);
 	strength_label->set_parent(column2);
 
 	strength = new Widget_Label("", -1);
 	strength->set_parent(column2);
 
-	karma_label = new Widget_Label(TRANSLATE("Karma")END + ": ", -1);
+	karma_label = new Widget_Label(noo.game_t->translate(96) + ": ", -1);
 	karma_label->set_break_line(true);
 	karma_label->set_parent(column2);
 
 	karma = new Widget_Label("", -1);
 	karma->set_parent(column2);
 
-	hunger_label = new Widget_Label(TRANSLATE("Hunger")END + ": ", -1);
+	hunger_label = new Widget_Label(noo.game_t->translate(86) + ": ", -1);
 	hunger_label->set_break_line(true);
 	hunger_label->set_parent(column2);
 
 	hunger = new Widget_Label("", -1);
 	hunger->set_parent(column2);
 
-	thirst_label = new Widget_Label(TRANSLATE("Thirst")END + ": ", -1);
+	thirst_label = new Widget_Label(noo.game_t->translate(132) + ": ", -1);
 	thirst_label->set_break_line(true);
 	thirst_label->set_parent(column2);
 
 	thirst = new Widget_Label("", -1);
 	thirst->set_parent(column2);
 
-	rest_label = new Widget_Label(TRANSLATE("Rest")END + ": ", -1);
+	rest_label = new Widget_Label(noo.game_t->translate(118) + ": ", -1);
 	rest_label->set_break_line(true);
 	rest_label->set_parent(column2);
 
 	rest = new Widget_Label("", -1);
 	rest->set_parent(column2);
 
-	sobriety_label = new Widget_Label(TRANSLATE("Sobriety")END + ": ", -1);
+	sobriety_label = new Widget_Label(noo.game_t->translate(124) + ": ", -1);
 	sobriety_label->set_break_line(true);
 	sobriety_label->set_parent(column2);
 
@@ -294,18 +294,18 @@ Pause_GUI::Pause_GUI() :
 	column3->set_padding_bottom(quit_button->get_height() + 5);
 	column3->set_parent(pad);
 
-	items_button = new Widget_Text_Button(TRANSLATE("Items")END, 1.0f, -1);
+	items_button = new Widget_Text_Button(noo.game_t->translate(92), 1.0f, -1);
 	items_button->set_parent(column3);
 
-	weapons_button = new Widget_Text_Button(TRANSLATE("Weapons")END, 1.0f, -1);
+	weapons_button = new Widget_Text_Button(noo.game_t->translate(139), 1.0f, -1);
 	weapons_button->set_padding_top(2);
 	weapons_button->set_parent(column3);
 
-	armour_button = new Widget_Text_Button(TRANSLATE("Armour")END, 1.0f, -1);
+	armour_button = new Widget_Text_Button(noo.game_t->translate(48), 1.0f, -1);
 	armour_button->set_padding_top(2);
 	armour_button->set_parent(column3);
 
-	quests_button = new Widget_Text_Button(TRANSLATE("Quests")END, 1.0f, -1);
+	quests_button = new Widget_Text_Button(noo.game_t->translate(116), 1.0f, -1);
 	quests_button->set_padding_top(2);
 	quests_button->set_parent(column3);
 
@@ -429,36 +429,36 @@ void Pause_GUI::set_labels()
 		return;
 	}
 
-	name->set_text(TRANSLATE("Eny")END); // FIXME
+	name->set_text(noo.game_t->translate(67)); // FIXME
 
 	if (stats->status == Stats::SICK) {
-		status->set_text(TRANSLATE("Sick")END);
+		status->set_text(noo.game_t->translate(122));
 	}
 	else if (stats->status == Stats::DRUNK) {
-		status->set_text(TRANSLATE("Drunk")END);
+		status->set_text(noo.game_t->translate(66));
 	}
 	else {
 		status->set_text("");
 	}
 
 	if (stats->alignment == Stats::GOOD) {
-		alignment->set_text(TRANSLATE("Good")END);
+		alignment->set_text(noo.game_t->translate(76));
 	}
 	else if (stats->alignment == Stats::EVIL) {
-		alignment->set_text(TRANSLATE("Evil")END);
+		alignment->set_text(noo.game_t->translate(68));
 	}
 	else {
-		alignment->set_text(TRANSLATE("Neutral")END);
+		alignment->set_text(noo.game_t->translate(104));
 	}
 
 	if (stats->sex == Stats::MALE) {
-		sex->set_text(TRANSLATE("Male")END);
+		sex->set_text(noo.game_t->translate(100));
 	}
 	else if (stats->sex == Stats::FEMALE) {
-		sex->set_text(TRANSLATE("Female")END);
+		sex->set_text(noo.game_t->translate(70));
 	}
 	else {
-		sex->set_text(TRANSLATE("Unknown")END);
+		sex->set_text(noo.game_t->translate(136));
 	}
 
 	gold->set_text(string_printf("%d", stats->inventory->gold));
@@ -600,13 +600,13 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	title_container->set_parent(pad);
 	std::string title_text;
 	if (type == Item::OTHER) {
-		title_text = TRANSLATE("Items")END;
+		title_text = noo.game_t->translate(92);
 	}
 	else if (type == Item::WEAPON) {
-		title_text = TRANSLATE("Weapons")END;
+		title_text = noo.game_t->translate(139);
 	}
 	else if (type == Item::ARMOUR) {
-		title_text = TRANSLATE("Armour")END;
+		title_text = noo.game_t->translate(48);
 	}
 	Widget_Label *title = new Widget_Label(title_text, 100);
 	title->set_center_x(true);
@@ -628,10 +628,10 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	TGUI_Widget *info = new TGUI_Widget(0.4f, -1.0f);
 	info->set_parent(pad);
 
-	action_label = new Widget_Label(TRANSLATE("Action")END + ":", 70);
+	action_label = new Widget_Label(noo.game_t->translate(22) + ":", 70);
 	action_label->set_parent(info);
 
-	use_radio = new Widget_Radio_Button(TRANSLATE("Use")END);
+	use_radio = new Widget_Radio_Button(noo.game_t->translate(137));
 	use_radio->set_selected(true);
 	use_radio->set_break_line(true);
 	use_radio->set_parent(info);
@@ -657,7 +657,7 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 		drop_radio = 0;
 	}
 	else {
-		drop_radio = new Widget_Radio_Button(TRANSLATE("Drop")END);
+		drop_radio = new Widget_Radio_Button(noo.game_t->translate(64));
 		drop_radio->set_break_line(true);
 		drop_radio->set_parent(info);
 
@@ -670,7 +670,7 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 		}
 	}
 
-	discard_radio = new Widget_Radio_Button(TRANSLATE("Discard")END);
+	discard_radio = new Widget_Radio_Button(noo.game_t->translate(61));
 	discard_radio->set_break_line(true);
 	discard_radio->set_parent(info);
 
@@ -686,16 +686,16 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	}
 	discard_radio->set_group(group);
 
-	weight_label = new Widget_Label(TRANSLATE("Weight")END + ": -", 70);
+	weight_label = new Widget_Label(noo.game_t->translate(140) + ": -", 70);
 	weight_label->set_padding_top(5);
 	weight_label->set_break_line(true);
 	weight_label->set_parent(info);
 
-	value_label = new Widget_Label(TRANSLATE("Value")END + ": -", 70);
+	value_label = new Widget_Label(noo.game_t->translate(138) + ": -", 70);
 	value_label->set_break_line(true);
 	value_label->set_parent(info);
 
-	condition_label = new Widget_Label(TRANSLATE("Condition")END + ": -", 70);
+	condition_label = new Widget_Label(noo.game_t->translate(58) + ": -", 70);
 	condition_label->set_break_line(true);
 	condition_label->set_parent(info);
 
@@ -703,7 +703,7 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	properties_label->set_break_line(true);
 	properties_label->set_parent(info);
 
-	done_button = new Widget_Text_Button(TRANSLATE("Done")END, -1, -1);
+	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
 	done_button->set_parent(pad);
 
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
@@ -802,7 +802,7 @@ void Items_GUI::update()
 			if (count > 5) {
 				got_number = false;
 				dropping_index = index;
-				Get_Number_GUI *gngui = new Get_Number_GUI(TRANSLATE("Drop how many?")END, count+1, 0, get_number_callback);
+				Get_Number_GUI *gngui = new Get_Number_GUI(noo.game_t->translate(65), count+1, 0, get_number_callback);
 				gngui->start();
 				noo.guis.push_back(gngui);
 			}
@@ -820,7 +820,7 @@ void Items_GUI::update()
 				discard_item = true;
 			}
 			else {
-				Yes_No_Always_GUI *gui = new Yes_No_Always_GUI(TRANSLATE("Discard this item (NO UNDO)?")END, milestone, discard_callback);
+				Yes_No_Always_GUI *gui = new Yes_No_Always_GUI(noo.game_t->translate(62), milestone, discard_callback);
 				gui->start();
 				noo.guis.push_back(gui);
 			}
@@ -835,9 +835,9 @@ void Items_GUI::set_labels()
 	if (list != 0) {
 		int selected = list->get_selected();
 		if (selected < 0) {
-			weight_label->set_text(TRANSLATE("Weight")END + ": -");
-			condition_label->set_text(TRANSLATE("Condition")END + ": -");
-			value_label->set_text(TRANSLATE("Value")END + ": -");
+			weight_label->set_text(noo.game_t->translate(140) + ": -");
+			condition_label->set_text(noo.game_t->translate(58) + ": -");
+			value_label->set_text(noo.game_t->translate(138) + ": -");
 			properties_label->set_text("");
 		}
 		else {
@@ -846,23 +846,23 @@ void Items_GUI::set_labels()
 
 			int condition = 100 * item->condition / 0xffff;
 
-			weight_label->set_text(TRANSLATE("Weight")END + ": " + Inventory::decimal_to_string(item->weight));
+			weight_label->set_text(noo.game_t->translate(140) + ": " + Inventory::decimal_to_string(item->weight));
 
 			if (item->type != Item::OTHER) {
-				condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
+				condition_label->set_text(noo.game_t->translate(58) + ": " + itos(condition) + "%");
 			}
 			else {
-				condition_label->set_text(TRANSLATE("Condition")END + ": -");
+				condition_label->set_text(noo.game_t->translate(58) + ": -");
 			}
 
 			int value = item->get_value();
 
-			value_label->set_text(TRANSLATE("Value")END + ": " + Inventory::decimal_to_string(value));
+			value_label->set_text(noo.game_t->translate(138) + ": " + Inventory::decimal_to_string(value));
 
 			int attack = int(item->min_attack + ((condition / 100.0f) * (item->max_attack - item->min_attack)));
 
 			if (item->type == Item::WEAPON) {
-				properties_label->set_text(TRANSLATE("Attack")END + ": " + itos(attack));
+				properties_label->set_text(noo.game_t->translate(49) + ": " + itos(attack));
 			}
 		}
 	}
@@ -870,8 +870,8 @@ void Items_GUI::set_labels()
 	int carrying = stats->inventory->get_total_weight();
 	int capacity = stats->strength * 1000;
 
-	carrying_label->set_text(TRANSLATE("Carrying")END + " " + Inventory::decimal_to_string(carrying));
-	capacity_label->set_text(Inventory::decimal_to_string(capacity) + " " + TRANSLATE("Capacity")END);
+	carrying_label->set_text(noo.game_t->translate(56) + " " + Inventory::decimal_to_string(carrying));
+	capacity_label->set_text(Inventory::decimal_to_string(capacity) + " " + noo.game_t->translate(54));
 
 	if (carrying > capacity) {
 		SDL_Colour red = { 255, 0, 0, 255 };
@@ -1110,7 +1110,7 @@ Buy_Sell_GUI::Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, s
 		your_gold_label = new Widget_Label("", 70);
 	}
 	else {
-		your_gold_label = new Widget_Label(TRANSLATE("Your items")END, 70);
+		your_gold_label = new Widget_Label(noo.game_t->translate(152), 70);
 	}
 	your_gold_label->set_parent(your_column);
 	your_list = new Widget_List(1.0f, -1.0f);
@@ -1124,7 +1124,7 @@ Buy_Sell_GUI::Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, s
 		their_gold_label = new Widget_Label("", 70);
 	}
 	else {
-		their_gold_label = new Widget_Label(TRANSLATE("Drop")END, 70);
+		their_gold_label = new Widget_Label(noo.game_t->translate(64), 70);
 	}
 	their_gold_label->set_parent(their_column);
 	their_list = new Widget_List(1.0f, -1.0f);
@@ -1134,12 +1134,12 @@ Buy_Sell_GUI::Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, s
 	TGUI_Widget *button_column = new TGUI_Widget(0.2f, 0.75f);
 	button_column->set_parent(pad);
 
-	accept_button = new Widget_Text_Button(TRANSLATE("Accept")END, -1, -1);
+	accept_button = new Widget_Text_Button(noo.game_t->translate(21), -1, -1);
 	accept_button->set_padding_top(int(noo.font->get_height() + 2));
 	accept_button->set_parent(button_column);
 	their_list->set_right_widget(accept_button); // feels better like this
 
-	done_button = new Widget_Text_Button(TRANSLATE("Done")END, -1, -1);
+	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
 	done_button->set_padding_top(int(noo.font->get_height() + 2));
 	done_button->set_break_line(true);
 	done_button->set_parent(button_column);
@@ -1151,15 +1151,15 @@ Buy_Sell_GUI::Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, s
 	cost_label->set_relative_position(0, 0);
 	cost_label->set_parent(info_column);
 
-	weight_label = new Widget_Label(TRANSLATE("Weight")END + ": -", 100);
+	weight_label = new Widget_Label(noo.game_t->translate(140) + ": -", 100);
 	weight_label->set_relative_position(0, int(noo.font->get_height() + 2));
 	weight_label->set_parent(info_column);
 
-	value_label = new Widget_Label(TRANSLATE("Value")END + ": -", 100);
+	value_label = new Widget_Label(noo.game_t->translate(138) + ": -", 100);
 	value_label->set_relative_position(0, 2 * int(noo.font->get_height() + 2));
 	value_label->set_parent(info_column);
 
-	condition_label = new Widget_Label(TRANSLATE("Condition")END + ": -", 100);
+	condition_label = new Widget_Label(noo.game_t->translate(58) + ": -", 100);
 	condition_label->set_relative_position(100, int(noo.font->get_height() + 2));
 	condition_label->set_parent(info_column);
 
@@ -1227,12 +1227,12 @@ void Buy_Sell_GUI::update()
 
 	if (accept_button->pressed()) {
 		if (get_your_gold() < 0) {
-			Notification_GUI *gui = new Notification_GUI(TRANSLATE("You don't have enough gold for this transaction.")END);
+			Notification_GUI *gui = new Notification_GUI(noo.game_t->translate(149));
 			gui->start();
 			noo.guis.push_back(gui);
 		}
 		else if (get_their_gold() < 0) {
-			Notification_GUI *gui = new Notification_GUI(TRANSLATE("Seller doesn't have enough gold for this transaction.")END);
+			Notification_GUI *gui = new Notification_GUI(noo.game_t->translate(120));
 			gui->start();
 			noo.guis.push_back(gui);
 		}
@@ -1273,7 +1273,7 @@ void Buy_Sell_GUI::update()
 			got_number = false;
 			getting_for_your_inventory = true;
 			getting_for = pressed;
-			Get_Number_GUI *gngui = new Get_Number_GUI(TRANSLATE("How many?")END, count+1, 0, get_number_callback);
+			Get_Number_GUI *gngui = new Get_Number_GUI(noo.game_t->translate(83), count+1, 0, get_number_callback);
 			gngui->start();
 			noo.guis.push_back(gngui);
 		}
@@ -1289,7 +1289,7 @@ void Buy_Sell_GUI::update()
 			got_number = false;
 			getting_for_your_inventory = false;
 			getting_for = pressed;
-			Get_Number_GUI *gngui = new Get_Number_GUI(TRANSLATE("How many?")END, count+1, 0, get_number_callback);
+			Get_Number_GUI *gngui = new Get_Number_GUI(noo.game_t->translate(83), count+1, 0, get_number_callback);
 			gngui->start();
 			noo.guis.push_back(gngui);
 		}
@@ -1334,26 +1334,26 @@ void Buy_Sell_GUI::set_labels()
 
 		int condition = 100 * item->condition / 0xffff;
 
-		weight_label->set_text(TRANSLATE("Weight")END + ": " + Inventory::decimal_to_string(item->weight));
+		weight_label->set_text(noo.game_t->translate(140) + ": " + Inventory::decimal_to_string(item->weight));
 
 		if (item->type != Item::OTHER) {
-			condition_label->set_text(TRANSLATE("Condition")END + ": " + itos(condition) + "%");
+			condition_label->set_text(noo.game_t->translate(58) + ": " + itos(condition) + "%");
 		}
 		else {
-			condition_label->set_text(TRANSLATE("Condition")END + ": -");
+			condition_label->set_text(noo.game_t->translate(58) + ": -");
 		}
 
 		int value = item->get_value();
 
-		value_label->set_text(TRANSLATE("Value")END + ": " + Inventory::decimal_to_string(value));
+		value_label->set_text(noo.game_t->translate(138) + ": " + Inventory::decimal_to_string(value));
 
 		std::string cost_text;
 		if (is_storage == false) {
 			if (is_their_list) {
-				cost_text = TRANSLATE("Buy price")END + ": ";
+				cost_text = noo.game_t->translate(51) + ": ";
 			}
 			else {
-				cost_text = TRANSLATE("Sell price")END + ": ";
+				cost_text = noo.game_t->translate(119) + ": ";
 			}
 			cost_text += Inventory::decimal_to_string(
 				is_your_list ? get_cost(is_your_list) : get_cost(is_your_list) * seller_multiplier / 100);
@@ -1365,9 +1365,9 @@ void Buy_Sell_GUI::set_labels()
 	}
 	else {
 		cost_label->set_text("-");
-		weight_label->set_text(TRANSLATE("Weight")END + ": -");
-		condition_label->set_text(TRANSLATE("Condition")END + ": -");
-		value_label->set_text(TRANSLATE("Value")END + ": -");
+		weight_label->set_text(noo.game_t->translate(140) + ": -");
+		condition_label->set_text(noo.game_t->translate(58) + ": -");
+		value_label->set_text(noo.game_t->translate(138) + ": -");
 		properties_label->set_text("");
 	}
 
@@ -1695,10 +1695,10 @@ void Buy_Sell_GUI::maybe_confirm()
 	if (buy_count > 0 || sell_count > 0) {
 		Yes_No_GUI *gui;
 		if (is_storage) {
-			gui = new Yes_No_GUI(TRANSLATE("Cancel?")END, confirm_callback);
+			gui = new Yes_No_GUI(noo.game_t->translate(53), confirm_callback);
 		}
 		else {
-			gui = new Yes_No_GUI(TRANSLATE("Cancel transaction?")END, confirm_callback);
+			gui = new Yes_No_GUI(noo.game_t->translate(52), confirm_callback);
 		}
 		gui->start();
 		noo.guis.push_back(gui);
@@ -1842,7 +1842,7 @@ Quests_GUI::Quests_GUI() :
 
 	Widget *title_container = new Widget(1.0f, int(noo.font->get_height() + 5));
 	title_container->set_parent(pad);
-	Widget_Label *title = new Widget_Label(TRANSLATE("Quests")END, 100);
+	Widget_Label *title = new Widget_Label(noo.game_t->translate(116), 100);
 	title->set_center_x(true);
 	title->set_parent(title_container);
 
@@ -1866,7 +1866,7 @@ Quests_GUI::Quests_GUI() :
 	Widget_Quest_Details *qd = new Widget_Quest_Details(list, indices);
 	qd->set_parent(w);
 
-	done_button = new Widget_Text_Button(TRANSLATE("Done")END, -1, -1);
+	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
 	done_button->set_parent(pad);
 
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);

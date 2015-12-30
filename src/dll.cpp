@@ -264,10 +264,10 @@ static void choose_action_callback(void *data)
 
 	std::string action = cad->choices[mccd->choice];
 
-	if (action == TRANSLATE("Activate")END) {
+	if (action == noo.game_t->translate(23)) {
 		noo.map->activate(noo.player);
 	}
-	else if (action == TRANSLATE("Pick Pocket")END) {
+	else if (action == noo.game_t->translate(114)) {
 		Brain *brain = cad->target->get_brain();
 		Pick_Pocketable_Brain *ppb = dynamic_cast<Pick_Pocketable_Brain *>(brain);
 		if (ppb) {
@@ -282,12 +282,12 @@ bool dll_choose_action(Map_Entity *entity)
 	data->initiator = noo.player; // FIXME
 	data->target = entity;
 
-	data->choices.push_back(TRANSLATE("Activate")END);
+	data->choices.push_back(noo.game_t->translate(23));
 
 	Brain *brain = entity->get_brain();
 
 	if (dynamic_cast<Pick_Pocketable_Brain *>(brain)) {
-		data->choices.push_back(TRANSLATE("Pick Pocket")END);
+		data->choices.push_back(noo.game_t->translate(114));
 	}
 
 	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI("", data->choices, -1, choose_action_callback, data);

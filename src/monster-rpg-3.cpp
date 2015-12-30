@@ -20,14 +20,14 @@ bool give_item(Map_Entity *activator, std::string item_name, int quantity, int m
 				}
 				noo.item_mml->play(false);
 				// FIXME: a/an and adding s isn't foolproof
-				std::string found = TRANSLATE("Found")END;
+				std::string found = noo.game_t->translate(72);
 				if (quantity > 1) {
 					noo.map->add_speech(found + " " + itos(quantity) + " " + name + "s");
 				}
 				else {
 					char c = tolower(name.c_str()[0]);
 					if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
-						noo.map->add_speech(found + " " + TRANSLATE("an")END + " " + name + "...");
+						noo.map->add_speech(found + " " + noo.game_t->translate(47) + " " + name + "...");
 					}
 					else {
 						noo.map->add_speech(found + " " + TRANSLATE("a") + " " + name + "...");

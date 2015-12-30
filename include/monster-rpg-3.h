@@ -14,7 +14,7 @@
 	}
 #define DEC_KARMA(amount) \
 	stats->karma -= MIN(amount, stats->karma); \
-	noo.add_notification(TRANSLATE("You lost karma...")END);
+	noo.add_notification(noo.game_t->translate(150));
 
 #include <Nooskewl_Engine/Nooskewl_Engine.h>
 

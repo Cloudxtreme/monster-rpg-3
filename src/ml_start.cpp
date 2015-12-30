@@ -368,9 +368,9 @@ static void bartender_answer(void *data)
 static void bartender_prompt(void *data)
 {
 	std::vector<std::string> choices;
-	choices.push_back(TRANSLATE("Let me see what you've got.")END);
-	choices.push_back(TRANSLATE("I was just leaving...")END);
-	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("No loitering, kid! Either get drunk or get out!")END, choices, 1, bartender_answer, data);
+	choices.push_back(noo.game_t->translate(97));
+	choices.push_back(noo.game_t->translate(90));
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(noo.game_t->translate(107), choices, 1, bartender_answer, data);
 	gui->start();
 	noo.guis.push_back(gui);
 }
@@ -379,7 +379,7 @@ void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
 	if (activated->get_name() == "bartender") {
 		if (noo.player->get_stats()->status == Stats::DRUNK) {
-			noo.map->add_speech("name=" + TRANSLATE("Bartender")END + "|" + TRANSLATE("Whoa whoa whoa! I think you've had enough!")END);
+			noo.map->add_speech("name=" + noo.game_t->translate(50) + "|" + noo.game_t->translate(146));
 		}
 		else {
 			bartender_prompt(activated);

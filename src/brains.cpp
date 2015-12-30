@@ -730,10 +730,10 @@ bool Growing_Brain::activate(Map_Entity *activator)
 		callback_data.activator = activator;
 
 		std::vector<std::string> choices;
-		choices.push_back(TRANSLATE("Yes")END);
-		choices.push_back(TRANSLATE("No")END);
+		choices.push_back(noo.game_t->translate(148));
+		choices.push_back(noo.game_t->translate(106));
 
-		Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("This is owned by someone. Really take it?")END, choices, 1, callback, &callback_data);
+		Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(noo.game_t->translate(133), choices, 1, callback, &callback_data);
 		gui->start();
 		noo.guis.push_back(gui);
 

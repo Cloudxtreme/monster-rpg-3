@@ -14,34 +14,34 @@ void ML_cabbagetown::tiggy_callback(void *data)
 	START_CALLBACK
 
 	NEXT_STAGE {
-		noo.map->add_speech("name=Tiggy|" + TRANSLATE("You were looking for me? You should know better.")END, tiggy_callback, data);
+		noo.map->add_speech("name=Tiggy|" + noo.game_t->translate(151), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Eny|" + TRANSLATE("The old man wants you to join us on another one of his whacky adventures... you know, the usual... gold, jewels, fame.")END, tiggy_callback, data);
+		noo.map->add_speech("name=Eny|" + noo.game_t->translate(130), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Gold and jewels? I'm tempted, but right now I'm a little hungry.")END, tiggy_callback, data);
+		noo.map->add_speech("name=Tiggy|" + noo.game_t->translate(75), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Eny|" + TRANSLATE("Hungry? Come on Tiggy, let's go. You can grab an apple on the way...")END, tiggy_callback, data);
+		noo.map->add_speech("name=Eny|" + noo.game_t->translate(87), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Actually I was thinking chicken pot pie... the kind Auntie May makes.")END, tiggy_callback, data);
+		noo.map->add_speech("name=Tiggy|" + noo.game_t->translate(24), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Eny|" + TRANSLATE("Grrr! Do you promise you'll come if I get you pie?")END, tiggy_callback, data);
+		noo.map->add_speech("name=Eny|" + noo.game_t->translate(78), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Life is too short to make promises.")END, tiggy_callback, data);
+		noo.map->add_speech("name=Tiggy|" + noo.game_t->translate(98), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Eny|" + TRANSLATE("If you don't, I'll tell all the girls in town how I beat you in a sword fight!")END, tiggy_callback, data);
+		noo.map->add_speech("name=Eny|" + noo.game_t->translate(91), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Tiggy|" + TRANSLATE("Just get the pie.")END, tiggy_callback, data);
+		noo.map->add_speech("name=Tiggy|" + noo.game_t->translate(94), tiggy_callback, data);
 	}
 	NEXT_STAGE {
-		noo.map->add_speech("name=Eny,+milestone=Get Pie|" + TRANSLATE("I'll be back soon...")END, tiggy_callback, data);
+		noo.map->add_speech("name=Eny,+milestone=Get Pie|" + noo.game_t->translate(88), tiggy_callback, data);
 	}
 }
 
@@ -259,9 +259,9 @@ void ML_cabbagetown::start(bool been_here_before)
 		suzy->load_sprite("suzy");
 		suzy->set_stats(suzy_stats);
 		suzy->set_brain(new Shop_Brain(
-			TRANSLATE("Howdy, pardner! See anything you like?")END,
-			TRANSLATE("Let me see what you've got.")END,
-			TRANSLATE("Just passing by...")END,
+			noo.game_t->translate(84),
+			noo.game_t->translate(97),
+			noo.game_t->translate(95),
 			110,
 			suzy_costs,
 			suzy_original_inventory,
@@ -349,7 +349,7 @@ static void earl_answer(void *data)
 		face_south(earl);
 	}
 	else if (d->choice == 1) {
-		noo.map->add_speech("name=Earl,+milestone=Rooster Quest|" + TRANSLATE("There are some jumbo size roosters in the woods south of here. I'll put a spring in your step, if you can catch me one. Dead or alive.")END, face_south, d->userdata);
+		noo.map->add_speech("name=Earl,+milestone=Rooster Quest|" + noo.game_t->translate(131), face_south, d->userdata);
 	}
 	else {
 		face_south(earl);
@@ -359,10 +359,10 @@ static void earl_answer(void *data)
 static void earl_prompt(void *data)
 {
 	std::vector<std::string> choices;
-	choices.push_back(TRANSLATE("Meat")END);
-	choices.push_back(TRANSLATE("Quests")END);
-	choices.push_back(TRANSLATE("Nevermind...")END);
-	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("What are you looking for?")END, choices, 2, earl_answer, data);
+	choices.push_back(noo.game_t->translate(101));
+	choices.push_back(noo.game_t->translate(116));
+	choices.push_back(noo.game_t->translate(105));
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(noo.game_t->translate(144), choices, 2, earl_answer, data);
 	gui->start();
 	noo.guis.push_back(gui);
 }
@@ -382,28 +382,28 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 		int apple_index = stats->inventory->find("apple");
 
 		std::vector<std::string> choices;
-		choices.push_back(TRANSLATE("Yes")END);
-		choices.push_back(TRANSLATE("No")END);
+		choices.push_back(noo.game_t->translate(148));
+		choices.push_back(noo.game_t->translate(106));
 
 		if (acd.ms2_complete) {
-			noo.map->add_speech("name=Alfred|" + TRANSLATE("I'm not starving.")END, face_south, activated);
+			noo.map->add_speech("name=Alfred|" + noo.game_t->translate(89), face_south, activated);
 		}
 		else if (acd.ms1_complete) {
 			if (apple_index < 0) {
-				noo.map->add_speech("name=Alfred|" + TRANSLATE("Hey hey! Got any apples? I love apples.")END, face_south, activated);
+				noo.map->add_speech("name=Alfred|" + noo.game_t->translate(79), face_south, activated);
 			}
 			else {
-				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Got another apple? I'll make it worth it.")END, choices, 1, apple_callback, &acd);
+				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(noo.game_t->translate(77), choices, 1, apple_callback, &acd);
 				gui->start();
 				noo.guis.push_back(gui);
 			}
 		}
 		else {
 			if (apple_index < 0) {
-				noo.map->add_speech("name=Alfred|" + TRANSLATE("Hey hey! Got any apples? I love apples.")END, face_south, activated);
+				noo.map->add_speech("name=Alfred|" + noo.game_t->translate(79), face_south, activated);
 			}
 			else {
-				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Oh! Ohhh! Can I have that apple?")END, choices, 1, apple_callback, &acd);
+				Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(noo.game_t->translate(110), choices, 1, apple_callback, &acd);
 				gui->start();
 				noo.guis.push_back(gui);
 			}
@@ -411,10 +411,10 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 	}
 	else if (activator == noo.player && activated->get_name() == "earl") {
 		activated->set_direction(get_facing_direction(activator, activated));
-		noo.map->add_speech("name=Earl|" + TRANSLATE("How's it hangin?^Are you looking for meat or quests?")END, earl_prompt, activated);
+		noo.map->add_speech("name=Earl|" + noo.game_t->translate(82), earl_prompt, activated);
 	}
 	else if (activator == noo.player && activated->get_name() == "tiggy") {
 		tiggy_callback_data = 0;
-		noo.map->add_speech("name=Eny|" + TRANSLATE("Tiggy! There you are!")END, tiggy_callback, &tiggy_callback_data);
+		noo.map->add_speech("name=Eny|" + noo.game_t->translate(134), tiggy_callback, &tiggy_callback_data);
 	}
 }

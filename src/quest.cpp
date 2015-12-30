@@ -101,7 +101,7 @@ void Quest::update()
 
 	if (!started_finished) {
 		if (is_finished()) {
-			noo.add_notification(TRANSLATE("Quest Complete")END);
+			noo.add_notification(noo.game_t->translate(115));
 		}
 	}
 }
@@ -118,16 +118,16 @@ void init_quests()
 	std::vector<Quest::Step *> steps;
 
 	steps.clear();
-	step = new Quest::Step(TRANSLATE("Find Tiggy")END, "Get Pie");
+	step = new Quest::Step(noo.game_t->translate(71), "Get Pie");
 	steps.push_back(step);
-	step = new Quest::Step(TRANSLATE("Get a Chicken Pie for Tiggy")END, "Got Pie");
+	step = new Quest::Step(noo.game_t->translate(73), "Got Pie");
 	steps.push_back(step);
-	step = new Quest::Step(TRANSLATE("Recruit Tiggy")END, "");
+	step = new Quest::Step(noo.game_t->translate(117), "");
 	quests.push_back(new Quest(step, steps));
 
 	steps.clear();
-	step = new Quest::Step(TRANSLATE("Capture a Jumbo Rooster for Earl")END, "Got Jumbo Rooster");
+	step = new Quest::Step(noo.game_t->translate(55), "Got Jumbo Rooster");
 	steps.push_back(step);
-	step = new Quest::Step(TRANSLATE("Jumbo Rooster")END, "Rooster Quest");
+	step = new Quest::Step(noo.game_t->translate(93), "Rooster Quest");
 	quests.push_back(new Quest(step, steps));
 }
