@@ -145,7 +145,7 @@ Brain *dll_get_brain(std::string type, std::string data)
 		int last_visit = atoi(last_visit_s.c_str());
 
 		std::string can_pick_pocket_s = t2.next();
-		bool can_pick_pocket = (bool)atoi(can_pick_pocket_s.c_str());
+		bool can_pick_pocket = atoi(can_pick_pocket_s.c_str()) == 0 ? false : true;
 
 		std::vector<int> costs;
 
