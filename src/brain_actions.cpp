@@ -1,9 +1,12 @@
 #include "brain_actions.h"
+#include "brains.h"
 #include "monster-rpg-3.h"
 
 void Pick_Pocketable_Brain::pick_pocket(Map_Entity *pocket_picker, Map_Entity *pocket_pickee)
 {
-	if (can_pick_pocket == false) {
+	Monster_RPG_3_Brain *pickee_brain = dynamic_cast<Monster_RPG_3_Brain *>(pocket_pickee->get_brain());
+
+	if (pickee_brain->can_pick_pocket == false) {
 		noo.add_notification(TRANSLATE("Cannot pick this pocket")END);
 		return;
 	}
@@ -22,8 +25,9 @@ void Pick_Pocketable_Brain::pick_pocket(Map_Entity *pocket_picker, Map_Entity *p
 	}
 	float ratio = picker_agility / pickee_agility;
 	if (ratio <= 1.0f) {
-		can_pick_pocket = false;
+		pickee_brain->can_pick_pocket = false;
 		noo.add_notification(TRANSLATE("Failed to pick pocket")END);
+		pick_pocket_failure_reaction();
 		return;
 	}
 	ratio -= 1.0f;
@@ -49,8 +53,15 @@ void Pick_Pocketable_Brain::pick_pocket(Map_Entity *pocket_picker, Map_Entity *p
 		}
 	}
 	else {
-		can_pick_pocket = false;
+		pickee_brain->can_pick_pocket = false;
 		noo.add_notification(TRANSLATE("Failed to pick pocket")END);
+		pick_pocket_failure_reaction();
 	}
 }
 
+//--
+
+void Bartender_Pick_Pocketable_Brain::pick_pocket_failure_reaction()
+{
+	noo.map->add_speech("name=" + TRANSLATE("Bartender")END + "|" + TRANSLATE("YOU LITTLE WEASEL! GET OUTTA HERE!!!")END);
+}

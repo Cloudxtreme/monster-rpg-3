@@ -506,18 +506,18 @@ Inventory *Item_Drop_Brain::get_inventory()
 
 //--
 
-void Shop_Brain::buy_sell_callback(void *data)
+void Base_Shop_Brain::buy_sell_callback(void *data)
 {
-	Shop_Brain *brain = (Shop_Brain *)data;
+	Base_Shop_Brain *brain = (Base_Shop_Brain *)data;
 	if (brain->direction_set) {
 		brain->map_entity->set_direction(brain->original_direction);
 	}
 }
 
-void Shop_Brain::callback(void *data)
+void Base_Shop_Brain::callback(void *data)
 {
 	Multiple_Choice_GUI::Callback_Data *d = (Multiple_Choice_GUI::Callback_Data *)data;
-	Shop_Brain *brain = (Shop_Brain *)d->userdata;
+	Base_Shop_Brain *brain = (Base_Shop_Brain *)d->userdata;
 
 	int choice = d->choice;
 
@@ -535,7 +535,7 @@ void Shop_Brain::callback(void *data)
 	}
 }
 
-Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
+Base_Shop_Brain::Base_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
 	caption(caption),
 	yes_option(yes_option),
 	no_option(no_option),
@@ -547,12 +547,12 @@ Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string 
 {
 }
 
-Shop_Brain::~Shop_Brain()
+Base_Shop_Brain::~Base_Shop_Brain()
 {
 	delete original_inventory;
 }
 
-void Shop_Brain::init()
+void Base_Shop_Brain::init()
 {
 	Inventory *inventory = map_entity->get_stats()->inventory;
 
@@ -634,7 +634,7 @@ void Shop_Brain::init()
 	delete removed_items;
 }
 
-bool Shop_Brain::activate(Map_Entity *activator)
+bool Base_Shop_Brain::activate(Map_Entity *activator)
 {
 	original_direction = map_entity->get_direction();
 	map_entity->set_direction(get_facing_direction(activator, map_entity));
@@ -649,18 +649,18 @@ bool Shop_Brain::activate(Map_Entity *activator)
 	return true;
 }
 
-bool Shop_Brain::save(std::string &out)
+bool Base_Shop_Brain::save(std::string &out)
 {
 	real_save("shop", out);
 	return true;
 }
 
-std::vector<int> &Shop_Brain::get_costs()
+std::vector<int> &Base_Shop_Brain::get_costs()
 {
 	return costs;
 }
 
-void Shop_Brain::real_save(std::string brain_name, std::string &out)
+void Base_Shop_Brain::real_save(std::string brain_name, std::string &out)
 {
 	std::string original_inventory_s = original_inventory->to_string();
 	int count = costs.size();
@@ -687,9 +687,20 @@ void Shop_Brain::real_save(std::string brain_name, std::string &out)
 	out += original_inventory_s;
 }
 
-int Shop_Brain::get_multiplier()
+int Base_Shop_Brain::get_multiplier()
 {
 	return multiplier;
+}
+
+//--
+
+Shop_Brain::Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
+	Base_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit)
+{
+}
+
+Shop_Brain::~Shop_Brain()
+{
 }
 
 //--
@@ -879,8 +890,42 @@ bool Wander_Brain::save(std::string &out)
 
 //--
 
+Base_No_Activate_Shop_Brain::Base_No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
+	Base_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit)
+{
+}
+
+Base_No_Activate_Shop_Brain::~Base_No_Activate_Shop_Brain()
+{
+}
+
+void Base_No_Activate_Shop_Brain::init()
+{
+	Base_Shop_Brain::init();
+}
+
+bool Base_No_Activate_Shop_Brain::activate(Map_Entity *activator)
+{
+	return false;
+}
+
+bool Base_No_Activate_Shop_Brain::save(std::string &out)
+{
+	real_save("no_activate_shop", out);
+	return true;
+}
+
+void Base_No_Activate_Shop_Brain::manual_activate()
+{
+	Buy_Sell_GUI *gui = new Buy_Sell_GUI(multiplier, map_entity->get_stats()->inventory, costs, false);
+	gui->start();
+	noo.guis.push_back(gui);
+}
+
+//--
+
 No_Activate_Shop_Brain::No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
-	Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit)
+	Base_No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit)
 {
 }
 
@@ -888,25 +933,19 @@ No_Activate_Shop_Brain::~No_Activate_Shop_Brain()
 {
 }
 
-void No_Activate_Shop_Brain::init()
+//--
+
+Bartender_Shop_Brain::Bartender_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
+	Base_No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit)
 {
-	Shop_Brain::init();
 }
 
-bool No_Activate_Shop_Brain::activate(Map_Entity *activator)
+Bartender_Shop_Brain::~Bartender_Shop_Brain()
 {
-	return false;
 }
 
-bool No_Activate_Shop_Brain::save(std::string &out)
+bool Bartender_Shop_Brain::save(std::string &out)
 {
-	real_save("no_activate_shop", out);
+	real_save("bartender_shop", out);
 	return true;
-}
-
-void No_Activate_Shop_Brain::manual_activate()
-{
-	Buy_Sell_GUI *gui = new Buy_Sell_GUI(multiplier, map_entity->get_stats()->inventory, costs, false);
-	gui->start();
-	noo.guis.push_back(gui);
 }

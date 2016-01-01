@@ -7,10 +7,17 @@ using namespace Nooskewl_Engine;
 
 class Pick_Pocketable_Brain {
 public:
-	Pick_Pocketable_Brain() : can_pick_pocket(true) {}
-
 	virtual void pick_pocket(Map_Entity *pocket_picker, Map_Entity *pocket_pickee);
-	bool can_pick_pocket;
+	virtual void pick_pocket_failure_reaction() {}
+
+	virtual ~Pick_Pocketable_Brain() {}
+};
+
+class Bartender_Pick_Pocketable_Brain : public Pick_Pocketable_Brain {
+public:
+	void pick_pocket_failure_reaction();
+
+	virtual ~Bartender_Pick_Pocketable_Brain() {}
 };
 
 #endif // BRAIN_ACTIONS_H

@@ -117,7 +117,7 @@ Brain *dll_get_brain(std::string type, std::string data)
 
 		return new Item_Drop_Brain(inventory, drop_time);
 	}
-	else if (type == "shop" || type == "no_activate_shop") {
+	else if (type == "shop" || type == "no_activate_shop" || type == "bartender_shop") {
 		Tokenizer t(data, '\n');
 
 		std::string line1 = t.next();
@@ -174,10 +174,13 @@ Brain *dll_get_brain(std::string type, std::string data)
 		Inventory *original_inventory = new Inventory();
 		original_inventory->from_string(original_inventory_s);
 
-		Shop_Brain *brain;
+		Base_Shop_Brain *brain;
 
 		if (type == "shop") {
 			brain = new Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
+		}
+		else if (type == "bartender_shop") {
+			brain = new Bartender_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
 		}
 		else {
 			brain = new No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);

@@ -10,7 +10,14 @@ using namespace Nooskewl_Engine;
 bool start_brains();
 void end_brains();
 
-class Talk_Brain : public Brain {
+class Monster_RPG_3_Brain : public Brain {
+public:
+	Monster_RPG_3_Brain() : can_pick_pocket(true) {} // even though true, must be the right type of brain
+
+	bool can_pick_pocket;
+};
+
+class Talk_Brain : public Monster_RPG_3_Brain {
 public:
 	static void callback(void *data);
 
@@ -77,7 +84,7 @@ private:
 	bool animating;
 };
 
-class Door_Brain : public Brain {
+class Door_Brain : public Monster_RPG_3_Brain {
 public:
 	static bool start();
 	static void end();
@@ -99,7 +106,7 @@ private:
 	bool open;
 };
 
-class Item_Brain : public Brain {
+class Item_Brain : public Monster_RPG_3_Brain {
 public:
 	Item_Brain(std::string item_name, int quantity, int milestone = -1);
 
@@ -113,7 +120,7 @@ protected:
 	int milestone;
 };
 
-class Item_Drop_Brain : public Brain {
+class Item_Drop_Brain : public Monster_RPG_3_Brain {
 public:
 	static void callback(void *data);
 
@@ -133,13 +140,13 @@ private:
 	bool die;
 };
 
-class Shop_Brain : public Brain, public Pick_Pocketable_Brain {
+class Base_Shop_Brain : public Monster_RPG_3_Brain {
 public:
 	static void buy_sell_callback(void *data);
 	static void callback(void *data);
 
-	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
-	virtual ~Shop_Brain();
+	Base_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
+	virtual ~Base_Shop_Brain();
 
 	void init();
 
@@ -166,7 +173,13 @@ protected:
 	bool direction_set;
 };
 
-class Growing_Brain : public Brain {
+class Shop_Brain : public Base_Shop_Brain, public Pick_Pocketable_Brain {
+public:
+	Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
+	virtual ~Shop_Brain();
+};
+
+class Growing_Brain : public Monster_RPG_3_Brain {
 public:
 	static const int STAGE_TIME = 60 * 5;
 
@@ -218,10 +231,10 @@ protected:
 	int count;
 };
 
-class No_Activate_Shop_Brain : public Shop_Brain {
+class Base_No_Activate_Shop_Brain : public Base_Shop_Brain {
 public:
-	No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
-	virtual ~No_Activate_Shop_Brain();
+	Base_No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
+	virtual ~Base_No_Activate_Shop_Brain();
 
 	void init();
 
@@ -230,6 +243,19 @@ public:
 	bool save(std::string &out);
 
 	void manual_activate();
+};
+
+class No_Activate_Shop_Brain : public Base_No_Activate_Shop_Brain, public Pick_Pocketable_Brain {
+public:
+	No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
+	virtual ~No_Activate_Shop_Brain();
+};
+
+class Bartender_Shop_Brain : public Base_No_Activate_Shop_Brain, public Bartender_Pick_Pocketable_Brain {
+public:
+	Bartender_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
+	virtual ~Bartender_Shop_Brain();
+	bool save(std::string &out);
 };
 
 #endif // BRAINS_H

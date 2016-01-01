@@ -144,7 +144,7 @@ void ML_start::start(bool been_here_before)
 		bartender = new Map_Entity("bartender");
 		bartender->load_sprite("bartender");
 		bartender->set_stats(bartender_stats);
-		bartender->set_brain(new No_Activate_Shop_Brain(
+		bartender->set_brain(new Bartender_Shop_Brain(
 			"",
 			"",
 			"",
@@ -379,7 +379,7 @@ static void bartender_prompt(void *data)
 void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
 	if (activated->get_name() == "bartender") {
-		Pick_Pocketable_Brain *brain = dynamic_cast<Pick_Pocketable_Brain *>(activated->get_brain());
+		Monster_RPG_3_Brain *brain = dynamic_cast<Monster_RPG_3_Brain *>(activated->get_brain());
 		if (brain && brain->can_pick_pocket == false) {
 			noo.map->add_speech("name=" + TRANSLATE("Bartender")END + "|" + TRANSLATE("Beat it you little hooligan!")END);
 		}
