@@ -296,7 +296,13 @@ bool dll_choose_action(Map_Entity *entity)
 	}
 
 	if (dynamic_cast<Pick_Pocketable_Brain *>(brain)) {
-		data->choices.push_back(noo.game_t->translate(114));
+		// Only pick pockets if you're directly beside the person
+		Point<int> player_pos = noo.player->get_position();
+		Point<int> entity_pos = entity->get_position();
+		if ((player_pos.x == entity_pos.x && abs(player_pos.y-entity_pos.y) == 1) ||
+				(player_pos.y == entity_pos.y && abs(player_pos.x-entity_pos.x) == 1)) {
+			data->choices.push_back(noo.game_t->translate(114));
+		}
 	}
 
 	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI("", data->choices, -2, choose_action_callback, data);
