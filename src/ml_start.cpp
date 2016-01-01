@@ -128,6 +128,7 @@ void ML_start::start(bool been_here_before)
 		legendary_warrior->set_sitting(true);
 
 		Stats *bartender_stats = new Stats();
+		bartender_stats->agility = 4;
 		bartender_stats->inventory = new Inventory();
 		std::vector<int> bartender_costs;
 		bartender_stats->inventory->gold = 40+rand()%20;
@@ -378,7 +379,11 @@ static void bartender_prompt(void *data)
 void ML_start::activate(Map_Entity *activator, Map_Entity *activated)
 {
 	if (activated->get_name() == "bartender") {
-		if (noo.player->get_stats()->status == Stats::DRUNK) {
+		Pick_Pocketable_Brain *brain = dynamic_cast<Pick_Pocketable_Brain *>(activated->get_brain());
+		if (brain && brain->can_pick_pocket == false) {
+			noo.map->add_speech("name=" + TRANSLATE("Bartender")END + "|" + TRANSLATE("Beat it you little hooligan!")END);
+		}
+		else if (noo.player->get_stats()->status == Stats::DRUNK) {
 			noo.map->add_speech("name=" + noo.game_t->translate(50) + "|" + noo.game_t->translate(146));
 		}
 		else {

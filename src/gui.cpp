@@ -11,37 +11,37 @@ static bool use_item(Stats *stats, int index)
 	bool remove = true;
 
 	if (item->id == "apple") {
-		DEC_HUNGER(0xffff/4);
+		DEC_HUNGER(stats, 0xffff/4);
 	}
 	else if (item->id == "beer") {
-		DEC_THIRST(0xffff/2);
-		DEC_SOBRIETY(0xffff/4);
+		DEC_THIRST(stats, 0xffff/2);
+		DEC_SOBRIETY(stats, 0xffff/4);
 	}
 	else if (item->id == "cabbage") {
-		DEC_HUNGER(0xffff/6);
+		DEC_HUNGER(stats, 0xffff/6);
 	}
 	else if (item->id == "red_cabbage") {
-		DEC_HUNGER(0xffff);
+		DEC_HUNGER(stats, 0xffff);
 	}
 	else if (item->id == "fish") {
-		DEC_HUNGER(0xffff/3);
+		DEC_HUNGER(stats, 0xffff/3);
 	}
 	else if (item->id == "pickled_egg") {
-		DEC_HUNGER(0xffff/8);
+		DEC_HUNGER(stats, 0xffff/8);
 	}
 	else if (item->id == "rotten_cabbage") {
-		DEC_HUNGER(0xffff/20);
+		DEC_HUNGER(stats, 0xffff/20);
 		stats->set_status(Stats::SICK);
 	}
 	else if (item->id == "wine") {
-		DEC_THIRST(0xffff/5);
-		DEC_SOBRIETY(0xffff/4);
+		DEC_THIRST(stats, 0xffff/5);
+		DEC_SOBRIETY(stats, 0xffff/4);
 	}
 	else if (item->id == "baby_cabbage") {
-		DEC_HUNGER(0xffff/12);
+		DEC_HUNGER(stats, 0xffff/12);
 	}
 	else if (item->id == "chicken") {
-		DEC_HUNGER(0xffff);
+		DEC_HUNGER(stats, 0xffff);
 	}
 	else {
 		remove = false;

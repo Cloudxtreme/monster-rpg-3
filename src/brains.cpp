@@ -666,7 +666,7 @@ void Shop_Brain::real_save(std::string brain_name, std::string &out)
 	int count = costs.size();
 	int original_count = original_costs.size();
 	out += string_printf(
-		"brain=%s,%d\n%s,%s,%s,%d,%d,%d,%d,", brain_name.c_str(),
+		"brain=%s,%d\n%s,%s,%s,%d,%d,%d,%d,%d,", brain_name.c_str(),
 		1 + std::count(original_inventory_s.begin(), original_inventory_s.end(), '\n'),
 		escape_string(caption, ',').c_str(),
 		escape_string(yes_option, ',').c_str(),
@@ -674,7 +674,8 @@ void Shop_Brain::real_save(std::string brain_name, std::string &out)
 		multiplier,
 		count,
 		original_count,
-		noo.get_play_time()
+		noo.get_play_time(),
+		can_pick_pocket
 	);
 	for (int i = 0; i < count; i++) {
 		out += string_printf("%d,", costs[i]);
@@ -700,7 +701,7 @@ void Growing_Brain::callback(void *data)
 	if (d->choice == 0) {
 		Callback_Data *cbd = static_cast<Callback_Data *>(d->userdata);
 		Stats *stats = cbd->activator->get_stats();
-		DEC_KARMA(cbd->brain->karma);
+		DEC_KARMA(stats, cbd->brain->karma);
 		cbd->brain->give(cbd->activator);
 	}
 }

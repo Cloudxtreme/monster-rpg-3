@@ -144,6 +144,9 @@ Brain *dll_get_brain(std::string type, std::string data)
 		std::string last_visit_s = t2.next();
 		int last_visit = atoi(last_visit_s.c_str());
 
+		std::string can_pick_pocket_s = t2.next();
+		bool can_pick_pocket = (bool)atoi(can_pick_pocket_s.c_str());
+
 		std::vector<int> costs;
 
 		for (int i = 0; i < inv_size; i++) {
@@ -171,12 +174,18 @@ Brain *dll_get_brain(std::string type, std::string data)
 		Inventory *original_inventory = new Inventory();
 		original_inventory->from_string(original_inventory_s);
 
+		Shop_Brain *brain;
+
 		if (type == "shop") {
-			return new Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
+			brain = new Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
 		}
 		else {
-			return new No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
+			brain = new No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
 		}
+
+		brain->can_pick_pocket = can_pick_pocket;
+
+		return brain;
 	}
 	else if (type == "growing_brain") {
 		Tokenizer t(data, ',');
@@ -285,7 +294,7 @@ static void choose_action_callback(void *data)
 	else if (action == noo.game_t->translate(114)) {
 		Brain *brain = cad->target->get_brain();
 		Pick_Pocketable_Brain *ppb = dynamic_cast<Pick_Pocketable_Brain *>(brain);
-		if (ppb) {
+		if (ppb && adjacent(cad->initiator, cad->target)) {
 			ppb->pick_pocket(cad->initiator, cad->target);
 		}
 	}
