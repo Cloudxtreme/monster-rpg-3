@@ -261,6 +261,17 @@ struct Choose_Action_Data {
 	std::vector<std::string> choices;
 };
 
+// Return true if a and b are in adjacent tiles
+static bool adjacent(Map_Entity *a, Map_Entity *b)
+{
+	Point<int> a_pos = a->get_position();
+	Point<int> b_pos = b->get_position();
+	if ((a_pos.x == b_pos.x && abs(a_pos.y-b_pos.y) == 1) || (a_pos.y == b_pos.y && abs(a_pos.x-b_pos.x) == 1)) {
+		return true;
+	}
+	return false;
+}
+
 static void choose_action_callback(void *data)
 {
 	Multiple_Choice_GUI::Callback_Data *mccd = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
@@ -296,11 +307,7 @@ bool dll_choose_action(Map_Entity *entity)
 	}
 
 	if (dynamic_cast<Pick_Pocketable_Brain *>(brain)) {
-		// Only pick pockets if you're directly beside the person
-		Point<int> player_pos = noo.player->get_position();
-		Point<int> entity_pos = entity->get_position();
-		if ((player_pos.x == entity_pos.x && abs(player_pos.y-entity_pos.y) == 1) ||
-				(player_pos.y == entity_pos.y && abs(player_pos.x-entity_pos.x) == 1)) {
+		if (adjacent(noo.player, entity)) {
 			data->choices.push_back(noo.game_t->translate(114));
 		}
 	}
