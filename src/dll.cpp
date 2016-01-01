@@ -311,7 +311,12 @@ bool dll_choose_action(Map_Entity *entity)
 
 	Brain *brain = entity->get_brain();
 
-	if (dynamic_cast<Talk_Brain *>(brain) || dynamic_cast<Shop_Brain *>(brain) || dynamic_cast<No_Activate_Shop_Brain *>(brain)) {
+	if (
+			dynamic_cast<Talk_Brain *>(brain) ||
+			dynamic_cast<Shop_Brain *>(brain) ||
+			dynamic_cast<No_Activate_Shop_Brain *>(brain) ||
+			dynamic_cast<Bartender_Shop_Brain *>(brain)
+	) {
 		data->choices.push_back(TRANSLATE("Talk")END);
 	}
 	else {
