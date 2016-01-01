@@ -268,7 +268,7 @@ static void choose_action_callback(void *data)
 
 	std::string action = cad->choices[mccd->choice];
 
-	if (action == noo.game_t->translate(23)) {
+	if (action == noo.game_t->translate(23) || action == TRANSLATE("Talk")END) {
 		noo.map->activate(noo.player);
 	}
 	else if (action == noo.game_t->translate(114)) {
@@ -286,9 +286,14 @@ bool dll_choose_action(Map_Entity *entity)
 	data->initiator = noo.player; // FIXME
 	data->target = entity;
 
-	data->choices.push_back(noo.game_t->translate(23));
-
 	Brain *brain = entity->get_brain();
+
+	if (dynamic_cast<Talk_Brain *>(brain) || dynamic_cast<Shop_Brain *>(brain) || dynamic_cast<No_Activate_Shop_Brain *>(brain)) {
+		data->choices.push_back(TRANSLATE("Talk")END);
+	}
+	else {
+		data->choices.push_back(noo.game_t->translate(23));
+	}
 
 	if (dynamic_cast<Pick_Pocketable_Brain *>(brain)) {
 		data->choices.push_back(noo.game_t->translate(114));
