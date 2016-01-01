@@ -309,12 +309,13 @@ Pause_GUI::Pause_GUI() :
 	quests_button->set_padding_top(2);
 	quests_button->set_parent(column3);
 
-	Widget *time_and_audio_toggle_container = new Widget(1.0f, -1.0f);
-	time_and_audio_toggle_container->set_parent(column3);
-
 	time_label = new Widget_Label(get_time_string(noo.get_play_time()), -1);
 	time_label->set_padding_top(2);
 	time_label->set_float_left(true);
+
+	Widget *time_and_audio_toggle_container = new Widget(1.0f, (int)time_label->get_height());
+	time_and_audio_toggle_container->set_parent(column3);
+
 	time_label->set_parent(time_and_audio_toggle_container);
 
 	Widget *audio_toggle_container = new Widget(1.0f, 5);
