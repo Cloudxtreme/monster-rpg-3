@@ -164,6 +164,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		Map_Entity *alfred = new Map_Entity("alfred");
 		alfred->load_sprite("alfred");
 		alfred->set_position(Point<int>(29, 10));
+		alfred->set_brain(new NULL_Brain(TRANSLATE("Talk")END));
 		alfred->set_direction(S);
 		alfred->set_sitting(true);
 		noo.map->add_entity(alfred);
@@ -278,6 +279,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		Map_Entity *tiggy = new Map_Entity("tiggy");
 		tiggy->load_sprite("tiggy");
 		tiggy->set_position(Point<int>(35, 47));
+		tiggy->set_brain(new NULL_Brain(TRANSLATE("Talk")END));
 		tiggy->set_size(Size<int>(noo.tile_size*2, noo.tile_size));
 		tiggy->set_should_face_activator(false);
 		noo.map->add_entity(tiggy);

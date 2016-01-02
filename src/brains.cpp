@@ -949,3 +949,15 @@ bool Bartender_Shop_Brain::save(std::string &out)
 	real_save("bartender_shop", out);
 	return true;
 }
+
+//--
+
+NULL_Brain::NULL_Brain(std::string action) :
+	action(action)
+{
+}
+
+std::string NULL_Brain::get_action()
+{
+	return action;
+}

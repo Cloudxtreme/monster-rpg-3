@@ -258,4 +258,14 @@ public:
 	bool save(std::string &out);
 };
 
+class NULL_Brain : public Monster_RPG_3_Brain {
+public:
+	NULL_Brain(std::string action);
+
+	std::string get_action();
+
+private:
+	std::string action;
+};
+
 #endif // BRAINS_H

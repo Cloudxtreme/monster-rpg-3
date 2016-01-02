@@ -291,7 +291,7 @@ static void choose_action_callback(void *data)
 
 	std::string action = cad->choices[mccd->choice];
 
-	if (action == noo.game_t->translate(23) || action == TRANSLATE("Talk")END) {
+	if (action == noo.game_t->translate(23) || action == TRANSLATE("Talk")END || action == TRANSLATE("Collect")END) {
 		noo.map->activate(noo.player);
 	}
 	else if (action == noo.game_t->translate(114)) {
@@ -301,6 +301,8 @@ static void choose_action_callback(void *data)
 			ppb->pick_pocket(cad->initiator, cad->target);
 		}
 	}
+
+	delete cad;
 }
 
 bool dll_choose_action(Map_Entity *entity)
@@ -319,14 +321,27 @@ bool dll_choose_action(Map_Entity *entity)
 	) {
 		data->choices.push_back(TRANSLATE("Talk")END);
 	}
-	else {
-		data->choices.push_back(noo.game_t->translate(23));
-	}
 
 	if (dynamic_cast<Pick_Pocketable_Brain *>(brain)) {
 		if (adjacent(noo.player, entity)) {
 			data->choices.push_back(noo.game_t->translate(114));
 		}
+	}
+
+	if (dynamic_cast<NULL_Brain *>(brain)) {
+		std::string action = dynamic_cast<NULL_Brain *>(brain)->get_action();
+		if (action != "") {
+			data->choices.push_back(action);
+		}
+	}
+
+	if (dynamic_cast<Item_Brain *>(brain) || dynamic_cast<Growing_Brain *>(brain)) {
+		data->choices.push_back(TRANSLATE("Collect")END);
+	}
+
+	if (data->choices.size() == 0) {
+		delete data;
+		return false;
 	}
 
 	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI("", data->choices, -2, choose_action_callback, data);
