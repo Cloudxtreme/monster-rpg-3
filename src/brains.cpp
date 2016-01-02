@@ -666,8 +666,9 @@ void Base_Shop_Brain::real_save(std::string brain_name, std::string &out)
 	int count = costs.size();
 	int original_count = original_costs.size();
 	out += string_printf(
-		"brain=%s,%d\n%s,%s,%s,%d,%d,%d,%d,%d,", brain_name.c_str(),
-		1 + std::count(original_inventory_s.begin(), original_inventory_s.end(), '\n'),
+		"brain=%s,%d\n%s\n%s,%s,%s,%d,%d,%d,%d,%d,", brain_name.c_str(),
+		2 + std::count(original_inventory_s.begin(), original_inventory_s.end(), '\n'),
+		caught_pick_pocket_text.c_str(),
 		escape_string(caption, ',').c_str(),
 		escape_string(yes_option, ',').c_str(),
 		escape_string(no_option, ',').c_str(),
@@ -931,23 +932,6 @@ No_Activate_Shop_Brain::No_Activate_Shop_Brain(std::string caption, std::string 
 
 No_Activate_Shop_Brain::~No_Activate_Shop_Brain()
 {
-}
-
-//--
-
-Bartender_Shop_Brain::Bartender_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit) :
-	Base_No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit)
-{
-}
-
-Bartender_Shop_Brain::~Bartender_Shop_Brain()
-{
-}
-
-bool Bartender_Shop_Brain::save(std::string &out)
-{
-	real_save("bartender_shop", out);
-	return true;
 }
 
 //--

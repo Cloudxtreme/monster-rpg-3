@@ -15,6 +15,7 @@ public:
 	Monster_RPG_3_Brain() : can_pick_pocket(true) {} // even though true, must be the right type of brain
 
 	bool can_pick_pocket;
+	std::string caught_pick_pocket_text;
 };
 
 class Talk_Brain : public Monster_RPG_3_Brain {
@@ -249,13 +250,6 @@ class No_Activate_Shop_Brain : public Base_No_Activate_Shop_Brain, public Pick_P
 public:
 	No_Activate_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
 	virtual ~No_Activate_Shop_Brain();
-};
-
-class Bartender_Shop_Brain : public Base_No_Activate_Shop_Brain, public Bartender_Pick_Pocketable_Brain {
-public:
-	Bartender_Shop_Brain(std::string caption, std::string yes_option, std::string no_option, int multiplier, std::vector<int> costs, Inventory *original_inventory, std::vector<int> original_costs, int last_visit);
-	virtual ~Bartender_Shop_Brain();
-	bool save(std::string &out);
 };
 
 class NULL_Brain : public Monster_RPG_3_Brain {

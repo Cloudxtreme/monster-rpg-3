@@ -27,6 +27,9 @@ void Pick_Pocketable_Brain::pick_pocket(Map_Entity *pocket_picker, Map_Entity *p
 	if (ratio <= 1.0f) {
 		pickee_brain->can_pick_pocket = false;
 		noo.add_notification(TRANSLATE("Failed to pick pocket")END);
+		if (pickee_brain->caught_pick_pocket_text != "") {
+			noo.map->add_speech(pickee_brain->caught_pick_pocket_text);
+		}
 		pick_pocket_failure_reaction();
 		return;
 	}
@@ -55,13 +58,9 @@ void Pick_Pocketable_Brain::pick_pocket(Map_Entity *pocket_picker, Map_Entity *p
 	else {
 		pickee_brain->can_pick_pocket = false;
 		noo.add_notification(TRANSLATE("Failed to pick pocket")END);
+		if (pickee_brain->caught_pick_pocket_text != "") {
+			noo.map->add_speech(pickee_brain->caught_pick_pocket_text);
+		}
 		pick_pocket_failure_reaction();
 	}
-}
-
-//--
-
-void Bartender_Pick_Pocketable_Brain::pick_pocket_failure_reaction()
-{
-	noo.map->add_speech("name=" + TRANSLATE("Bartender")END + "|" + TRANSLATE("YOU LITTLE WEASEL! GET OUTTA HERE!!!")END);
 }

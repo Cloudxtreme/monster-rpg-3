@@ -226,7 +226,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		Map_Entity *earl = new Map_Entity("earl");
 		earl->load_sprite("earl");
 		earl->set_stats(earl_stats);
-		earl->set_brain(new No_Activate_Shop_Brain(
+		No_Activate_Shop_Brain *earl_brain = new No_Activate_Shop_Brain(
 			"",
 			"",
 			"",
@@ -235,8 +235,9 @@ void ML_cabbagetown::start(bool been_here_before)
 			earl_original_inventory,
 			earl_original_costs,
 			noo.get_play_time()
-		)
 		);
+		earl_brain->caught_pick_pocket_text = "name=" + TRANSLATE("Earl")END + "|" + TRANSLATE("Heyyy now, can't trust anyone can ya?")END;
+		earl->set_brain(earl_brain);
 		earl->set_position(Point<int>(38, 36));
 		earl->set_direction(S);
 		noo.map->add_entity(earl);
@@ -261,7 +262,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		Map_Entity *suzy = new Map_Entity("suzy");
 		suzy->load_sprite("suzy");
 		suzy->set_stats(suzy_stats);
-		suzy->set_brain(new Shop_Brain(
+		Shop_Brain *suzy_brain = new Shop_Brain(
 			noo.game_t->translate(84),
 			noo.game_t->translate(97),
 			noo.game_t->translate(95),
@@ -270,8 +271,9 @@ void ML_cabbagetown::start(bool been_here_before)
 			suzy_original_inventory,
 			suzy_original_costs,
 			noo.get_play_time()
-		)
 		);
+		suzy->set_brain(suzy_brain);
+		suzy_brain->caught_pick_pocket_text = "name=" + TRANSLATE("Suzy")END + "|" + TRANSLATE("I've got my eye on you from now on!")END;
 		suzy->set_position(Point<int>(45, 45));
 		suzy->set_direction(W);
 		noo.map->add_entity(suzy);

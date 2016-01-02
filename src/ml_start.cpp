@@ -144,7 +144,7 @@ void ML_start::start(bool been_here_before)
 		bartender = new Map_Entity("bartender");
 		bartender->load_sprite("bartender");
 		bartender->set_stats(bartender_stats);
-		bartender->set_brain(new Bartender_Shop_Brain(
+		No_Activate_Shop_Brain *bartender_brain = new No_Activate_Shop_Brain(
 			"",
 			"",
 			"",
@@ -153,8 +153,9 @@ void ML_start::start(bool been_here_before)
 			bartender_original_inventory,
 			bartender_original_costs,
 			noo.get_play_time()
-		)
 		);
+		bartender_brain->caught_pick_pocket_text = "name=" + TRANSLATE("Bartender")END + "|" + TRANSLATE("YOU LITTLE WEASEL! GET OUTTA HERE!!!")END;
+		bartender->set_brain(bartender_brain);
 		bartender->set_position(Point<int>(19, 19));
 		bartender->set_draw_offset(Point<int>(-10, 0));
 

@@ -117,8 +117,11 @@ Brain *dll_get_brain(std::string type, std::string data)
 
 		return new Item_Drop_Brain(inventory, drop_time);
 	}
-	else if (type == "shop" || type == "no_activate_shop" || type == "bartender_shop") {
+	else if (type == "shop" || type == "no_activate_shop") {
 		Tokenizer t(data, '\n');
+
+		std::string caught_pick_pocket_text = t.next();
+		trim(caught_pick_pocket_text);
 
 		std::string line1 = t.next();
 
@@ -179,14 +182,12 @@ Brain *dll_get_brain(std::string type, std::string data)
 		if (type == "shop") {
 			brain = new Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
 		}
-		else if (type == "bartender_shop") {
-			brain = new Bartender_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
-		}
 		else {
 			brain = new No_Activate_Shop_Brain(caption, yes_option, no_option, multiplier, costs, original_inventory, original_costs, last_visit);
 		}
 
 		brain->can_pick_pocket = can_pick_pocket;
+		brain->caught_pick_pocket_text = caught_pick_pocket_text;
 
 		return brain;
 	}
@@ -316,8 +317,7 @@ bool dll_choose_action(Map_Entity *entity)
 	if (
 			dynamic_cast<Talk_Brain *>(brain) ||
 			dynamic_cast<Shop_Brain *>(brain) ||
-			dynamic_cast<No_Activate_Shop_Brain *>(brain) ||
-			dynamic_cast<Bartender_Shop_Brain *>(brain)
+			dynamic_cast<No_Activate_Shop_Brain *>(brain)
 	) {
 		data->choices.push_back(TRANSLATE("Talk")END);
 	}
