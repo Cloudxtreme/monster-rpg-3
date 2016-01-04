@@ -335,8 +335,16 @@ bool dll_choose_action(Map_Entity *entity)
 		}
 	}
 
-	if (dynamic_cast<Item_Brain *>(brain) || dynamic_cast<Growing_Brain *>(brain)) {
+	if (dynamic_cast<Item_Brain *>(brain)) {
 		data->choices.push_back(TRANSLATE("Collect")END);
+	}
+
+	if (dynamic_cast<Growing_Brain *>(brain)) {
+		// Don't show Collect if it's in the picked state
+		int diff = noo.get_play_time() - dynamic_cast<Growing_Brain *>(brain)->get_instantiation_time();
+		if (diff > Growing_Brain::STAGE_TIME) {
+			data->choices.push_back(TRANSLATE("Collect")END);
+		}
 	}
 
 	if (data->choices.size() == 0) {
