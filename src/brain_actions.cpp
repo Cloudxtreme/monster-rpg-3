@@ -17,8 +17,8 @@ void Pick_Pocketable_Brain::pick_pocket(Map_Entity *pocket_picker, Map_Entity *p
 		// no stats, can't do it
 		return;
 	}
-	float picker_agility = (float)picker_stats->agility;
-	float pickee_agility = (float)pickee_stats->agility;
+	float picker_agility = (float)picker_stats->characteristics.agility;
+	float pickee_agility = (float)pickee_stats->characteristics.agility;
 	if (pickee_agility == 0.0f) {
 		// can't divide by zero
 		return;

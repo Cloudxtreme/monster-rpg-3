@@ -128,7 +128,7 @@ void ML_start::start(bool been_here_before)
 		legendary_warrior->set_sitting(true);
 
 		Stats *bartender_stats = new Stats();
-		bartender_stats->agility = 4;
+		bartender_stats->characteristics.agility = 4;
 		bartender_stats->inventory = new Inventory();
 		std::vector<int> bartender_costs;
 		bartender_stats->inventory->gold = 40+rand()%20;

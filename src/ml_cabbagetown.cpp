@@ -214,7 +214,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		noo.map->add_entity(horse2);
 
 		Stats *earl_stats = new Stats();
-		earl_stats->agility = 3;
+		earl_stats->characteristics.agility = 3;
 		earl_stats->inventory = new Inventory();
 		std::vector<int> earl_costs;
 		earl_stats->inventory->gold = 30+rand()%10;
@@ -243,7 +243,7 @@ void ML_cabbagetown::start(bool been_here_before)
 		noo.map->add_entity(earl);
 
 		Stats *suzy_stats = new Stats();
-		suzy_stats->agility = 10;
+		suzy_stats->characteristics.agility = 10;
 		suzy_stats->inventory = new Inventory();
 		std::vector<int> suzy_costs;
 		suzy_stats->inventory->gold = 100+rand()%50;
