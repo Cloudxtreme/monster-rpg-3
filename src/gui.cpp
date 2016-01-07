@@ -472,8 +472,8 @@ void Pause_GUI::set_labels()
 
 	gold->set_text(string_printf("%d", stats->inventory->gold));
 
-	hp->set_text(string_printf("%d/%d", stats->hp, stats->characteristics.max_hp));
-	mp->set_text(string_printf("%d/%d", stats->mp, stats->characteristics.max_mp));
+	hp->set_text(string_printf("%d/%d", stats->hp, stats->characteristics.get_max_hp()));
+	mp->set_text(string_printf("%d/%d", stats->mp, stats->characteristics.get_max_mp()));
 	experience->set_text(string_printf("%d", stats->experience));
 
 	if (stats->weapon_index >= 0) {
@@ -489,12 +489,12 @@ void Pause_GUI::set_labels()
 		armour->set_text("");
 	}
 
-	attack->set_text(string_printf("%d", stats->characteristics.attack));
-	defense->set_text(string_printf("%d", stats->characteristics.defense));
-	agility->set_text(string_printf("%d", stats->characteristics.agility));
-	luck->set_text(string_printf("%d", stats->characteristics.luck));
-	speed->set_text(string_printf("%d", stats->characteristics.speed));
-	strength->set_text(string_printf("%d", stats->characteristics.strength));
+	attack->set_text(string_printf("%d", stats->characteristics.get_attack()));
+	defense->set_text(string_printf("%d", stats->characteristics.get_defense()));
+	agility->set_text(string_printf("%d", stats->characteristics.get_agility()));
+	luck->set_text(string_printf("%d", stats->characteristics.get_luck()));
+	speed->set_text(string_printf("%d", stats->characteristics.get_speed()));
+	strength->set_text(string_printf("%d", stats->characteristics.get_strength()));
 
 	karma->set_text(string_printf("%d%%", int((((float)stats->karma / 0xffff) * 2.0f - 1.0f) * 100)));
 	hunger->set_text(string_printf("%d%%", int(((float)stats->hunger / 0xffff) * 100)));
@@ -879,7 +879,7 @@ void Items_GUI::set_labels()
 	}
 
 	int carrying = stats->inventory->get_total_weight();
-	int capacity = stats->characteristics.strength * 1000;
+	int capacity = stats->characteristics.get_strength() * 1000;
 
 	carrying_label->set_text(noo.game_t->translate(56) + " " + Inventory::decimal_to_string(carrying));
 	capacity_label->set_text(Inventory::decimal_to_string(capacity) + " " + noo.game_t->translate(54));
