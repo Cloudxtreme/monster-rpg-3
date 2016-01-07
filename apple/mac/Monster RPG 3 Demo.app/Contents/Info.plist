@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>Nooskewl_Runner</string>
+	<key>CFBundleIdentifier</key>
+	<string>ca.nooskewl.monsterrpg3</string>
+	<key>CFBundleName</key>
+	<string>Monster RPG 3 Demo</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1</string>
+	<key>CFBundleVersion</key>
+	<string>0.1.19</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.role-playing-games</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2015 Nooskewl</string>
+	<key>CFBundleIconFile</key>
+	<string>icon.icns</string>
+</dict>
+</plist>
