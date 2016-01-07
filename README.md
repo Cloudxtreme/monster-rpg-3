@@ -1,6 +1,6 @@
 # Build instructions
 
-The tools/build.sh script can be used to download and build everything on Linux if you have access to the monster-rpg-3-data repo which is for early access backers. If you don't have backer access, the tools/build_demo.sh script can be used to build a demo version.
+The tools/build.sh script can be used to download and build everything on Linux.
 
 Below are the instructions to build manually. See the instructions in README.txt in the monster-rpg-3-data repo for instructions on building the datafile.
 
