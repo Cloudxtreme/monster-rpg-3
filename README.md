@@ -8,7 +8,7 @@ Below are the instructions to build manually. See the instructions in README.txt
 
 ## Prerequisites
 
-The following packages need to be installed: `libsdl2-dev libsdl2-ttf-dev libglm-dev libglew-dev cmake g++`
+The following packages need to be installed: `libsdl2-dev libsdl2-ttf-dev libglm-dev libglew-dev cmake g++ git`
 
 ## Getting the code
 
