@@ -49,8 +49,6 @@ void Widget_Quest_Details::draw()
 
 	if (focussed) {
 		enable_focus_shader(true);
-		noo.draw_quad(noo.colours[211]/*blue*/, Point<float>((float)calculated_x, (float)calculated_y), Size<float>((float)calculated_w, (float)calculated_h));
-		enable_focus_shader(false);
 	}
 
 	if (current_quest != list->get_selected()) {
@@ -96,7 +94,7 @@ void Widget_Quest_Details::draw()
 		bool full;
 		int num_lines;
 		int width;
-		noo.font->draw_wrapped(noo.white, "  " + steps[i]->get_description(), Point<float>(0.0f, 0.0f), calculated_w - 10, line_height, -1, -1, 0, true, full, num_lines, width);
+		noo.font->draw_wrapped(noo.black, "  " + steps[i]->get_description(), Point<float>(0.0f, 0.0f), calculated_w - 10, line_height, -1, -1, 0, true, full, num_lines, width);
 
 		total_lines += num_lines;
 	}
@@ -136,14 +134,17 @@ void Widget_Quest_Details::draw()
 			check->draw_single(Point<int>(calculated_x + 5, y));
 		}
 
-		noo.font->enable_shadow(noo.shadow_colour, Font::DROP_SHADOW);
-		noo.font->draw_wrapped(noo.white, "  " + steps[i]->get_description(), Point<float>(calculated_x + 5.0f, (float)y), calculated_w - 10, line_height, -1, -1, 0, false, full, num_lines, width);
-		noo.font->disable_shadow();
+		noo.font->draw_wrapped(noo.black, "  " + steps[i]->get_description(), Point<float>(calculated_x + 5.0f, (float)y), calculated_w - 10, line_height, -1, -1, 0, false, full, num_lines, width);
 
 		y += line_height * (num_lines+1);
 	}
 
 	if (display_ellipses) {
-		noo.font->draw(noo.white, "...", Point<float>(calculated_x + 5.0f, (float)y));
+		noo.font->draw(noo.black, "...", Point<float>(calculated_x + 5.0f, (float)y));
 	}
+
+	if (focussed) {
+		enable_focus_shader(false);
+	}
+
 }
