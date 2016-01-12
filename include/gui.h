@@ -8,6 +8,7 @@ using namespace Nooskewl_Engine;
 class Pause_GUI : public GUI {
 public:
 	static void callback(void *data);
+	static void crafting_callback(void *data);
 
 	Pause_GUI();
 
@@ -82,6 +83,7 @@ private:
 	Widget_Text_Button *items_button;
 	Widget_Text_Button *weapons_button;
 	Widget_Text_Button *armour_button;
+	Widget_Text_Button *crafting_button;
 	Widget_Text_Button *quests_button;
 
 	Widget_Label *time_label;
@@ -268,6 +270,40 @@ private:
 	Widget_Text_Button *done_button;
 
 	std::vector<int> indices; // where list items fall into quests vector
+
+	bool exit_menu;
+};
+
+class Crafting_GUI : public GUI {
+public:
+	Crafting_GUI(Item::Type type);
+
+	void handle_event(TGUI_Event *event);
+	void update();
+
+private:
+	void set_labels();
+	void hilight_list_items();
+	int have_crafted(int index);
+	bool have_components(int index, std::vector<bool> &found);
+	void verify_equipment(std::string weapon_id, std::string armour_id);
+
+	Item::Type type;
+
+	std::vector<std::string> item_ids;
+	std::vector< std::vector<std::string> > components;
+	std::vector< std::vector<std::string> > component_names;
+
+	Widget_List *list;
+
+	Widget_Text_Button *done_button;
+
+	TGUI_Widget *column2;
+	TGUI_Widget *column2_inner;
+	Widget_Label *num_crafted_label;
+	Widget *components_parent;
+	Widget_Text_Button *teardown_button;
+	Widget_Text_Button *craft_button;
 
 	bool exit_menu;
 };

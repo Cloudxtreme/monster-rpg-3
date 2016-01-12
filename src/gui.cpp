@@ -73,6 +73,25 @@ void Pause_GUI::callback(void *data)
 	}
 }
 
+void Pause_GUI::crafting_callback(void *data)
+{
+	Multiple_Choice_GUI::Callback_Data *d = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
+
+	if (d->choice == 0) {
+		Crafting_GUI *gui = new Crafting_GUI(Item::WEAPON);
+		gui->start();
+		noo.guis.push_back(gui);
+	}
+	else if (d->choice == 1) {
+		Crafting_GUI *gui = new Crafting_GUI(Item::ARMOUR);
+		gui->start();
+		noo.guis.push_back(gui);
+	}
+	// FIXME: spells
+
+	set_the_labels = true;
+}
+
 Pause_GUI::Pause_GUI() :
 	exit_menu(false)
 {
@@ -305,6 +324,10 @@ Pause_GUI::Pause_GUI() :
 	armour_button->set_padding_top(2);
 	armour_button->set_parent(column3);
 
+	crafting_button = new Widget_Text_Button(TRANSLATE("Crafting")END, 1.0f, -1);
+	crafting_button->set_padding_top(2);
+	crafting_button->set_parent(column3);
+
 	quests_button = new Widget_Text_Button(noo.game_t->translate(116), 1.0f, -1);
 	quests_button->set_padding_top(2);
 	quests_button->set_parent(column3);
@@ -392,6 +415,15 @@ void Pause_GUI::update()
 		Items_GUI *items_gui = new Items_GUI(Item::ARMOUR, callback);
 		items_gui->start();
 		noo.guis.push_back(items_gui);
+	}
+	else if (crafting_button->pressed()) {
+		std::vector<std::string> choices;
+		choices.push_back(TRANSLATE("Weapons")END);
+		choices.push_back(TRANSLATE("Armour")END);
+		choices.push_back(TRANSLATE("Spells")END);
+		Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(TRANSLATE("Craft what?")END, choices, -2, crafting_callback, 0);
+		gui->start();
+		noo.guis.push_back(gui);
 	}
 	else if (quests_button->pressed()) {
 		Quests_GUI *quests_gui = new Quests_GUI();
@@ -715,8 +747,11 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	properties_label->set_break_line(true);
 	properties_label->set_parent(info);
 
+	TGUI_Widget *column3 = new TGUI_Widget(0.19f, 1.0f);
+	column3->set_parent(pad);
+
 	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
-	done_button->set_parent(pad);
+	done_button->set_parent(column3);
 
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
 
@@ -1016,7 +1051,7 @@ void Items_GUI::remove_item(int index, bool drop)
 	else if (erased && stats->armour_indices.size() > 0 && stats->armour_indices[0] > index) {
 		stats->armour_indices[0]--;
 	}
-	
+
 	set_list();
 }
 
@@ -1134,7 +1169,7 @@ Buy_Sell_GUI::Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, s
 	your_list = new Widget_List(1.0f, -1.0f);
 	your_list->set_break_line(true);
 	your_list->set_parent(your_column);
-	
+
 	TGUI_Widget *their_column = new TGUI_Widget(0.4f, 0.75f);
 	their_column->set_parent(pad);
 
@@ -1882,7 +1917,7 @@ Quests_GUI::Quests_GUI() :
 	list = new Widget_List(0.4f, -1.0f);
 	list->set_parent(pad);
 	list->set_items(list_strings);
-	
+
 	TGUI_Widget *w = new TGUI_Widget(0.4f, -1.0f);
 	w->set_parent(pad);
 	// Widget_Quest_Details takes all the space it can, so we need a container for it
@@ -1918,3 +1953,357 @@ void Quests_GUI::update()
 	}
 }
 
+//--
+
+Crafting_GUI::Crafting_GUI(Item::Type type) :
+	type(type),
+	exit_menu(false)
+{
+	Widget *modal_main_widget = new Widget(1.0f, 1.0f);
+	SDL_Colour background_colour = { 0, 0, 0, 192 };
+	modal_main_widget->set_background_colour(background_colour);
+
+	Widget_Window *window = new Widget_Window(0.95f, 0.95f);
+	window->set_center_x(true);
+	window->set_center_y(true);
+	window->set_parent(modal_main_widget);
+
+	TGUI_Widget *pad = new TGUI_Widget(1.0f, 1.0f);
+	pad->set_center_x(true);
+	pad->set_center_y(true);
+	pad->set_padding(5);
+	pad->set_parent(window);
+
+	std::string crafting_type_s;
+
+	switch (type) {
+		case Item::WEAPON:
+			crafting_type_s = "Weapons";
+			break;
+		case Item::ARMOUR:
+			crafting_type_s = "Armour";
+			break;
+		default:
+			crafting_type_s = "Spells";
+			break;
+	}
+
+	Widget *title_container = new Widget(1.0f, int(noo.font->get_height() + 5));
+	title_container->set_parent(pad);
+	Widget_Label *title = new Widget_Label(TRANSLATE("Crafting")END + " - " + crafting_type_s, 100);
+	title->set_center_x(true);
+	title->set_parent(title_container);
+
+	std::vector<std::string> list_strings;
+
+	std::vector<std::string> filenames = noo.cpa->get_all_filenames();
+
+	for (size_t i = 0; i < filenames.size(); i++) {
+		std::string fn = filenames[i];
+		if (fn.substr(0, 6) == "items/") {
+			std::string name = fn.substr(6); // chop item/
+			name = name.substr(0, name.length()-4); // chop .xml
+			Item *item = new Item(name);
+			if (item->components != "" && type == item->type) {
+				item_ids.push_back(item->id);
+				list_strings.push_back(item->name);
+
+				Tokenizer t(item->components, ':');
+				std::string s;
+
+				std::vector<std::string> v;
+				std::vector<std::string> v2;
+
+				while ((s = t.next()) != "") {
+					v.push_back(s);
+
+					Item *item = new Item(s);
+					v2.push_back(item->name);
+					delete item;
+				}
+
+				components.push_back(v);
+				component_names.push_back(v2);
+			}
+
+			delete item;
+		}
+	}
+
+	list = new Widget_List(0.4f, -1.0f);
+	list->set_parent(pad);
+	list->set_items(list_strings);
+
+	hilight_list_items();
+
+	column2 = new TGUI_Widget(TGUI_Widget::FIT_Y, 0.4f);
+	column2->set_padding_left(5);
+	column2->set_padding_right(5);
+	column2->set_parent(pad);
+
+	column2_inner = 0;
+	num_crafted_label = new Widget_Label("", -1);
+	teardown_button = new Widget_Text_Button(TRANSLATE("Tear 1 Down")END, -1, -1);
+	craft_button = new Widget_Text_Button(TRANSLATE("Craft It")END, -1, -1);
+
+	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
+	done_button->set_parent(pad);
+
+	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
+
+	//gui->set_focus(list); FIXME
+	gui->set_focus(done_button);
+
+	set_labels();
+}
+
+void Crafting_GUI::handle_event(TGUI_Event *event)
+{
+	if ((event->type == TGUI_KEY_DOWN && event->keyboard.code == noo.key_b2) ||
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b2)) {
+
+		noo.button_mml->play(false);
+		exit_menu = true;
+	}
+	else {
+		GUI::handle_event(event);
+	}
+}
+
+void Crafting_GUI::update()
+{
+	if (done_button->pressed() || exit_menu) {
+		exit();
+		return;
+	}
+	else if (teardown_button->pressed()) {
+		Stats *stats = noo.player->get_stats();
+
+		std::string weapon_id = stats->weapon_indices.size() > 0 ? stats->inventory->items[stats->weapon_indices[0]][0]->id : "";
+		std::string armour_id = stats->armour_indices.size() > 0 ? stats->inventory->items[stats->armour_indices[0]][0]->id : "";
+
+		int selected = list->get_selected();
+		std::string id = item_ids[selected];
+		int index = stats->inventory->find(id);
+		if (index >= 0) {
+			stats->inventory->remove(id);
+			for (size_t i = 0; i < components[selected].size(); i++) {
+				Item *item = new Item(components[selected][i]);
+				stats->inventory->add(item);
+			}
+		}
+		set_labels();
+
+		if (teardown_button->get_accepts_focus() == false) {
+			gui->set_focus(done_button);
+		}
+
+		verify_equipment(weapon_id, armour_id);
+	}
+	else if (craft_button->pressed()) {
+		Stats *stats = noo.player->get_stats();
+
+		std::string weapon_id = stats->weapon_indices.size() > 0 ? stats->inventory->items[stats->weapon_indices[0]][0]->id : "";
+		std::string armour_id = stats->armour_indices.size() > 0 ? stats->inventory->items[stats->armour_indices[0]][0]->id : "";
+
+		int selected = list->get_selected();
+		std::string id = item_ids[selected];
+		for (size_t i = 0; i < components[selected].size(); i++) {
+			stats->inventory->remove(components[selected][i]);
+		}
+		Item *item = new Item(id);
+		stats->inventory->add(item);
+		set_labels();
+
+		if (craft_button->get_accepts_focus() == false) {
+			gui->set_focus(done_button);
+		}
+
+		verify_equipment(weapon_id, armour_id);
+	}
+}
+
+void Crafting_GUI::set_labels()
+{
+	if (column2_inner) {
+		column2_inner->set_parent(0);
+		delete column2_inner;
+	}
+
+	int selected = list->get_selected();
+
+	column2_inner = new TGUI_Widget(1.0f, 1.0f);
+	column2_inner->set_parent(column2);
+
+	int num_crafted = have_crafted(selected);
+
+	num_crafted_label->set_text(TRANSLATE("Have")END + ": " + itos(num_crafted));
+	num_crafted_label->set_parent(column2_inner);
+
+	teardown_button->set_enabled(num_crafted > 0);
+	teardown_button->set_padding_top(2);
+	teardown_button->set_break_line(true);
+	teardown_button->set_parent(column2_inner);
+
+	std::vector<bool> found;
+	craft_button->set_enabled(have_components(selected, found));
+
+	Widget_Label *components_label = new Widget_Label(TRANSLATE("Needed")END + ":", 100);
+	components_label->set_padding_top(5);
+	components_label->set_parent(column2_inner);
+
+	std::vector<std::string> &needed = components[selected];
+	std::vector<std::string> &needed_names = component_names[selected];
+
+	for (size_t i = 0; i < needed.size(); i++) {
+		Widget_Label *label = new Widget_Label(needed_names[i], 100);
+		if (found[i] == true) {
+			label->set_colour(noo.colours[30]); // orange
+		}
+		if (i == 0) {
+			label->set_padding_top(2);
+		}
+		label->set_break_line(true);
+		label->set_parent(column2_inner);
+	}
+
+	craft_button->set_padding_top(2);
+	craft_button->set_break_line(true);
+	craft_button->set_parent(column2_inner);
+
+	teardown_button->set_right_widget(done_button);
+	craft_button->set_right_widget(done_button);
+
+	if (teardown_button->get_accepts_focus()) {
+		list->set_right_widget(teardown_button);
+		done_button->set_left_widget(teardown_button);
+	}
+	else if (craft_button->get_accepts_focus()) {
+		list->set_right_widget(craft_button);
+		done_button->set_left_widget(craft_button);
+	}
+	else {
+		list->set_right_widget(done_button);
+		done_button->set_left_widget(list);
+	}
+
+	gui->layout();
+}
+
+void Crafting_GUI::hilight_list_items()
+{
+	for (size_t i = 0; i < item_ids.size(); i++) {
+		std::vector<bool> found;
+		if (have_crafted(i) > 0 || have_components(i, found)) {
+			list->set_hilight(i, true);
+		}
+		else {
+			list->set_hilight(i, false);
+		}
+	}
+}
+
+int Crafting_GUI::have_crafted(int index)
+{
+	Inventory *inv = noo.player->get_stats()->inventory;
+
+	int count = 0;
+
+	for (size_t i = 0; i < inv->items.size(); i++) {
+		for (size_t j = 0; j < inv->items[i].size(); j++) {
+			if (inv->items[i][j]->id == item_ids[index]) {
+				count++;
+			}
+		}
+	}
+
+	return count;
+}
+
+bool Crafting_GUI::have_components(int index, std::vector<bool> &found)
+{
+	Inventory *inv = noo.player->get_stats()->inventory;
+
+	std::vector<std::string> &needed = components[index];
+
+	found.clear();
+	for (size_t i = 0; i < needed.size(); i++) {
+		found.push_back(false);
+	}
+
+	std::vector< std::pair<int, int> > used;
+
+	for (size_t i = 0; i < inv->items.size(); i++) {
+		for (size_t j = 0; j < inv->items[i].size(); j++) {
+			std::pair<int, int> p;
+			p.first = i;
+			p.second = j;
+
+			if (std::find(used.begin(), used.end(), p) != used.end()) {
+				continue;
+			}
+
+			Item *item = inv->items[i][j];
+			int found_index = -1;
+
+			for (size_t k = 0; k < needed.size(); k++) {
+				if (found[k] == false && item->id == needed[k]) {
+					found_index = k;
+					break;
+				}
+			}
+
+			if (found_index >= 0) {
+				found[found_index] = true;
+				used.push_back(p);
+			}
+		}
+	}
+
+	bool all_found = true;
+
+	for (size_t i = 0; i < found.size(); i++) {
+		if (found[i] == false) {
+			all_found = false;
+			break;
+		}
+	}
+
+	if (all_found) {
+		return true;
+	}
+
+	return false;
+}
+
+void Crafting_GUI::verify_equipment(std::string weapon_id, std::string armour_id)
+{
+	// Check if we tore down or built with our weapon or armour
+
+	Stats *stats = noo.player->get_stats();
+
+	if (type == Item::WEAPON && stats->weapon_indices.size() > 0) {
+		int weapon_index = stats->weapon_indices[0];
+		if (stats->inventory->items.size() <= weapon_index) {
+			stats->weapon_indices.clear();
+		}
+		else if (stats->inventory->items[weapon_index].size() == 0) {
+			stats->weapon_indices.clear();
+		}
+		else if (stats->inventory->items[weapon_index][0]->id != weapon_id) {
+			stats->weapon_indices.clear();
+		}
+	}
+	if (type == Item::ARMOUR && stats->armour_indices.size() > 0) {
+		int armour_index = stats->armour_indices[0];
+		if (stats->inventory->items.size() <= armour_index) {
+			stats->armour_indices.clear();
+		}
+		else if (stats->inventory->items[armour_index].size() == 0) {
+			stats->armour_indices.clear();
+		}
+		else if (stats->inventory->items[armour_index][0]->id != armour_id) {
+			stats->armour_indices.clear();
+		}
+	}
+}
