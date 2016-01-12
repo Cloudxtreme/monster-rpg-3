@@ -1815,6 +1815,7 @@ Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::s
 	TGUI_Widget *modal_main_widget = new TGUI_Widget(1.0f, 1.0f);
 
 	Widget_Window *window = new Widget_Window(w + 10, h + 10);
+	window->set_9patch_image(noo.speech_window_image);
 	window->set_float_right(true);
 	window->set_float_bottom(true);
 	window->set_padding_right(10);
