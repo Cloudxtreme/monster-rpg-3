@@ -1181,6 +1181,7 @@ Buy_Sell_GUI::Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, s
 	}
 	their_gold_label->set_parent(their_column);
 	their_list = new Widget_List(1.0f, -1.0f);
+	their_list->set_highlight_colour(noo.colours[52]); // cyan
 	their_list->set_break_line(true);
 	their_list->set_parent(their_column);
 
@@ -2044,7 +2045,7 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 
 	column2_inner = 0;
 	num_crafted_label = new Widget_Label("", -1);
-	teardown_button = new Widget_Text_Button(TRANSLATE("Tear 1 Down")END, -1, -1);
+	teardown_button = new Widget_Text_Button(TRANSLATE("Deconstruct")END, -1, -1);
 	craft_button = new Widget_Text_Button(TRANSLATE("Craft It")END, -1, -1);
 
 	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
@@ -2159,7 +2160,7 @@ void Crafting_GUI::set_labels()
 	for (size_t i = 0; i < needed.size(); i++) {
 		Widget_Label *label = new Widget_Label(needed_names[i], 100);
 		if (found[i] == true) {
-			label->set_colour(noo.colours[30]); // orange
+			label->set_colour(noo.colours[40]); // green
 		}
 		if (i == 0) {
 			label->set_padding_top(2);
