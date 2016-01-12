@@ -2284,7 +2284,7 @@ void Crafting_GUI::verify_equipment(std::string weapon_id, std::string armour_id
 
 	if (type == Item::WEAPON && stats->weapon_indices.size() > 0) {
 		int weapon_index = stats->weapon_indices[0];
-		if (stats->inventory->items.size() <= weapon_index) {
+		if ((int)stats->inventory->items.size() <= weapon_index) {
 			stats->weapon_indices.clear();
 		}
 		else if (stats->inventory->items[weapon_index].size() == 0) {
@@ -2296,7 +2296,7 @@ void Crafting_GUI::verify_equipment(std::string weapon_id, std::string armour_id
 	}
 	if (type == Item::ARMOUR && stats->armour_indices.size() > 0) {
 		int armour_index = stats->armour_indices[0];
-		if (stats->inventory->items.size() <= armour_index) {
+		if ((int)stats->inventory->items.size() <= armour_index) {
 			stats->armour_indices.clear();
 		}
 		else if (stats->inventory->items[armour_index].size() == 0) {
