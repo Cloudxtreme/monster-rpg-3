@@ -2099,9 +2099,11 @@ void Crafting_GUI::update()
 		std::string id = item_ids[selected];
 		int index = stats->inventory->find(id);
 		if (index >= 0) {
+			uint16_t condition = stats->inventory->items[index][0]->condition;
 			stats->inventory->remove(id);
 			for (size_t i = 0; i < components[selected].size(); i++) {
 				Item *item = new Item(components[selected][i]);
+				item->condition = condition;
 				stats->inventory->add(item);
 			}
 		}
@@ -2121,10 +2123,15 @@ void Crafting_GUI::update()
 
 		int selected = list->get_selected();
 		std::string id = item_ids[selected];
+		uint32_t total_condition = 0;
 		for (size_t i = 0; i < components[selected].size(); i++) {
-			stats->inventory->remove(components[selected][i]);
+			int index = stats->inventory->find(components[selected][i]);
+			Item *item = stats->inventory->items[index][0];
+			total_condition += item->condition;
+			stats->inventory->remove(item);
 		}
 		Item *item = new Item(id);
+		item->condition = total_condition / components[selected].size();
 		stats->inventory->add(item);
 		set_labels();
 
