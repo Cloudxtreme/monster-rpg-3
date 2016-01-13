@@ -111,6 +111,7 @@ private:
 	void handle_dropped_items();
 	void set_list();
 	void remove_item(int index, bool drop);
+	void clear_highlights();
 
 	Stats *stats;
 

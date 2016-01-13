@@ -508,15 +508,14 @@ void Pause_GUI::set_labels()
 	mp->set_text(string_printf("%d/%d", stats->mp, stats->characteristics.get_modified_max_mp(stats)));
 	experience->set_text(string_printf("%d", stats->experience));
 
-	// FIXME: get weapon/armour names based on arrays
-	if (stats->weapon_indices.size() > 0) {
-		weapon->set_text(stats->inventory->items[stats->weapon_indices[0]][0]->name);
+	if (stats->weapon_index >= 0) {
+		weapon->set_text(stats->inventory->items[stats->weapon_index][0]->name);
 	}
 	else {
 		weapon->set_text("");
 	}
-	if (stats->armour_indices.size() > 0) {
-		armour->set_text(stats->inventory->items[stats->armour_indices[0]][0]->name);
+	if (stats->armour_index >= 0) {
+		armour->set_text(stats->inventory->items[stats->armour_index][0]->name);
 	}
 	else {
 		armour->set_text("");
@@ -819,25 +818,24 @@ void Items_GUI::update()
 
 		if (use_radio->is_selected()) {
 			if (type == Item::WEAPON) {
-				// FIXME: multiple weapons
-				if (stats->weapon_indices.size() > 0 && stats->weapon_indices[0] == index) {
-					stats->weapon_indices.clear();
+				if (stats->weapon_index >= 0 && stats->weapon_index == index) {
+					stats->weapon_index = -1;
 					list->set_hilight(pressed, false);
 				}
 				else {
-					stats->weapon_indices.clear();
-					stats->weapon_indices.push_back(index);
+					clear_highlights();
+					stats->weapon_index = index;
 					list->set_hilight(pressed, true);
 				}
 			}
 			else if (type == Item::ARMOUR) {
-				if (stats->armour_indices.size() > 0 && stats->armour_indices[0] == index) {
-					stats->armour_indices.clear();
+				if (stats->armour_index >= 0 && stats->armour_index == index) {
+					stats->armour_index = -1;
 					list->set_hilight(pressed, false);
 				}
 				else {
-					stats->armour_indices.clear();
-					stats->armour_indices.push_back(index);
+					clear_highlights();
+					stats->armour_index = index;
 					list->set_hilight(pressed, true);
 				}
 			}
@@ -974,11 +972,10 @@ void Items_GUI::set_list()
 				std::string name = items[i][0]->name;
 				item_list.push_back(itos(count) + " " + name);
 				indices.push_back(i);
-				// FIXME: arrays of weapon/armour indices
-				if (type == Item::WEAPON && stats->weapon_indices.size() > 0 && i == stats->weapon_indices[0]) {
+				if (type == Item::WEAPON && stats->weapon_index >= 0 && i == stats->weapon_index) {
 					hilight = item_list.size() - 1;
 				}
-				else if (type == Item::ARMOUR && stats->armour_indices.size() > 0 && i == stats->armour_indices[0]) {
+				else if (type == Item::ARMOUR && stats->armour_index >= 0 && i == stats->armour_index) {
 					hilight = item_list.size() - 1;
 				}
 			}
@@ -1038,21 +1035,36 @@ void Items_GUI::remove_item(int index, bool drop)
 		delete item;
 	}
 
-	// FIXME: arrays of weapon/armour indices
-	if (stats->weapon_indices.size() > 0 && index == stats->weapon_indices[0]) {
-		stats->weapon_indices.clear();
+	if (stats->weapon_index >= 0 && index == stats->weapon_index) {
+		if (erased) {
+			stats->weapon_index = -1;
+			clear_highlights();
+		}
 	}
-	else if (stats->armour_indices.size() > 0 && index == stats->armour_indices[0]) {
-		stats->armour_indices.clear();
+	else if (stats->armour_index >= 0 && index == stats->armour_index) {
+		if (erased) {
+			stats->armour_index = -1;
+			clear_highlights();
+		}
 	}
-	else if (erased && stats->weapon_indices.size() > 0 && stats->weapon_indices[0] > index) {
-		stats->weapon_indices[0]--;
+	else if (erased && stats->weapon_index >= 0 && stats->weapon_index > index) {
+		stats->weapon_index--;
 	}
-	else if (erased && stats->armour_indices.size() > 0 && stats->armour_indices[0] > index) {
-		stats->armour_indices[0]--;
+	else if (erased && stats->armour_index >= 0 && stats->armour_index > index) {
+		stats->armour_index--;
 	}
 
 	set_list();
+}
+
+void Items_GUI::clear_highlights()
+{
+	if (list != 0) {
+		int size = list->get_size();
+		for (int i = 0; i < size; i++) {
+			list->set_hilight(i, false);
+		}
+	}
 }
 
 //--
@@ -1101,18 +1113,17 @@ Buy_Sell_GUI::Buy_Sell_GUI(int seller_multiplier, Inventory *seller_inventory, s
 
 	stats = noo.map->get_entity(0)->get_stats();
 
-	// FIXME: weapon and armour arrays
-	if (stats->weapon_indices.size() == 0) {
+	if (stats->weapon_index == -1) {
 		start_weapon = 0;
 	}
 	else {
-		start_weapon = stats->inventory->items[stats->weapon_indices[0]][0];
+		start_weapon = stats->inventory->items[stats->weapon_index][0];
 	}
-	if (stats->armour_indices.size() == 0) {
+	if (stats->armour_index == -1) {
 		start_armour = 0;
 	}
 	else {
-		start_armour = stats->inventory->items[stats->armour_indices[0]][0];
+		start_armour = stats->inventory->items[stats->armour_index][0];
 	}
 
 	for (size_t i = 0; i < seller_inventory->items.size(); i++) {
@@ -1236,16 +1247,16 @@ Buy_Sell_GUI::~Buy_Sell_GUI()
 {
 	delete cha_ching;
 
-	stats->weapon_indices.clear();
-	stats->armour_indices.clear();
+	stats->weapon_index = -1;
+	stats->armour_index = -1;
 
 	for (size_t i = 0; i < stats->inventory->items.size(); i++) {
 		for (size_t j = 0; j < stats->inventory->items[i].size(); j++) {
 			if (stats->inventory->items[i][j] == start_weapon) {
-				stats->weapon_indices.push_back(i);
+				stats->weapon_index = i;
 			}
 			else if (stats->inventory->items[i][j] == start_armour) {
-				stats->armour_indices.push_back(i);
+				stats->armour_index = i;
 			}
 		}
 	}
@@ -2054,8 +2065,7 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
 
-	//gui->set_focus(list); FIXME
-	gui->set_focus(done_button);
+	gui->set_focus(list);
 
 	set_labels();
 }
@@ -2082,8 +2092,8 @@ void Crafting_GUI::update()
 	else if (teardown_button->pressed()) {
 		Stats *stats = noo.player->get_stats();
 
-		std::string weapon_id = stats->weapon_indices.size() > 0 ? stats->inventory->items[stats->weapon_indices[0]][0]->id : "";
-		std::string armour_id = stats->armour_indices.size() > 0 ? stats->inventory->items[stats->armour_indices[0]][0]->id : "";
+		std::string weapon_id = stats->weapon_index >= 0 ? stats->inventory->items[stats->weapon_index][0]->id : "";
+		std::string armour_id = stats->armour_index >= 0 ? stats->inventory->items[stats->armour_index][0]->id : "";
 
 		int selected = list->get_selected();
 		std::string id = item_ids[selected];
@@ -2106,8 +2116,8 @@ void Crafting_GUI::update()
 	else if (craft_button->pressed()) {
 		Stats *stats = noo.player->get_stats();
 
-		std::string weapon_id = stats->weapon_indices.size() > 0 ? stats->inventory->items[stats->weapon_indices[0]][0]->id : "";
-		std::string armour_id = stats->armour_indices.size() > 0 ? stats->inventory->items[stats->armour_indices[0]][0]->id : "";
+		std::string weapon_id = stats->weapon_index >= 0 ? stats->inventory->items[stats->weapon_index][0]->id : "";
+		std::string armour_id = stats->armour_index >= 0 ? stats->inventory->items[stats->armour_index][0]->id : "";
 
 		int selected = list->get_selected();
 		std::string id = item_ids[selected];
@@ -2285,28 +2295,28 @@ void Crafting_GUI::verify_equipment(std::string weapon_id, std::string armour_id
 
 	Stats *stats = noo.player->get_stats();
 
-	if (type == Item::WEAPON && stats->weapon_indices.size() > 0) {
-		int weapon_index = stats->weapon_indices[0];
+	if (type == Item::WEAPON && stats->weapon_index >= 0) {
+		int weapon_index = stats->weapon_index;
 		if ((int)stats->inventory->items.size() <= weapon_index) {
-			stats->weapon_indices.clear();
+			stats->weapon_index = -1;
 		}
 		else if (stats->inventory->items[weapon_index].size() == 0) {
-			stats->weapon_indices.clear();
+			stats->weapon_index = -1;
 		}
 		else if (stats->inventory->items[weapon_index][0]->id != weapon_id) {
-			stats->weapon_indices.clear();
+			stats->weapon_index = -1;
 		}
 	}
-	if (type == Item::ARMOUR && stats->armour_indices.size() > 0) {
-		int armour_index = stats->armour_indices[0];
+	if (type == Item::ARMOUR && stats->armour_index >= 0) {
+		int armour_index = stats->armour_index;
 		if ((int)stats->inventory->items.size() <= armour_index) {
-			stats->armour_indices.clear();
+			stats->armour_index = -1;
 		}
 		else if (stats->inventory->items[armour_index].size() == 0) {
-			stats->armour_indices.clear();
+			stats->armour_index = -1;
 		}
 		else if (stats->inventory->items[armour_index][0]->id != armour_id) {
-			stats->armour_indices.clear();
+			stats->armour_index = -1;
 		}
 	}
 }
