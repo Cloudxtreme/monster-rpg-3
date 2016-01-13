@@ -1834,6 +1834,7 @@ Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::s
 	}
 
 	list = new Widget_List(1.0f, int(h - (num_lines + 1) * (noo.font->get_height() + 3)));
+	list->set_selected_colour(noo.colours[7]); // darker grey
 	list->set_items(choices);
 	list->set_padding_top(int(h - (3 * (3 + noo.font->get_height()))));
 	list->set_parent(pad);
