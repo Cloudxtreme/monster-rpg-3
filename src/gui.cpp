@@ -2058,7 +2058,7 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 	column2_inner = 0;
 	num_crafted_label = new Widget_Label("", -1);
 	teardown_button = new Widget_Text_Button(TRANSLATE("Deconstruct")END, -1, -1);
-	craft_button = new Widget_Text_Button(TRANSLATE("Craft It")END, -1, -1);
+	craft_button = new Widget_Text_Button(TRANSLATE("Construct")END, -1, -1);
 
 	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
 	done_button->set_parent(pad);
