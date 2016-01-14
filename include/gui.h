@@ -129,6 +129,7 @@ private:
 	Widget_Label *value_label;
 	Widget_Label *condition_label;
 	Widget_Label *properties_label;
+	Widget_Label *modifiers_label;
 
 	std::vector<int> indices; // index into inventory
 

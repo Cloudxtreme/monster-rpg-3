@@ -746,6 +746,11 @@ Items_GUI::Items_GUI(Item::Type type, Callback callback) :
 	properties_label->set_break_line(true);
 	properties_label->set_parent(info);
 
+	modifiers_label = new Widget_Label("", 70);
+	modifiers_label->set_break_line(true);
+	modifiers_label->set_padding_top(5);
+	modifiers_label->set_parent(info);
+
 	TGUI_Widget *column3 = new TGUI_Widget(0.19f, 1.0f);
 	column3->set_parent(pad);
 
@@ -887,6 +892,7 @@ void Items_GUI::set_labels()
 			condition_label->set_text(noo.game_t->translate(58) + ": -");
 			value_label->set_text(noo.game_t->translate(138) + ": -");
 			properties_label->set_text("");
+			modifiers_label->set_text("");
 		}
 		else {
 			selected = indices[selected];
@@ -907,10 +913,56 @@ void Items_GUI::set_labels()
 
 			value_label->set_text(noo.game_t->translate(138) + ": " + Inventory::decimal_to_string(value));
 
-			int attack = int(item->min_attack + ((condition / 100.0f) * (item->max_attack - item->min_attack)));
-
 			if (item->type == Item::WEAPON) {
+				int attack = int(item->min_attack + ((condition / 100.0f) * (item->max_attack - item->min_attack)));
 				properties_label->set_text(noo.game_t->translate(49) + ": " + itos(attack));
+			}
+			else if (item->type == Item::ARMOUR) {
+				int defense = int(item->min_defense + ((condition / 100.0f) * (item->max_defense - item->min_defense)));
+				properties_label->set_text(TRANSLATE("Defense")END + ": " + itos(defense));
+			}
+
+			std::string modifiers_text;
+
+			Stats::Characteristics &mods = item->modifiers;
+
+			int m_max_hp = int((((float)mods.get_max_hp() - (0xffff/2)) / (0xffff/2)) * 100);
+			int m_max_mp = int((((float)mods.get_max_mp() - (0xffff/2)) / (0xffff/2)) * 100);
+			int m_attack = int((((float)mods.get_attack() - (0xffff/2)) / (0xffff/2)) * 100);
+			int m_defense = int((((float)mods.get_defense() - (0xffff/2)) / (0xffff/2)) * 100);
+			int m_agility = int((((float)mods.get_agility() - (0xffff/2)) / (0xffff/2)) * 100);
+			int m_luck = int((((float)mods.get_luck() - (0xffff/2)) / (0xffff/2)) * 100);
+			int m_speed = int((((float)mods.get_speed() - (0xffff/2)) / (0xffff/2)) * 100);
+			int m_strength = int((((float)mods.get_strength() - (0xffff/2)) / (0xffff/2)) * 100);
+
+			if (m_max_hp != 0) {
+				modifiers_text += TRANSLATE("Max. HP")END + " " + (m_max_hp > 0 ? "+" : "") + itos(m_max_hp) + "%$";
+			}
+			if (m_max_mp != 0) {
+				modifiers_text += TRANSLATE("Max. MP")END + " " + (m_max_mp > 0 ? "+" : "") + itos(m_max_mp) + "%$";
+			}
+			if (m_attack != 0) {
+				modifiers_text += TRANSLATE("Attack")END + " " + (m_attack > 0 ? "+" : "") + itos(m_attack) + "%$";
+			}
+			if (m_defense != 0) {
+				modifiers_text += TRANSLATE("Defense")END + " " + (m_defense > 0 ? "+" : "") + itos(m_defense) + "%$";
+			}
+			if (m_agility != 0) {
+				modifiers_text += TRANSLATE("Agility")END + " " + (m_agility > 0 ? "+" : "") + itos(m_agility) + "%$";
+			}
+			if (m_luck != 0) {
+				modifiers_text += TRANSLATE("Luck")END + " " + (m_luck > 0 ? "+" : "") + itos(m_luck) + "%$";
+			}
+			if (m_speed != 0) {
+				modifiers_text += TRANSLATE("Speed")END + " " + (m_speed > 0 ? "+" : "") + itos(m_speed) + "%$";
+			}
+			if (m_strength != 0) {
+				modifiers_text += TRANSLATE("Strength")END + " " + (m_strength > 0 ? "+" : "") + itos(m_strength) + "%$";
+			}
+
+			if (modifiers_text != "") {
+				modifiers_text = "Modifiers:$" + modifiers_text;
+				modifiers_label->set_text(modifiers_text);
 			}
 		}
 	}
