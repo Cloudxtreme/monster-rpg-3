@@ -363,6 +363,9 @@ Pause_GUI::Pause_GUI() :
 	audio_toggle->set_parent(audio_toggle_container);
 	audio_toggle_container->set_parent(time_and_audio_toggle_container);
 
+	quests_button->set_down_widget(audio_toggle);
+	resume_button->set_up_widget(audio_toggle);
+
 	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
 
 	gui->set_focus(resume_button);
@@ -1910,7 +1913,7 @@ Multiple_Choice_GUI::Multiple_Choice_GUI(std::string caption, std::vector<std::s
 	}
 
 	list = new Widget_List(1.0f, int(h - (num_lines + 1) * (noo.font->get_height() + 3)));
-	list->set_selected_colour(noo.colours[7]); // darker grey
+	list->set_selected_colour(noo.colours[13]); // blue
 	list->set_items(choices);
 	list->set_padding_top(int(h - (3 * (3 + noo.font->get_height()))));
 	list->set_parent(pad);
