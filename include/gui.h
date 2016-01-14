@@ -83,6 +83,7 @@ private:
 	Widget_Text_Button *items_button;
 	Widget_Text_Button *weapons_button;
 	Widget_Text_Button *armour_button;
+	Widget_Text_Button *spells_button;
 	Widget_Text_Button *crafting_button;
 	Widget_Text_Button *quests_button;
 
@@ -311,6 +312,25 @@ private:
 	bool exit_menu;
 
 	Sample *sample;
+};
+
+class Spells_GUI : public GUI {
+public:
+	Spells_GUI();
+
+	void handle_event(TGUI_Event *event);
+	void update();
+
+private:
+	void set_list();
+
+	Stats *stats;
+
+	TGUI_Widget *pad;
+	Widget_List *list;
+	Widget_Text_Button *done_button;
+	
+	bool exit_menu;
 };
 
 #endif // M3_GUI_H

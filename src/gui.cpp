@@ -87,7 +87,11 @@ void Pause_GUI::crafting_callback(void *data)
 		gui->start();
 		noo.guis.push_back(gui);
 	}
-	// FIXME: spells
+	else {
+		Crafting_GUI *gui = new Crafting_GUI(Item::OTHER); // Since OTHER isn't used, use it for spells
+		gui->start();
+		noo.guis.push_back(gui);
+	}
 
 	set_the_labels = true;
 }
@@ -324,6 +328,10 @@ Pause_GUI::Pause_GUI() :
 	armour_button->set_padding_top(2);
 	armour_button->set_parent(column3);
 
+	spells_button = new Widget_Text_Button(TRANSLATE("Spells")END, 1.0f, -1);
+	spells_button->set_padding_top(2);
+	spells_button->set_parent(column3);
+
 	crafting_button = new Widget_Text_Button(TRANSLATE("Crafting")END, 1.0f, -1);
 	crafting_button->set_padding_top(2);
 	crafting_button->set_parent(column3);
@@ -415,6 +423,11 @@ void Pause_GUI::update()
 		Items_GUI *items_gui = new Items_GUI(Item::ARMOUR, callback);
 		items_gui->start();
 		noo.guis.push_back(items_gui);
+	}
+	else if (spells_button->pressed()) {
+		Spells_GUI *gui = new Spells_GUI();
+		gui->start();
+		noo.guis.push_back(gui);
 	}
 	else if (crafting_button->pressed()) {
 		std::vector<std::string> choices;
@@ -2025,7 +2038,12 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 	type(type),
 	exit_menu(false)
 {
-	sample = new Sample("craft.wav");
+	if (type == Item::OTHER) {
+		sample = new Sample("craft.wav"); // FIXME: bubbling
+	}
+	else {
+		sample = new Sample("craft.wav");
+	}
 
 	Widget *modal_main_widget = new Widget(1.0f, 1.0f);
 	SDL_Colour background_colour = { 0, 0, 0, 192 };
@@ -2068,33 +2086,62 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 
 	for (size_t i = 0; i < filenames.size(); i++) {
 		std::string fn = filenames[i];
-		if (fn.substr(0, 6) == "items/") {
-			std::string name = fn.substr(6); // chop item/
-			name = name.substr(0, name.length()-4); // chop .xml
-			Item *item = new Item(name);
-			if (item->components != "" && type == item->type) {
-				item_ids.push_back(item->id);
-				list_strings.push_back(item->name);
+		if (type == Item::OTHER) {
+			if (fn.substr(0, 7) == "spells/") {
+				std::string name = fn.substr(7); // chop spells/
+				name = name.substr(0, name.length()-4); // chop .xml
+				
+				Spell *spell = new Spell(name);
 
-				Tokenizer t(item->components, ':');
-				std::string s;
+				item_ids.push_back(spell->get_id());
+				list_strings.push_back(spell->get_name());
 
-				std::vector<std::string> v;
-				std::vector<std::string> v2;
+				std::vector<std::string> &ingredients = spell->get_ingredients();
 
-				while ((s = t.next()) != "") {
-					v.push_back(s);
+				components.push_back(ingredients);
 
-					Item *item = new Item(s);
-					v2.push_back(item->name);
+				std::vector<std::string> names;
+
+				for (size_t i =  0; i < ingredients.size(); i++) {
+					Item *item = new Item(ingredients[i]);
+					names.push_back(item->name);
 					delete item;
 				}
 
-				components.push_back(v);
-				component_names.push_back(v2);
-			}
+				component_names.push_back(names);
 
-			delete item;
+				delete spell;
+			}
+		}
+		else {
+			if (fn.substr(0, 6) == "items/") {
+				std::string name = fn.substr(6); // chop item/
+				name = name.substr(0, name.length()-4); // chop .xml
+				Item *item = new Item(name);
+				if (item->components != "" && type == item->type) {
+					item_ids.push_back(item->id);
+					list_strings.push_back(item->name);
+
+					Tokenizer t(item->components, ':');
+					std::string s;
+
+					std::vector<std::string> v;
+					std::vector<std::string> v2;
+
+					while ((s = t.next()) != "") {
+						v.push_back(s);
+
+						Item *item = new Item(s);
+						v2.push_back(item->name);
+						delete item;
+					}
+
+					components.push_back(v);
+					component_names.push_back(v2);
+				}
+
+				delete item;
+			}
 		}
 	}
 
@@ -2112,10 +2159,17 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 	column2_inner = 0;
 	num_crafted_label = new Widget_Label("", -1);
 
-	teardown_button = new Widget_Text_Button(TRANSLATE("Deconstruct")END, -1, -1);
-	teardown_button->set_sound_enabled(false);
+	if (type != Item::OTHER) {
+		teardown_button = new Widget_Text_Button(TRANSLATE("Deconstruct")END, -1, -1);
+		teardown_button->set_sound_enabled(false);
+	}
 
-	craft_button = new Widget_Text_Button(TRANSLATE("Construct")END, -1, -1);
+	if (type == Item::OTHER) {
+		craft_button = new Widget_Text_Button(TRANSLATE("Brew")END, -1, -1);
+	}
+	else {
+		craft_button = new Widget_Text_Button(TRANSLATE("Construct")END, -1, -1);
+	}
 	craft_button->set_sound_enabled(false);
 
 	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
@@ -2152,7 +2206,7 @@ void Crafting_GUI::update()
 		exit();
 		return;
 	}
-	else if (teardown_button->pressed()) {
+	else if (type != Item::OTHER && teardown_button->pressed()) {
 		sample->play(1.0f, false);
 
 		SDL_Delay(1000);
@@ -2189,9 +2243,6 @@ void Crafting_GUI::update()
 
 		Stats *stats = noo.player->get_stats();
 
-		std::string weapon_id = stats->weapon_index >= 0 ? stats->inventory->items[stats->weapon_index][0]->id : "";
-		std::string armour_id = stats->armour_index >= 0 ? stats->inventory->items[stats->armour_index][0]->id : "";
-
 		int selected = list->get_selected();
 		std::string id = item_ids[selected];
 		uint32_t total_condition = 0;
@@ -2201,23 +2252,34 @@ void Crafting_GUI::update()
 			total_condition += item->condition;
 			stats->inventory->remove(item);
 		}
-		Item *item = new Item(id);
-		item->condition = total_condition / components[selected].size();
-		stats->inventory->add(item);
-		set_labels();
 
+		if (type == Item::OTHER) {
+			Spell *spell = new Spell(id);
+			stats->spells.push_back(spell);
+		}
+		else {
+			Item *item = new Item(id);
+			item->condition = total_condition / components[selected].size();
+			stats->inventory->add(item);
+
+			std::string weapon_id = stats->weapon_index >= 0 ? stats->inventory->items[stats->weapon_index][0]->id : "";
+			std::string armour_id = stats->armour_index >= 0 ? stats->inventory->items[stats->armour_index][0]->id : "";
+
+			verify_equipment(weapon_id, armour_id);
+		}
+
+		set_labels();
+		
 		if (craft_button->get_accepts_focus() == false) {
 			gui->set_focus(done_button);
 		}
-
-		verify_equipment(weapon_id, armour_id);
 	}
 }
 
 void Crafting_GUI::set_labels()
 {
 	if (column2_inner) {
-		column2_inner->set_parent(0);
+		column2_inner->set_parent(0); // clear state
 		delete column2_inner;
 	}
 
@@ -2226,21 +2288,57 @@ void Crafting_GUI::set_labels()
 	column2_inner = new TGUI_Widget(1.0f, 1.0f);
 	column2_inner->set_parent(column2);
 
-	int num_crafted = have_crafted(selected);
-
-	num_crafted_label->set_text(TRANSLATE("Have")END + ": " + itos(num_crafted));
-	num_crafted_label->set_parent(column2_inner);
-
-	teardown_button->set_enabled(num_crafted > 0);
-	teardown_button->set_padding_top(2);
-	teardown_button->set_break_line(true);
-	teardown_button->set_parent(column2_inner);
-
 	std::vector<bool> found;
-	craft_button->set_enabled(have_components(selected, found));
+
+	if (type == Item::OTHER) {
+		Stats *stats = noo.player->get_stats();
+		bool have_spell = false;
+
+		for (size_t i = 0; i < stats->spells.size(); i++) {
+			if (stats->spells[i]->get_id() == item_ids[selected]) {
+				have_spell = true;
+				break;
+			}
+		}
+		
+		bool have_everything = have_components(selected, found);
+
+		if (have_spell) {
+			num_crafted_label->set_text(TRANSLATE("In spellbook")END);
+			craft_button->set_enabled(false);
+		}
+		else {
+			num_crafted_label->set_text(TRANSLATE("Not learned")END);
+
+			if (have_everything) {
+				craft_button->set_enabled(true);
+			}
+			else {
+				craft_button->set_enabled(false);
+			}
+		}
+		
+		num_crafted_label->set_parent(column2_inner);
+	}
+	else {
+		int num_crafted = have_crafted(selected);
+
+		num_crafted_label->set_text(TRANSLATE("Have")END + ": " + itos(num_crafted));
+		num_crafted_label->set_parent(column2_inner);
+
+		teardown_button->set_enabled(num_crafted > 0);
+		teardown_button->set_padding_top(2);
+		teardown_button->set_break_line(true);
+		teardown_button->set_parent(column2_inner);
+
+		craft_button->set_enabled(have_components(selected, found));
+	}
 
 	Widget_Label *components_label = new Widget_Label(TRANSLATE("Needed")END + ":", 100);
 	components_label->set_padding_top(5);
+	if (type == Item::OTHER) {
+		components_label->set_break_line(true);
+	}
 	components_label->set_parent(column2_inner);
 
 	std::vector<std::string> &needed = components[selected];
@@ -2262,20 +2360,34 @@ void Crafting_GUI::set_labels()
 	craft_button->set_break_line(true);
 	craft_button->set_parent(column2_inner);
 
-	teardown_button->set_right_widget(done_button);
-	craft_button->set_right_widget(done_button);
+	if (type == Item::OTHER) {
+		craft_button->set_right_widget(done_button);
 
-	if (teardown_button->get_accepts_focus()) {
-		list->set_right_widget(teardown_button);
-		done_button->set_left_widget(teardown_button);
-	}
-	else if (craft_button->get_accepts_focus()) {
-		list->set_right_widget(craft_button);
-		done_button->set_left_widget(craft_button);
+		if (craft_button->get_accepts_focus()) {
+			list->set_right_widget(craft_button);
+			done_button->set_left_widget(craft_button);
+		}
+		else {
+			list->set_right_widget(done_button);
+			done_button->set_left_widget(list);
+		}
 	}
 	else {
-		list->set_right_widget(done_button);
-		done_button->set_left_widget(list);
+		teardown_button->set_right_widget(done_button);
+		craft_button->set_right_widget(done_button);
+
+		if (teardown_button->get_accepts_focus()) {
+			list->set_right_widget(teardown_button);
+			done_button->set_left_widget(teardown_button);
+		}
+		else if (craft_button->get_accepts_focus()) {
+			list->set_right_widget(craft_button);
+			done_button->set_left_widget(craft_button);
+		}
+		else {
+			list->set_right_widget(done_button);
+			done_button->set_left_widget(list);
+		}
 	}
 
 	gui->layout();
@@ -2396,5 +2508,91 @@ void Crafting_GUI::verify_equipment(std::string weapon_id, std::string armour_id
 		else if (stats->inventory->items[armour_index][0]->id != armour_id) {
 			stats->armour_index = -1;
 		}
+	}
+}
+
+//--
+
+Spells_GUI::Spells_GUI() :
+	list(0),
+	exit_menu(false)
+{
+	stats = noo.map->get_entity(0)->get_stats();
+
+	Widget *modal_main_widget = new Widget(1.0f, 1.0f);
+	SDL_Colour background_colour = { 0, 0, 0, 192 };
+	modal_main_widget->set_background_colour(background_colour);
+
+	Widget_Window *window = new Widget_Window(0.95f, 0.95f);
+	window->set_center_x(true);
+	window->set_center_y(true);
+	window->set_parent(modal_main_widget);
+
+	pad = new TGUI_Widget(1.0f, 1.0f);
+	pad->set_center_x(true);
+	pad->set_center_y(true);
+	pad->set_padding(5);
+	pad->set_parent(window);
+
+	Widget *title_container = new Widget(1.0f, int(noo.font->get_height() + 5));
+	title_container->set_parent(pad);
+	Widget_Label *title = new Widget_Label(TRANSLATE("Spells")END, 100);
+	title->set_center_x(true);
+	title->set_parent(title_container);
+
+	set_list();
+
+	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
+	done_button->set_parent(pad);
+
+	gui = new TGUI(modal_main_widget, noo.screen_size.w, noo.screen_size.h);
+
+	if (list) {
+		gui->set_focus(list);
+	}
+	else {
+		gui->set_focus(done_button);
+	}
+}
+
+void Spells_GUI::handle_event(TGUI_Event *event)
+{
+	if ((event->type == TGUI_KEY_DOWN && event->keyboard.code == noo.key_b2) ||
+		(event->type== TGUI_JOY_DOWN && event->joystick.button == noo.joy_b2)) {
+
+		noo.button_mml->play(false);
+		exit_menu = true;
+	}
+	else {
+		GUI::handle_event(event);
+	}
+}
+
+void Spells_GUI::update()
+{
+	if (done_button->pressed() || exit_menu) {
+		exit();
+		return;
+	}
+}
+
+void Spells_GUI::set_list()
+{
+	std::vector<std::string> spell_list;
+
+	for (size_t i = 0; i < stats->spells.size(); i++) {
+		spell_list.push_back(stats->spells[i]->get_name());
+	}
+
+	if (spell_list.size() == 0) {
+		TGUI_Widget *parent = new TGUI_Widget(0.4f, -1.0f);
+		parent->set_parent(pad);
+		Widget_Label *label = new Widget_Label("No spells", -1);
+		label->set_parent(parent);
+	}
+	else {
+		list = new Widget_List(0.4f, -1.0f);
+		list->set_parent(pad);
+		list->set_items(spell_list);
 	}
 }
