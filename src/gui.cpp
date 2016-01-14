@@ -2155,7 +2155,7 @@ void Crafting_GUI::update()
 	else if (teardown_button->pressed()) {
 		sample->play(1.0f, false);
 
-		SDL_Delay(500);
+		SDL_Delay(1000);
 
 		Stats *stats = noo.player->get_stats();
 
@@ -2185,7 +2185,7 @@ void Crafting_GUI::update()
 	else if (craft_button->pressed()) {
 		sample->play(1.0f, false);
 
-		SDL_Delay(500);
+		SDL_Delay(1000);
 
 		Stats *stats = noo.player->get_stats();
 
