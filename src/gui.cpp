@@ -1973,6 +1973,8 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 	type(type),
 	exit_menu(false)
 {
+	sample = new Sample("craft.wav");
+
 	Widget *modal_main_widget = new Widget(1.0f, 1.0f);
 	SDL_Colour background_colour = { 0, 0, 0, 192 };
 	modal_main_widget->set_background_colour(background_colour);
@@ -2057,8 +2059,12 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 
 	column2_inner = 0;
 	num_crafted_label = new Widget_Label("", -1);
+
 	teardown_button = new Widget_Text_Button(TRANSLATE("Deconstruct")END, -1, -1);
+	teardown_button->set_sound_enabled(false);
+
 	craft_button = new Widget_Text_Button(TRANSLATE("Construct")END, -1, -1);
+	craft_button->set_sound_enabled(false);
 
 	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
 	done_button->set_parent(pad);
@@ -2068,6 +2074,11 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 	gui->set_focus(list);
 
 	set_labels();
+}
+
+Crafting_GUI::~Crafting_GUI()
+{
+	delete sample;
 }
 
 void Crafting_GUI::handle_event(TGUI_Event *event)
@@ -2090,6 +2101,10 @@ void Crafting_GUI::update()
 		return;
 	}
 	else if (teardown_button->pressed()) {
+		sample->play(1.0f, false);
+
+		SDL_Delay(500);
+
 		Stats *stats = noo.player->get_stats();
 
 		std::string weapon_id = stats->weapon_index >= 0 ? stats->inventory->items[stats->weapon_index][0]->id : "";
@@ -2116,6 +2131,10 @@ void Crafting_GUI::update()
 		verify_equipment(weapon_id, armour_id);
 	}
 	else if (craft_button->pressed()) {
+		sample->play(1.0f, false);
+
+		SDL_Delay(500);
+
 		Stats *stats = noo.player->get_stats();
 
 		std::string weapon_id = stats->weapon_index >= 0 ? stats->inventory->items[stats->weapon_index][0]->id : "";

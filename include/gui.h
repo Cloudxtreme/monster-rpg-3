@@ -278,6 +278,7 @@ private:
 class Crafting_GUI : public GUI {
 public:
 	Crafting_GUI(Item::Type type);
+	~Crafting_GUI();
 
 	void handle_event(TGUI_Event *event);
 	void update();
@@ -307,6 +308,8 @@ private:
 	Widget_Text_Button *craft_button;
 
 	bool exit_menu;
+
+	Sample *sample;
 };
 
 #endif // M3_GUI_H
