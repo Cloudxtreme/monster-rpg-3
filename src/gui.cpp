@@ -2042,7 +2042,7 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 	exit_menu(false)
 {
 	if (type == Item::OTHER) {
-		sample = new Sample("craft.wav"); // FIXME: bubbling
+		sample = new Sample("spell_craft.wav");
 	}
 	else {
 		sample = new Sample("craft.wav");
