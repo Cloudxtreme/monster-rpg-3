@@ -329,6 +329,7 @@ private:
 	TGUI_Widget *pad;
 	Widget_List *list;
 	Widget_Text_Button *done_button;
+	Widget_Label *cost_label;
 	
 	bool exit_menu;
 };

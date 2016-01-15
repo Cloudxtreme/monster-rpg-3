@@ -2545,6 +2545,12 @@ Spells_GUI::Spells_GUI() :
 
 	set_list();
 
+	Widget *middle_column = new Widget(0.4f, 1.0f);
+	middle_column->set_parent(pad);
+
+	cost_label = new Widget_Label("", -1);
+	cost_label->set_parent(middle_column);
+
 	done_button = new Widget_Text_Button(noo.game_t->translate(63), -1, -1);
 	done_button->set_parent(pad);
 
@@ -2576,6 +2582,11 @@ void Spells_GUI::update()
 	if (done_button->pressed() || exit_menu) {
 		exit();
 		return;
+	}
+
+	if (list) {
+		Spell *spell = noo.player->get_stats()->spells[list->get_selected()];
+		cost_label->set_text(TRANSLATE("Cost")END + ": " + itos(spell->get_cost()));
 	}
 }
 
