@@ -1,8 +1,8 @@
 # Build instructions
 
-The tools/build.sh script can be used to download and build everything on Linux.
+The tools/build.sh script can be used to download and build everything on Linux. You still need the development packages listed below installed first, though.
 
-Below are the instructions to build manually. See the instructions in README.txt in the monster-rpg-3-data repo for instructions on building the datafile.
+The following are instructions to build manually. See the instructions in README.txt in the monster-rpg-3-data repo for instructions on building the datafile.
 
 # Build instructions (Ubuntu 14.04)
 
