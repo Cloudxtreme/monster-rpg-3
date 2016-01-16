@@ -7,8 +7,6 @@ MO3_DIR=${ROOT}/monster-rpg-3
 DATA_DIR=${ROOT}/monster-rpg-3-data
 TARGET_DIR=${ROOT}/mo3
 
-NODES=3
-
 # Clone TGUI3 if its directory doesn't already exist.
 if [ ! -d "tgui3" ]; then
 
@@ -42,7 +40,7 @@ pushd ${TGUI3_DIR}
 git pull --rebase
 mkdir -p build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j${NODES}
+make $*
 popd
 
 echo "### Building Nooskewl Engine ###"
@@ -50,7 +48,7 @@ pushd ${NE_DIR}
 git pull --rebase
 mkdir -p build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_PATH="${TGUI3_DIR}/include" -DUSER_LIBRARY_PATH="${TGUI3_DIR}/build"
-make -j${NODES}
+make $*
 popd
 
 echo "### Building Monster RPG 3 ###"
@@ -58,7 +56,7 @@ pushd ${MO3_DIR}
 git pull --rebase
 mkdir -p build && cd build
 cmake .. -DDEMO=off -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_PATH="${TGUI3_DIR}/include;${NE_DIR}/include" -DUSER_LIBRARY_PATH="${TGUI3_DIR}/build;${NE_DIR}/build"
-make -j${NODES}
+make $*
 popd
 
 echo "### Building data archive ###"
