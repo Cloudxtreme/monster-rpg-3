@@ -340,7 +340,7 @@ Pause_GUI::Pause_GUI() :
 	quests_button->set_padding_top(2);
 	quests_button->set_parent(column3);
 
-	time_label = new Widget_Label(get_time_string(noo.get_play_time()), -1);
+	time_label = new Widget_Label(get_day_time_string(), -1);
 	time_label->set_padding_top(2);
 	time_label->set_float_left(true);
 
@@ -593,7 +593,7 @@ void Pause_GUI::set_labels()
 	rest_label->set_width(max_w);
 	sobriety_label->set_width(max_w);
 
-	time_label->set_text(get_time_string(noo.get_play_time()));
+	time_label->set_text(get_day_time_string());
 
 	gui->layout();
 }

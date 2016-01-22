@@ -82,3 +82,17 @@ std::string get_time_string(int seconds)
 		return std::string(buf);
 	}
 }
+
+std::string get_day_time_string()
+{
+	float day_time = noo.get_day_time();
+
+	int hour = day_time * 24;
+	int minute = ((day_time - (hour / 24.0f)) / (1.0f / 24.0f)) * 60;
+
+	char s[100];
+
+	snprintf(s, 100, "%d:%02d", hour, minute);
+
+	return s;
+}

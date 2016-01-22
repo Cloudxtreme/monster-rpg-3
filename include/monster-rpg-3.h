@@ -23,5 +23,6 @@ using namespace Nooskewl_Engine;
 bool give_item(Map_Entity *activator, std::string item_name, int quantity, int milestone);
 Direction get_facing_direction(Map_Entity *activator, Map_Entity *activated);
 std::string get_time_string(int seconds);
+std::string get_day_time_string();
 
 #endif
