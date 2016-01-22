@@ -81,6 +81,10 @@ void ML_cabbagetown::start_audio()
 
 void ML_cabbagetown::start(bool been_here_before)
 {
+	Tilemap *tilemap = noo.map->get_tilemap();
+	tilemap->enable_lighting(false);
+	tilemap->set_lighting_parameters(false, 100, noo.white);
+
 	if (!been_here_before) {
 		for (int y = 17; y <= 17; y++) {
 			for (int x = 27; x <= 32; x++) {
