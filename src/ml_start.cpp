@@ -98,8 +98,8 @@ void ML_start::start_audio()
 void ML_start::start(bool been_here_before)
 {
 	Tilemap *tilemap = noo.map->get_tilemap();
-	tilemap->enable_lighting(false);
-	tilemap->set_lighting_parameters(true, 15, noo.colours[7]/*the darkest grey about 50%*/);
+	tilemap->enable_lighting(true);
+	tilemap->set_lighting_parameters(true, 15, noo.colours[6]/*medium grey*/);
 
 	if (!been_here_before) {
 		noo.player->set_input_enabled(false);
