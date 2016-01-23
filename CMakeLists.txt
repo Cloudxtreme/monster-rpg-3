@@ -28,7 +28,11 @@ set(SRC
 
 if(WIN32)
 	if(DEMO)
-		set(FLAGS "${FLAGS} /DDEMO")
+		if(MSVC)
+			set(FLAGS "${FLAGS} /DDEMO")
+		else()
+			set(FLAGS "${FLAGS} -DDEMO")
+		endif()
 	endif()
 else()
 	if(DEMO)
