@@ -1,5 +1,14 @@
 #!/bin/sh
 
+if [ "$1" == "demo" ] ; then
+	DEMO="on"
+	DATA_REPO="monster-rpg-3-demo-data"
+	shift 1
+else
+	DEMO="off"
+	DATA_REPO="monster-rpg-3-data"
+fi
+
 cd tgui3
 git pull --rebase
 cd build
@@ -21,12 +30,12 @@ cp Nooskewl_Runner ~/code/mo3/"Monster RPG 3.app"/Contents/MacOS
 cd ../../monster-rpg-3
 git pull --rebase
 cd build
-cmake .. -DDEMO=off -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7
+cmake .. -DDEMO=$DEMO -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7
 make $*
 ~/bin/codesign.sh libgame.dylib
 cp libgame.dylib ~/code/mo3/"Monster RPG 3.app"/Contents/MacOS
 
-cd ../../monster-rpg-3-data
+cd ../../$DATA_REPO
 git pull --rebase
 ../Nooskewl_Engine/tools/cpa/mkcpa-osx.sh ../mo3/data.cpa
 
