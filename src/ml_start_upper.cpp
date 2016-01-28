@@ -14,6 +14,10 @@ void ML_start_upper::start_audio()
 
 void ML_start_upper::start(bool been_here_before)
 {
+	Tilemap *tilemap = noo.map->get_tilemap();
+	tilemap->enable_lighting(true);
+	tilemap->set_lighting_parameters(true, 15, noo.colours[6]/*medium grey*/);
+
 	if (been_here_before == false) {
 		Map_Entity *door1 = new Map_Entity("door");
 		door1->load_sprite("door");
