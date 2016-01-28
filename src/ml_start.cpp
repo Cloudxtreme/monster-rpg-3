@@ -99,7 +99,7 @@ void ML_start::start(bool been_here_before)
 {
 	Tilemap *tilemap = noo.map->get_tilemap();
 	tilemap->enable_lighting(true);
-	tilemap->set_lighting_parameters(true, 15, noo.colours[6]/*medium grey*/);
+	tilemap->set_lighting_parameters(true, 15, noo.colours[7]/*darkest grey*/);
 
 	if (!been_here_before) {
 		noo.player->set_input_enabled(false);
@@ -328,6 +328,85 @@ void ML_start::start(bool been_here_before)
 		monsterslayer->set_high(true);
 		monsterslayer->set_solid(false);
 		noo.map->add_entity(monsterslayer);
+
+		SDL_Colour light_colour = noo.colours[36]; // light yellow
+
+		Map_Entity *torch_w1 = new Map_Entity("torch_w1");
+		torch_w1->load_sprite("torch_w");
+		torch_w1->set_position(Point<int>(7, 10));
+		torch_w1->set_solid(false);
+		torch_w1->set_z(noo.tile_size);
+		noo.map->add_entity(torch_w1);
+		Map_Entity *torch_w1_light = new Map_Entity("torch_w1_light");
+		torch_w1_light->set_brain(new Light_Brain(Vec3D<float>(7, 10, 1), light_colour, 2, 2));
+		torch_w1_light->set_solid(false);
+		noo.map->add_entity(torch_w1_light);
+
+		Map_Entity *torch_w2 = new Map_Entity("torch_w2");
+		torch_w2->load_sprite("torch_w");
+		torch_w2->set_position(Point<int>(7, 18));
+		torch_w2->set_solid(false);
+		torch_w2->set_z(noo.tile_size);
+		noo.map->add_entity(torch_w2);
+		Map_Entity *torch_w2_light = new Map_Entity("torch_w2_light");
+		torch_w2_light->set_brain(new Light_Brain(Vec3D<float>(7, 18, 1), light_colour, 2, 2));
+		torch_w2_light->set_solid(false);
+		noo.map->add_entity(torch_w2_light);
+
+		Map_Entity *torch_e1 = new Map_Entity("torch_e1");
+		torch_e1->load_sprite("torch_e");
+		torch_e1->set_position(Point<int>(16, 9));
+		torch_e1->set_solid(false);
+		torch_e1->set_z(noo.tile_size);
+		noo.map->add_entity(torch_e1);
+		Map_Entity *torch_e1_light = new Map_Entity("torch_e1_light");
+		torch_e1_light->set_brain(new Light_Brain(Vec3D<float>(16, 9, 1), light_colour, 2, 2));
+		torch_e1_light->set_solid(false);
+		noo.map->add_entity(torch_e1_light);
+
+		Map_Entity *torch_e2 = new Map_Entity("torch_e2");
+		torch_e2->load_sprite("torch_e");
+		torch_e2->set_position(Point<int>(20, 12));
+		torch_e2->set_solid(false);
+		torch_e2->set_z(noo.tile_size);
+		noo.map->add_entity(torch_e2);
+		Map_Entity *torch_e2_light = new Map_Entity("torch_e2_light");
+		torch_e2_light->set_brain(new Light_Brain(Vec3D<float>(20, 12, 1), light_colour, 2, 2));
+		torch_e2_light->set_solid(false);
+		noo.map->add_entity(torch_e2_light);
+
+		Map_Entity *torch_e3 = new Map_Entity("torch_e3");
+		torch_e3->load_sprite("torch_e");
+		torch_e3->set_position(Point<int>(20, 21));
+		torch_e3->set_solid(false);
+		torch_e3->set_z(noo.tile_size);
+		noo.map->add_entity(torch_e3);
+		Map_Entity *torch_e3_light = new Map_Entity("torch_e3_light");
+		torch_e3_light->set_brain(new Light_Brain(Vec3D<float>(20, 21, 1), light_colour, 2, 2));
+		torch_e3_light->set_solid(false);
+		noo.map->add_entity(torch_e3_light);
+
+		Map_Entity *torch_n1 = new Map_Entity("torch_n1");
+		torch_n1->load_sprite("torch_n");
+		torch_n1->set_position(Point<int>(4, 3));
+		torch_n1->set_solid(false);
+		torch_n1->set_z(noo.tile_size);
+		noo.map->add_entity(torch_n1);
+		Map_Entity *torch_n1_light = new Map_Entity("torch_n1_light");
+		torch_n1_light->set_brain(new Light_Brain(Vec3D<float>(4, 3, 1), light_colour, 2, 2));
+		torch_n1_light->set_solid(false);
+		noo.map->add_entity(torch_n1_light);
+
+		Map_Entity *torch_n2 = new Map_Entity("torch_n2");
+		torch_n2->load_sprite("torch_n");
+		torch_n2->set_position(Point<int>(13, 3));
+		torch_n2->set_solid(false);
+		torch_n2->set_z(noo.tile_size);
+		noo.map->add_entity(torch_n2);
+		Map_Entity *torch_n2_light = new Map_Entity("torch_n2_light");
+		torch_n2_light->set_brain(new Light_Brain(Vec3D<float>(13, 3, 1), light_colour, 2, 2));
+		torch_n2_light->set_solid(false);
+		noo.map->add_entity(torch_n2_light);
 	}
 }
 
