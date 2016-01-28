@@ -329,7 +329,8 @@ void ML_start::start(bool been_here_before)
 		monsterslayer->set_solid(false);
 		noo.map->add_entity(monsterslayer);
 
-		SDL_Colour light_colour = noo.colours[36]; // light yellow
+		SDL_Colour light_colour1 = noo.colours[36]; // light yellow
+		SDL_Colour light_colour2 = noo.colours[37]; // darker yellow
 
 		Map_Entity *torch_w1 = new Map_Entity("torch_w1");
 		torch_w1->load_sprite("torch_w");
@@ -338,7 +339,7 @@ void ML_start::start(bool been_here_before)
 		torch_w1->set_z(noo.tile_size);
 		noo.map->add_entity(torch_w1);
 		Map_Entity *torch_w1_light = new Map_Entity("torch_w1_light");
-		torch_w1_light->set_brain(new Light_Brain(Vec3D<float>(7, 10, 1), light_colour, 2, 2));
+		torch_w1_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(7, 10, 1), light_colour1, light_colour2, 4, 8, 1, 3));
 		torch_w1_light->set_solid(false);
 		noo.map->add_entity(torch_w1_light);
 
@@ -349,7 +350,7 @@ void ML_start::start(bool been_here_before)
 		torch_w2->set_z(noo.tile_size);
 		noo.map->add_entity(torch_w2);
 		Map_Entity *torch_w2_light = new Map_Entity("torch_w2_light");
-		torch_w2_light->set_brain(new Light_Brain(Vec3D<float>(7, 18, 1), light_colour, 2, 2));
+		torch_w2_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(7, 18, 1), light_colour1, light_colour2, 4, 8, 1, 3));
 		torch_w2_light->set_solid(false);
 		noo.map->add_entity(torch_w2_light);
 
@@ -360,7 +361,7 @@ void ML_start::start(bool been_here_before)
 		torch_e1->set_z(noo.tile_size);
 		noo.map->add_entity(torch_e1);
 		Map_Entity *torch_e1_light = new Map_Entity("torch_e1_light");
-		torch_e1_light->set_brain(new Light_Brain(Vec3D<float>(16, 9, 1), light_colour, 2, 2));
+		torch_e1_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(16, 9, 1), light_colour1, light_colour2, 4, 8, 1, 3));
 		torch_e1_light->set_solid(false);
 		noo.map->add_entity(torch_e1_light);
 
@@ -371,7 +372,7 @@ void ML_start::start(bool been_here_before)
 		torch_e2->set_z(noo.tile_size);
 		noo.map->add_entity(torch_e2);
 		Map_Entity *torch_e2_light = new Map_Entity("torch_e2_light");
-		torch_e2_light->set_brain(new Light_Brain(Vec3D<float>(20, 12, 1), light_colour, 2, 2));
+		torch_e2_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(20, 12, 1), light_colour1, light_colour2, 4, 8, 1, 3));
 		torch_e2_light->set_solid(false);
 		noo.map->add_entity(torch_e2_light);
 
@@ -382,7 +383,7 @@ void ML_start::start(bool been_here_before)
 		torch_e3->set_z(noo.tile_size);
 		noo.map->add_entity(torch_e3);
 		Map_Entity *torch_e3_light = new Map_Entity("torch_e3_light");
-		torch_e3_light->set_brain(new Light_Brain(Vec3D<float>(20, 21, 1), light_colour, 2, 2));
+		torch_e3_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(20, 21, 1), light_colour1, light_colour2, 4, 8, 1, 3));
 		torch_e3_light->set_solid(false);
 		noo.map->add_entity(torch_e3_light);
 
@@ -393,7 +394,7 @@ void ML_start::start(bool been_here_before)
 		torch_n1->set_z(noo.tile_size);
 		noo.map->add_entity(torch_n1);
 		Map_Entity *torch_n1_light = new Map_Entity("torch_n1_light");
-		torch_n1_light->set_brain(new Light_Brain(Vec3D<float>(4, 3, 1), light_colour, 2, 2));
+		torch_n1_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(4, 3, 1), light_colour1, light_colour2, 4, 8, 1, 3));
 		torch_n1_light->set_solid(false);
 		noo.map->add_entity(torch_n1_light);
 
@@ -404,7 +405,7 @@ void ML_start::start(bool been_here_before)
 		torch_n2->set_z(noo.tile_size);
 		noo.map->add_entity(torch_n2);
 		Map_Entity *torch_n2_light = new Map_Entity("torch_n2_light");
-		torch_n2_light->set_brain(new Light_Brain(Vec3D<float>(13, 3, 1), light_colour, 2, 2));
+		torch_n2_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(13, 3, 1), light_colour1, light_colour2, 4, 8, 1, 3));
 		torch_n2_light->set_solid(false);
 		noo.map->add_entity(torch_n2_light);
 	}
