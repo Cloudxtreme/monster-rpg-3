@@ -19,6 +19,7 @@ extern "C" {
 	MONSTERRPG3_EXPORT Map_Logic *dll_get_map_logic(std::string map_name, int last_visited_time);
 	MONSTERRPG3_EXPORT Brain *dll_get_brain(std::string type, std::string data);
 	MONSTERRPG3_EXPORT bool dll_choose_action(Map_Entity *entity);
+	MONSTERRPG3_EXPORT bool dll_handle_event(SDL_Event *sdl_event);
 }
 
 #endif // DLL_H

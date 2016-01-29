@@ -366,3 +366,8 @@ bool dll_choose_action(Map_Entity *entity)
 
 	return true;
 }
+
+bool dll_handle_event(SDL_Event *sdl_event)
+{
+	return false;
+}
