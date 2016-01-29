@@ -142,6 +142,16 @@ void ML_start_upper::start(bool been_here_before)
 		torch_n5_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(20, 12, 1), light_colour1, light_colour2, 4, 8, 0, 6));
 		torch_n5_light->set_solid(false);
 		noo.map->add_entity(torch_n5_light);
+
+		Map_Entity *books1 = new Map_Entity("books1");
+		books1->set_position(Point<int>(4, 3));
+		books1->set_brain(new Sign_Brain("start_upper_books1"));
+		noo.map->add_entity(books1);
+
+		Map_Entity *books2 = new Map_Entity("books2");
+		books2->set_position(Point<int>(5, 3));
+		books2->set_brain(new Sign_Brain("start_upper_books2"));
+		noo.map->add_entity(books2);
 	}
 }
 

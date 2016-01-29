@@ -60,6 +60,19 @@ protected:
 	bool talking;
 };
 
+// Only activates when you're facing North
+class Sign_Brain : public Talk_Brain {
+public:
+	Sign_Brain(std::string name);
+	virtual ~Sign_Brain();
+
+	bool activate(Map_Entity *activator);
+
+	bool save(std::string &out);
+
+protected:
+};
+
 class Animated_Brain : public Talk_Brain {
 public:
 	Animated_Brain(std::string name);

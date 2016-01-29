@@ -39,6 +39,10 @@ Talk_Brain::Talk_Brain(std::string name, Callback callback, void *callback_data)
 	user_callback_data(callback_data),
 	talking(false)
 {
+	if (name == "") {
+		return;
+	}
+
 	std::string text = noo.load_text("text/speech/" + name + ".utf8");
 
 	int offset = 0;
@@ -203,6 +207,32 @@ bool Talk_Brain::save(std::string &out)
 	out += string_printf("brain=talk_brain,1\n%s\n", name.c_str());
 	return true;
 }
+
+//--
+
+Sign_Brain::Sign_Brain(std::string name) :
+	Talk_Brain(name, 0, 0)
+{
+}
+
+Sign_Brain::~Sign_Brain()
+{
+}
+
+bool Sign_Brain::activate(Map_Entity *activator)
+{
+	if (activator->get_direction() == N) {
+		return Talk_Brain::activate(activator);
+	}
+	return false;
+}
+
+bool Sign_Brain::save(std::string &out)
+{
+	out += string_printf("brain=n_talk_brain,1\n%s\n", name.c_str());
+	return true;
+}
+
 
 //--
 

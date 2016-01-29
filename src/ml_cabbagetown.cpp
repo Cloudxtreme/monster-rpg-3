@@ -289,6 +289,12 @@ void ML_cabbagetown::start(bool been_here_before)
 		tiggy->set_size(Size<int>(noo.tile_size*2, noo.tile_size));
 		tiggy->set_should_face_activator(false);
 		noo.map->add_entity(tiggy);
+
+		Map_Entity *statue = new Map_Entity("statue");
+		statue->set_position(Point<int>(38, 22));
+		statue->set_brain(new Sign_Brain("potluck_statue"));
+		statue->set_size(Size<int>(noo.tile_size*2, noo.tile_size));
+		noo.map->add_entity(statue);
 	}
 }
 

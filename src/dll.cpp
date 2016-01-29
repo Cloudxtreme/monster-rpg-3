@@ -59,6 +59,10 @@ Brain *dll_get_brain(std::string type, std::string data)
 		std::string name = trim(data);
 		return new Talk_Brain(name);
 	}
+	else if (type == "n_talk_brain") {
+		std::string name = trim(data);
+		return new Sign_Brain(name);
+	}
 	else if (type == "animated_brain") {
 		std::string name = trim(data);
 		return new Animated_Brain(name);
@@ -292,7 +296,7 @@ static void choose_action_callback(void *data)
 
 	std::string action = cad->choices[mccd->choice];
 
-	if (action == noo.game_t->translate(23) || action == TRANSLATE("Talk")END || action == TRANSLATE("Collect")END) {
+	if (action == noo.game_t->translate(23) || action == TRANSLATE("Talk")END || action == TRANSLATE("Collect")END || action == TRANSLATE("Read")) {
 		noo.map->activate(noo.player);
 	}
 	else if (action == noo.game_t->translate(114)) {
@@ -314,7 +318,11 @@ bool dll_choose_action(Map_Entity *entity)
 
 	Brain *brain = entity->get_brain();
 
-	if (
+	// if else if here
+	if (dynamic_cast<Sign_Brain *>(brain)) {
+		data->choices.push_back(TRANSLATE("Read")END);
+	}
+	else if (
 			dynamic_cast<Talk_Brain *>(brain) ||
 			dynamic_cast<Shop_Brain *>(brain) ||
 			dynamic_cast<No_Activate_Shop_Brain *>(brain)
