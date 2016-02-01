@@ -78,17 +78,22 @@ void Pause_GUI::crafting_callback(void *data)
 	Multiple_Choice_GUI::Callback_Data *d = static_cast<Multiple_Choice_GUI::Callback_Data *>(data);
 
 	if (d->choice == 0) {
-		Crafting_GUI *gui = new Crafting_GUI(Item::WEAPON);
+		Crafting_GUI *gui = new Crafting_GUI(Item::OTHER);
 		gui->start();
 		noo.guis.push_back(gui);
 	}
 	else if (d->choice == 1) {
+		Crafting_GUI *gui = new Crafting_GUI(Item::WEAPON);
+		gui->start();
+		noo.guis.push_back(gui);
+	}
+	else if (d->choice == 2) {
 		Crafting_GUI *gui = new Crafting_GUI(Item::ARMOUR);
 		gui->start();
 		noo.guis.push_back(gui);
 	}
 	else {
-		Crafting_GUI *gui = new Crafting_GUI(Item::OTHER); // Since OTHER isn't used, use it for spells
+		Crafting_GUI *gui = new Crafting_GUI(Item::OTHER, true);
 		gui->start();
 		noo.guis.push_back(gui);
 	}
@@ -434,6 +439,7 @@ void Pause_GUI::update()
 	}
 	else if (crafting_button->pressed()) {
 		std::vector<std::string> choices;
+		choices.push_back(TRANSLATE("Items")END);
 		choices.push_back(TRANSLATE("Weapons")END);
 		choices.push_back(TRANSLATE("Armour")END);
 		choices.push_back(TRANSLATE("Spells")END);
@@ -2037,12 +2043,16 @@ void Quests_GUI::update()
 
 //--
 
-Crafting_GUI::Crafting_GUI(Item::Type type) :
+Crafting_GUI::Crafting_GUI(Item::Type type, bool craft_spells) :
 	type(type),
+	crafting_spells(craft_spells),
 	exit_menu(false)
 {
-	if (type == Item::OTHER) {
+	if (crafting_spells) {
 		sample = new Sample("spell_craft.wav");
+	}
+	else if (type == Item::OTHER) {
+		sample = new MML("craft_item.mml");
 	}
 	else {
 		sample = new Sample("craft.wav");
@@ -2065,16 +2075,21 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 
 	std::string crafting_type_s;
 
-	switch (type) {
-		case Item::WEAPON:
-			crafting_type_s = "Weapons";
-			break;
-		case Item::ARMOUR:
-			crafting_type_s = "Armour";
-			break;
-		default:
-			crafting_type_s = "Spells";
-			break;
+	if (crafting_spells) {
+		crafting_type_s = "Spells";
+	}
+	else {
+		switch (type) {
+			case Item::WEAPON:
+				crafting_type_s = "Weapons";
+				break;
+			case Item::ARMOUR:
+				crafting_type_s = "Armour";
+				break;
+			case Item::OTHER:
+				crafting_type_s = "Items";
+				break;
+		}
 	}
 
 	Widget *title_container = new Widget(1.0f, int(noo.font->get_height() + 5));
@@ -2089,7 +2104,7 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 
 	for (size_t i = 0; i < filenames.size(); i++) {
 		std::string fn = filenames[i];
-		if (type == Item::OTHER) {
+		if (crafting_spells) {
 			if (fn.substr(0, 7) == "spells/") {
 				std::string name = fn.substr(7); // chop spells/
 				name = name.substr(0, name.length()-4); // chop .xml
@@ -2114,6 +2129,8 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 				component_names.push_back(names);
 
 				delete spell;
+
+				can_disassemble.push_back(false);
 			}
 		}
 		else {
@@ -2121,6 +2138,7 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 				std::string name = fn.substr(6); // chop item/
 				name = name.substr(0, name.length()-4); // chop .xml
 				Item *item = new Item(name);
+
 				if (item->components != "" && type == item->type) {
 					item_ids.push_back(item->id);
 					list_strings.push_back(item->name);
@@ -2141,6 +2159,8 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 
 					components.push_back(v);
 					component_names.push_back(v2);
+
+					can_disassemble.push_back(item->can_disassemble);
 				}
 
 				delete item;
@@ -2162,16 +2182,13 @@ Crafting_GUI::Crafting_GUI(Item::Type type) :
 	column2_inner = 0;
 	num_crafted_label = new Widget_Label("", -1);
 
-	if (type != Item::OTHER) {
-		teardown_button = new Widget_Text_Button(TRANSLATE("Deconstruct")END, -1, -1);
-		teardown_button->set_sound_enabled(false);
-	}
-
-	if (type == Item::OTHER) {
+	if (crafting_spells) {
 		craft_button = new Widget_Text_Button(TRANSLATE("Brew")END, -1, -1);
 	}
 	else {
-		craft_button = new Widget_Text_Button(TRANSLATE("Construct")END, -1, -1);
+		teardown_button = new Widget_Text_Button(TRANSLATE("Disassemble")END, -1, -1);
+		teardown_button->set_sound_enabled(false);
+		craft_button = new Widget_Text_Button(TRANSLATE("Combine")END, -1, -1);
 	}
 	craft_button->set_sound_enabled(false);
 
@@ -2209,8 +2226,8 @@ void Crafting_GUI::update()
 		exit();
 		return;
 	}
-	else if (type != Item::OTHER && teardown_button->pressed()) {
-		sample->play(1.0f, false);
+	else if (crafting_spells == false && teardown_button->pressed()) {
+		sample->play(false);
 
 		SDL_Delay(1000);
 
@@ -2240,7 +2257,7 @@ void Crafting_GUI::update()
 		verify_equipment(weapon_id, armour_id);
 	}
 	else if (craft_button->pressed()) {
-		sample->play(1.0f, false);
+		sample->play(false);
 
 		SDL_Delay(1000);
 
@@ -2256,7 +2273,7 @@ void Crafting_GUI::update()
 			stats->inventory->remove(item);
 		}
 
-		if (type == Item::OTHER) {
+		if (crafting_spells) {
 			Spell *spell = new Spell(id);
 			stats->spells.push_back(spell);
 		}
@@ -2293,7 +2310,7 @@ void Crafting_GUI::set_labels()
 
 	std::vector<bool> found;
 
-	if (type == Item::OTHER) {
+	if (crafting_spells) {
 		Stats *stats = noo.player->get_stats();
 		bool have_spell = false;
 
@@ -2329,7 +2346,7 @@ void Crafting_GUI::set_labels()
 		num_crafted_label->set_text(TRANSLATE("Have")END + ": " + itos(num_crafted));
 		num_crafted_label->set_parent(column2_inner);
 
-		teardown_button->set_enabled(num_crafted > 0);
+		teardown_button->set_enabled(num_crafted > 0 && can_disassemble[selected]);
 		teardown_button->set_padding_top(2);
 		teardown_button->set_break_line(true);
 		teardown_button->set_parent(column2_inner);
@@ -2339,7 +2356,7 @@ void Crafting_GUI::set_labels()
 
 	Widget_Label *components_label = new Widget_Label(TRANSLATE("Needed")END + ":", 100);
 	components_label->set_padding_top(5);
-	if (type == Item::OTHER) {
+	if (crafting_spells) {
 		components_label->set_break_line(true);
 	}
 	components_label->set_parent(column2_inner);
@@ -2363,7 +2380,7 @@ void Crafting_GUI::set_labels()
 	craft_button->set_break_line(true);
 	craft_button->set_parent(column2_inner);
 
-	if (type == Item::OTHER) {
+	if (crafting_spells) {
 		craft_button->set_right_widget(done_button);
 
 		if (craft_button->get_accepts_focus()) {

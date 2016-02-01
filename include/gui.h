@@ -279,7 +279,8 @@ private:
 
 class Crafting_GUI : public GUI {
 public:
-	Crafting_GUI(Item::Type type);
+	// type is ignored for spells
+	Crafting_GUI(Item::Type type, bool craft_spells = false);
 	~Crafting_GUI();
 
 	void handle_event(TGUI_Event *event);
@@ -293,10 +294,12 @@ private:
 	void verify_equipment(std::string weapon_id, std::string armour_id);
 
 	Item::Type type;
+	bool crafting_spells;
 
 	std::vector<std::string> item_ids;
 	std::vector< std::vector<std::string> > components;
 	std::vector< std::vector<std::string> > component_names;
+	std::vector<bool> can_disassemble;
 
 	Widget_List *list;
 
@@ -311,7 +314,7 @@ private:
 
 	bool exit_menu;
 
-	Sample *sample;
+	Sound *sample;
 };
 
 class Spells_GUI : public GUI {
