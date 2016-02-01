@@ -408,6 +408,15 @@ void ML_start::start(bool been_here_before)
 		torch_n2_light->set_brain(new Flickering_Light_Brain(Vec3D<float>(13, 3, 1), light_colour1, light_colour2, 4, 8, 0, 6));
 		torch_n2_light->set_solid(false);
 		noo.map->add_entity(torch_n2_light);
+
+		Map_Entity *matchbox = new Map_Entity("matchbox");
+		matchbox->load_sprite("matchbox");
+		matchbox->set_brain(new Item_Brain("match", 6));
+		matchbox->set_position(Point<int>(17, 13));
+		matchbox->set_z(noo.tile_size);
+		matchbox->set_high(true);
+		matchbox->set_solid(false);
+		noo.map->add_entity(matchbox);
 	}
 }
 
