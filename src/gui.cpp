@@ -2049,10 +2049,10 @@ Crafting_GUI::Crafting_GUI(Item::Type type, bool craft_spells) :
 	exit_menu(false)
 {
 	if (crafting_spells) {
-		sample = new Sample("spell_craft.wav");
+		sample = new Sample("craft_spell.wav");
 	}
 	else if (type == Item::OTHER) {
-		sample = new MML("craft_item.mml");
+		sample = new Sample("craft_item.wav");
 	}
 	else {
 		sample = new Sample("craft.wav");
