@@ -9,7 +9,7 @@
 int ML_start::callback_data;
 Map_Entity *ML_start::coro;
 
-void ML_start::callback(void *data)
+void ML_start::callback(void *generic_data)
 {
 	START_CALLBACK
 

@@ -9,7 +9,7 @@
 
 int ML_cabbagetown::tiggy_callback_data;
 
-void ML_cabbagetown::tiggy_callback(void *data)
+void ML_cabbagetown::tiggy_callback(void *generic_data)
 {
 	START_CALLBACK
 
@@ -21,6 +21,7 @@ void ML_cabbagetown::tiggy_callback(void *data)
 	}
 	NEXT_STAGE {
 		noo.map->add_speech("name=Tiggy|" + noo.game_t->translate(75), tiggy_callback, data);
+		// offer pie
 	}
 	NEXT_STAGE {
 		noo.map->add_speech("name=Eny|" + noo.game_t->translate(87), tiggy_callback, data);
@@ -327,8 +328,9 @@ static Apple_Callback_Data acd;
 
 static void face_south(void *data)
 {
-	Map_Entity *alfred = static_cast<Map_Entity *>(data);
-	alfred->set_direction(S);
+	Generic_Callback_Data *gcbd = static_cast<Generic_Callback_Data *>(data);
+	Map_Entity *entity = static_cast<Map_Entity *>(gcbd->userdata);
+	entity->set_direction(S);
 }
 
 static void apple_callback(void *data)
@@ -347,7 +349,7 @@ static void apple_callback(void *data)
 			noo.set_milestone(acd->ms1, true);
 		}
 	}
-	face_south(acd->alfred);
+	acd->alfred->set_direction(S);
 }
 
 static void earl_answer(void *data)
@@ -362,23 +364,24 @@ static void earl_answer(void *data)
 		if (nasb) {
 			nasb->manual_activate();
 		}
-		face_south(earl);
+		earl->set_direction(S);
 	}
 	else if (d->choice == 1) {
 		noo.map->add_speech("name=Earl,+milestone=Rooster Quest|" + noo.game_t->translate(131), face_south, d->userdata);
 	}
 	else {
-		face_south(earl);
+		earl->set_direction(S);
 	}
 }
 
 static void earl_prompt(void *data)
 {
+	Generic_Callback_Data *gcbd = static_cast<Generic_Callback_Data *>(data);
 	std::vector<std::string> choices;
 	choices.push_back(noo.game_t->translate(101));
 	choices.push_back(noo.game_t->translate(116));
 	choices.push_back(noo.game_t->translate(105));
-	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(noo.game_t->translate(144), choices, 2, earl_answer, data);
+	Multiple_Choice_GUI *gui = new Multiple_Choice_GUI(noo.game_t->translate(144), choices, 2, earl_answer, gcbd->userdata);
 	gui->start();
 	noo.guis.push_back(gui);
 }
@@ -430,7 +433,17 @@ void ML_cabbagetown::activate(Map_Entity *activator, Map_Entity *activated)
 		noo.map->add_speech("name=Earl|" + noo.game_t->translate(82), earl_prompt, activated);
 	}
 	else if (activator == noo.player && activated->get_name() == "tiggy") {
-		tiggy_callback_data = 0;
-		noo.map->add_speech("name=Eny|" + noo.game_t->translate(134), tiggy_callback, &tiggy_callback_data);
+		if (noo.check_milestone("Get Pie")) {
+			if (noo.player->get_stats()->inventory->find("chicken_pie") >= 0) {
+				noo.map->add_speech("mc_caption=" + TRANSLATE("Give Tiggy pie?")END + ",mc_option=" + TRANSLATE("Yes")END + ",mc_option=" + TRANSLATE("No")END + ",name=Tiggy|" + TRANSLATE("*sniff* *sniff* I smell chicken pot pie! Can I have that?")END + ">name=Tiggy|" + TRANSLATE("Let me pound that into me and we'll get going...")END + ">name=Tiggy|" + TRANSLATE("Your loss. I'll be here if you change your mind.")END);
+			}
+			else {
+				noo.map->add_speech("name=Tiggy|" + TRANSLATE("No chicken pie? I'll be here when you get one.")END);
+			}
+		}
+		else {
+			tiggy_callback_data = 0;
+			noo.map->add_speech("name=Eny|" + noo.game_t->translate(134), tiggy_callback, &tiggy_callback_data);
+		}
 	}
 }

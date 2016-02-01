@@ -20,14 +20,16 @@ void end_brains()
 
 void Talk_Brain::callback(void *data)
 {
-	Callback_Data *d = (Callback_Data *)data;
+	Speech::Callback_Data *scbd = (Speech::Callback_Data *)data;
+
+	Callback_Data *d = (Callback_Data *)scbd->userdata;
 
 	if (d->entity->should_face_activator()) {
 		d->entity->set_direction(d->direction);
 	}
 
 	if (d->user_callback) {
-		d->user_callback(data);
+		d->user_callback(d);
 	}
 
 	((Talk_Brain *)d->entity->get_brain())->talking = false;
